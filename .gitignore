@@ -79,3 +79,10 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Production Files
+# =========================
+
+SUMO.zip
+Sun.plg
+Moon.plg
