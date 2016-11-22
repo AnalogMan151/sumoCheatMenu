@@ -1,21 +1,48 @@
 #!/usr/bin/python
 
-x = 'E92D400EE59F1074E5912000E3A03000E5813000E3A03C13E2833093E152000303A0400011A04000E8BD800EE350000EEAF77D09E92D400FE24DD010E3A00000E58D0000E58D0004E58D0008E58D000CE1A03000E1A02000E3A01C13E2811093E59F0018E5801000E59F0014E5900000EBF7D9CEE3A00002E28DD010E8BD800F006360000067206C';
+# Big endian code block assigned as string. Credits to @Nanquitas.
+print("Enter the codes:")
 
-j = 0;
-k = 8;
+lines = []
+while True:
+    line = raw_input()
+    if line:
+        lines.append(line)
+    else:
+        break
+code = '\n'.join(lines)
 
-for i in range(0,(len(x) / 8)):
-	a = x[j:k:1];
-	b = a.decode('hex');
-	c = b[::-1];
-	d = c.encode('hex').upper();	
-	l = 0;
-	m = 2;
-	j += 8;
-	k += 8;
 
+# Strip out the spaces and new lines
+code = code.replace(" ","").replace("\n","");
+
+# Initiaing loop variables
+big_start = 0;
+big_end = 8;
+
+output ="";
+
+# Loop through the string 8 characters at a time and convert to little endian
+for i in range(0,(len(code) / 8)):
+	
+	bytes = code[big_start:big_end:1];
+	decoded_bytes = bytes.decode('hex');
+	swap = decoded_bytes[::-1];
+	encoded_swap = swap.encode('hex').upper();	
+	big_start += 8;
+	big_end += 8;
+	
+	# Initializes and resets formatting loop
+	little_start = 0;
+	little_end = 2;
+
+	# Loops through little endian bytes and formats them '0x00, '
 	for i in range(0,4):
-		print("0x%s,") % d[l:m:1],;
-		l += 2;
-		m += 2;
+		output += "0x{}, ".format(encoded_swap[little_start:little_end:1]);
+		little_start += 2;
+		little_end += 2;
+
+# Print result minus last comma
+print("\n\n");
+print(output[:-2]);
+print("\n\n");
