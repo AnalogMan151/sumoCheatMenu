@@ -1,6 +1,4 @@
 #include "cheats.h"
-#include "notes.h"
-#include <string.h>
 
 char    statusOutlines[40] = "Disable Outlines";
 char	currentEXP[40] = "Current EXP rate: 1x";
@@ -20,7 +18,6 @@ int i_allClothesMale;
 int i_allClothesFemale;
 int i_toggleOutlines;
 int i_rematchTrainers;
-
 
 void	my_menus(void)
 {
@@ -87,6 +84,7 @@ void	my_menus(void)
 		set_note("Hold L & talk to Trainer", i_rematchTrainers);
 		i_toggleOutlines = new_entry(statusOutlines, toggleOutlines);
 	exit_spoiler();
+
 }
 
 

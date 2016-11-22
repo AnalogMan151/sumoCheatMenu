@@ -4,20 +4,6 @@
 
 char	*builder_name = "AnalogMan";
 
-extern int i_increaseEXP;
-extern int i_increaseEXP10;
-extern int i_decreaseEXP;
-extern int i_decreaseEXP10;
-extern int i_resetEXP;
-extern int i_allMedicine;
-extern int i_allBerries;
-extern int i_allClothesMale;
-extern int i_allClothesFemale;
-extern int i_toggleOutlines;
-extern char statusOutlines[40];
-extern char currentEXP[40];
-
-
 /********************************
 *				*
 *	  EXP Modifiers		*
