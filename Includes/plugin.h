@@ -6,6 +6,7 @@
 #include "result.h"
 #include "common.h"
 #include "hid.h"
+#include <string.h>
 
 #define MAX(x, y) (x > y ? x : y)
 
@@ -151,6 +152,8 @@ void	set_note(const char *text, int index);
 ** Disable an entry
 */
 void    disableCheat(int index);
+
+void    xsprintf(char *buffer, char *fmt, ...);
 void	new_log(int log_type, char *text, ...);
 
 #endif
