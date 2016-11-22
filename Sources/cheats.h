@@ -36,6 +36,7 @@ void	allClothesMale(void);
 void	allClothesFemale(void);
 
 void	instantText(void);
+void    pcAnywhere(void);
 void	rematchTrainers(void);
 void	toggleOutlines(void);
 void	updateOutlines(void);

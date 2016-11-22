@@ -18,6 +18,7 @@ int i_allClothesMale;
 int i_allClothesFemale;
 int i_toggleOutlines;
 int i_rematchTrainers;
+int i_pcAnywhere;
 
 void	my_menus(void)
 {
@@ -80,6 +81,8 @@ void	my_menus(void)
 	
 	new_spoiler("Misc");
 		new_entry("Instant Text Speed", instantText);
+        i_pcAnywhere = new_entry("Access PC Anywhere", pcAnywhere);
+        set_note("Hold START while opening options menu", i_pcAnywhere);
 		i_rematchTrainers = new_entry("Rematch Trainers *", rematchTrainers);
 		set_note("Hold L & talk to Trainer", i_rematchTrainers);
 		i_toggleOutlines = new_entry(statusOutlines, toggleOutlines);
