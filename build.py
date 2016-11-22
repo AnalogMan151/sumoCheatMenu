@@ -20,9 +20,9 @@ def allFolderFile(pattern, ext):
 			s+= os.path.join(dirpath, filename) + ' '
 	return s;
 
-USA_TID 	= "0004000000187000"
-NAME 		= "MonsterHunter"
-HOST		= "192.168.1.99"
+USA_TID 	= "0004000000175E00"
+NAME 		= "cheat"
+HOST		= "192.168.1.133"
 PORT		= "5000"
 COPYTOPATH	= "%s.plg" % NAME
 CC 		= "arm-none-eabi-gcc"
