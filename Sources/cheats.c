@@ -15,6 +15,7 @@ extern int i_allClothesMale;
 extern int i_allClothesFemale;
 extern int i_toggleOutlines;
 extern char statusOutlines[40];
+extern char currentEXP[40];
 
 
 /********************************
@@ -33,8 +34,6 @@ void	exp_x()
 	WRITEU32(0x595810, 0xE8BD8002);
 	WRITEU32(0x48F1EC, 0xEB041983);	
 }	
-
-extern char	currentEXP[40];
 
 // Reads current EXP modifier and prints it to the menu
 void	updateEXP(void)
