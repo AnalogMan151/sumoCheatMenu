@@ -17,11 +17,11 @@ extern int i_toggleOutlines;
 extern char statusOutlines[40];
 
 
-/************************************
-*									*
-*			EXP Modifiers			*
-*									*
-************************************/
+/********************************
+*				*
+*	  EXP Modifiers		*
+*				*
+********************************/
 
 // Sets the stage for Experience Modifier code
 void	exp_x()
@@ -104,11 +104,11 @@ void	resetEXP(void)
 }
 
 
-/************************************
-*									*
-*		Movement Modifiers			*
-*									*
-************************************/
+/********************************
+*				*
+*	Movement Modifiers	*
+*				*
+********************************/
 
 // Increases run speed to 1.375x
 void	runFaster(void)
@@ -141,11 +141,11 @@ void	walkThruWalls(void)
 }
 
 
-/************************************
-*									*
-*		Pokemon Modifiers			*
-*									*
-************************************/
+/********************************
+*				*
+*	Pokemon Modifiers	*
+*				*
+********************************/
 
 // 100% Catch rate for Pokemon
 void	catch100(void)
@@ -218,11 +218,11 @@ void	instantHatch(void)
 }
 
 
-/************************************
-*									*
-*				QR Codes			*
-*									*
-************************************/
+/********************************
+*				*
+*	     QR Codes		*
+*				*
+********************************/
 
 // Removed 24 hour wait time for island scanning
 void	removeIslandScanWait(void)
@@ -244,11 +244,11 @@ void	qrScan100(void)
 }
 
 
-/************************************
-*									*
-*	    Currency Manipulators		*
-*									*
-************************************/
+/********************************
+*				*
+*     Currency Manipulators	*
+*				*
+********************************/
 
 // Set PokeDollars to 9,999,999
 void	maxMoney(void)
@@ -288,11 +288,11 @@ void	maxBP(void)
 }
 
 
-/************************************
-*									*
-*				Items				*
-*									*
-************************************/
+/********************************
+*				*
+*		Items		*
+*				*
+********************************/
 
 // Gives all medicine items and sets them to quantity 950 (credit to Nanquitas for method)
 void    allMedicine(void)
@@ -441,11 +441,11 @@ void	allClothesFemale(void)
 }
 
 
-/************************************
-*									*
-*				Misc				*
-*									*
-************************************/
+/********************************
+*				*
+*	Misc			*
+*				*
+********************************/
 
 // Sets text speed to instant
 void	instantText(void)
