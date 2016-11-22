@@ -1,7 +1,7 @@
 # Pokémon Sun & Moon Cheat Plugin
 ## A cheats plugin for NTR CFW
 
-A plugin created using RyDog199's blankCheatMenu base which in turn was based off Nanquitas work. 
+A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMenu](https://github.com/RyDog199/blankCheatMenu) base which in turn was based off [@Nanquitas](https://github.com/Nanquitas/) work. 
 
 ### Cheats include:
 
