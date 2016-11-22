@@ -15,9 +15,9 @@ def allFile(pattern):
 
 def allFolderFile(pattern, ext):
     s = "";
-        for dirpath, dirnames, filenames in os.walk(pattern):
-            for filename in [f for f in filenames if f.endswith(ext)]:
-                s+= os.path.join(dirpath, filename) + ' '
+    for dirpath, dirnames, filenames in os.walk(pattern):
+        for filename in [f for f in filenames if f.endswith(ext)]:
+            s+= os.path.join(dirpath, filename) + ' '
         return s;
 
 SUN_TID 	= "0004000000164800"
@@ -57,9 +57,9 @@ def ls():
 
 def send(path, FILE2):
     file = open(FILE, 'rb');
-        ftp.cwd(path);
-        ftp.storbinary('STOR '+ FILE2, file);
-        file.close();
+    ftp.cwd(path);
+    ftp.storbinary('STOR '+ FILE2, file);
+    file.close();
 
 def printf(string):
     print(datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S') + " : " + string);
@@ -70,11 +70,11 @@ def run(cmd):
 
 def error():
     print("\n\n");
-        printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-        printf("There's some errors on your code.");
-        printf("Correct them and try again, for now I'm exiting the compilation.\n");
-        printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
-        sys.exit();
+    printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+    printf("There's some errors on your code.");
+    printf("Correct them and try again, for now I'm exiting the compilation.\n");
+    printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
+    sys.exit();
 
 cwd = os.getcwd()
 print("\n\n");
@@ -104,14 +104,14 @@ if (result != 0):
 
 if (os.path.isfile("config.o")):
     run("cp -r *.o obj/ ")
-        run("rm *.o")
+    run("rm *.o")
 if (os.path.isfile("a.out")):
     run(OC +" -O binary a.out payload.bin -S")
 if (os.path.isfile("a.out")):
     run("rm *.out")
 if (os.path.isfile("payload.bin")):
     shutil.copy2("payload.bin", COPYTOPATH);
-        run("rm payload.bin");
+    run("rm payload.bin");
 if (os.path.isfile(NAME + ".map")):
     run("rm *.map");
 
@@ -124,12 +124,12 @@ printf("Should I send the plugin on your console? (y/N)");
 user = raw_input();
 if (user == "yes" or user == "y"):
     print("");
-        printf("You got it!");
-        printf("Sending the plugin right now...\n");
-        connect(HOST, PORT);
-        send(FTP_FOLDER + SUN_TID, "Sun.plg");
-        send(FTP_FOLDER + MOON_TID, "Moon.plg");
-        disconnect();
+    printf("You got it!");
+    printf("Sending the plugin right now...\n");
+    connect(HOST, PORT);
+    send(FTP_FOLDER + SUN_TID, "Sun.plg");
+    send(FTP_FOLDER + MOON_TID, "Moon.plg");
+    disconnect();
 else:
     printf("As you want sir.\n");
 print("\n\n");
