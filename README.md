@@ -1,39 +1,47 @@
 # Pokémon Sun & Moon Cheat Plugin
-A cheats plugin for NTR CFW
+## A cheats plugin for NTR CFW
 
 A plugin created using RyDog199's blankCheatMenu base which in turn was based off Nanquitas work. 
 
-Cheats include:
+### Cheats include:
 
-Dynamic EXP multiplier adjustable from 0x to 255x
+- EXP Modifiers
+  1. Dynamic EXP multiplier adjustable from 0x to 255x
+  
+- Movement Modifiers
+  1. Run Faster
+  2. No trip animation
+  3. Walk through Walls (Hold R)
 
-Run Faster
-No trip animation
-Walk through Walls (Hold R)
+- Pokémon Modifiers
+  1. 100% Catch Rate
+  2. Wild Pokémon are shiny (START+L to enable, START+R to disable)
+  3. Rename any Pokémon
+  4. Instant Egg available from Nursery (Hold START and speak with NPC)
+  5. Instant Hatching
 
-100% Catch Rate
-Wild Pokémon are shiny (START+L to enable, START+R to disable)
-Rename any Pokémon
-Instant Egg available from Nursery (Hold START and speak with NPC)
-Instant Hatching
+- QR Codes
+  1. Removal of 24h wait time between Island Scans
+  2. 100 QR Scan Points
 
-Removal of 24h wait time between Island Scans
-100 QR Scan Points
+- Currency Manipulators
+  1. Max PokéDollars
+  2. Max Festival Coins
+  3. 9,999,999 total Festival Coins
+  4. 1,500,000 photo Thumbs Up
+  5. Max Battle Points
 
-Max PokéDollars
-Max Festival Coins
-9,999,999 total Festival Coins
-1,500,000 photo Thumbs Up
-Max Battle Points
+- Items
+  1. All medicine items x 950
+  2. All Berries x 150
+  3. All male clothes
+  4. All female clothes
 
-All medicine items x 950
-All Berries x 150
-All male and female clothing
-
-Instant message speed
-Re-match trainers (Hold L and speak to Trainer)
-Black outline toogle ON/OFF for player and Pokémon.
+- Misc
+  1. Instant message speed
+  2. Re-match trainers (Hold L and speak to Trainer)
+  3. Black outline toogle ON/OFF for player and Pokémon.
 
 In this release I have chosen to remove any codes that could make illegitimate Pokémon such as Catch Trainer's Pokémon, Learn any TM, and Pokémon spawning.
 
-This is a work in proccess and a learning exercise. The Gateshark cheats these codes were derived from can be found in the resources folder. 
+This is a work in progress and a learning exercise. The Gateshark cheats these codes were derived from can be found in the resources folder. 
