@@ -171,11 +171,14 @@ void	shinyPokemon(void)
 		WRITEU32(0x5957B8, 0xE2846020);
 		WRITEU32(0x5957BC, 0xE12FFF1E);
 	}
+	
 	WRITEU32(0x31835C, 0xEB09F513);
+	
 	if (is_pressed(BUTTON_ST + BUTTON_L))
 	{
 		WRITEU32(0x5957B0, 0xE3A06002);
 	}
+	
 	if (is_pressed(BUTTON_ST + BUTTON_R))
 	{
 		WRITEU32(0x5957B0, 0xEA000000);
