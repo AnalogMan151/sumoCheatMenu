@@ -20,27 +20,29 @@ def allFolderFile(pattern, ext):
 			s+= os.path.join(dirpath, filename) + ' '
 	return s;
 
-USA_TID 	= "0004000000175E00"
-NAME 		= "cheat"
+SUN_TID 	= "0004000000164800"
+MOON_TID 	= "0004000000175E00"
+NAME 		= "SUMO"
+FTP_FOLDER	= "/3ds/ntr/plugin/"
 HOST		= "192.168.1.133"
 PORT		= "5000"
-COPYTOPATH	= "%s.plg" % NAME
-CC 		= "arm-none-eabi-gcc"
-CP 		= "arm-none-eabi-g++"
-OC		= "arm-none-eabi-objcopy" 
-LD 		= "arm-none-eabi-ld"
-CTRULIB 	= "../libctru"
-DEVKITARM 	= "/opt/devkitPro/devkitARM"
-LIBPATH 	= "-L ./lib "
-ARCH 		= " -march=armv6k -mlittle-endian -mtune=mpcore -mfloat-abi=hard "
-CFLAGS		= " -Os -c " + ARCH
-ASFLAGS		= " -Os -c -s " + ARCH
+COPYTOPATH	= NAME + ".plg"
+CC 			= "arm-none-eabi-gcc"
+CP 			= "arm-none-eabi-g++"
+OC			= "arm-none-eabi-objcopy" 
+LD 			= "arm-none-eabi-ld"
+CTRULIB 	= '../libctru'
+DEVKITARM 	= 'opt/devkitPro/devkitARM'
+LIBPATH 	= '-L ./lib '
+ARCH 		= ' -march=armv6k -mlittle-endian -mtune=mpcore -mfloat-abi=hard '
+CFLAGS		= ' -Os -c ' + ARCH
+ASFLAGS		= ' -Os -c -s ' + ARCH
 LIBFLAGS 	= " -lntr -lShark2NTR_dev -lctr -lg -lsysbase -lc -lgcc "
-LDFLAGS		= " -pie --gc-sections -T 3ds.ld -Map=%s.map " % NAME
+LDFLAGS		= ' -pie --gc-sections -T 3ds.ld -Map=' + NAME +'.map '
 INCLUDES 	= " -I Includes -I Sources -I Includes/libntrplg "
 CFILES		= allFolderFile("./Sources/", ".c")
 ASFILES		= allFolderFile("./Sources/", ".s")
-OFILES          = allFolderFile("./ofiles/", ".o") 
+OFILES      = allFolderFile("./ofiles/", ".o")
 ftp 		= FTP()
 FILE		= COPYTOPATH
 		
@@ -53,10 +55,10 @@ def disconnect():
 def ls():
 	ftp.dir();
 
-def send():
+def send(path, FILE2):
 	file = open(FILE, 'rb');
-	ftp.cwd(FTP_FOLDER);
-	ftp.storbinary('STOR '+ FILE, file);
+	ftp.cwd(path);
+	ftp.storbinary('STOR '+ FILE2, file);
 	file.close();
 
 def printf(string):
@@ -76,9 +78,9 @@ def error():
 
 cwd = os.getcwd()
 print("\n\n");
-printf("Hello!\n");
-printf("How are you ?\n");
-printf("Preparing to compile the plugin: %s\n " % COPYTOPATH);
+printf("Hello AnalogMan!\n");
+printf("How are you?\n");
+printf("I'm preparing to compile your " + COPYTOPATH + " plugin.\n");
 printf("Please just wait a second...\n");
 if (os.path.isfile("obj/cheats.o")):
 	run("rm obj/*.o")
@@ -113,5 +115,23 @@ if (os.path.isfile("payload.bin")):
 if (os.path.isfile(NAME + ".map")):
 	run("rm *.map");
 
-printf("Done, enjoy your plugin !\n\n");
+printf("Copying the plugin in each folder...");
+shutil.copy2(COPYTOPATH, "./" + FTP_FOLDER + SUN_TID + "/Sun.plg");
+shutil.copy2(COPYTOPATH, "./" + FTP_FOLDER + MOON_TID + "/Moon.plg");
+printf("Creating the zip folder...");
+shutil.make_archive(NAME, 'zip', "./3ds/ntr/plugin");
+printf("Should I send the plugin on your console? (y/N)");
+user = raw_input();
+if (user == "yes" or user == "y"):
+	print("");
+	printf("You got it!");
+	printf("Sending the plugin right now...\n");
+	connect(HOST, PORT);
+	send(FTP_FOLDER + SUN_TID, "Sun.plg");
+	send(FTP_FOLDER + MOON_TID, "Moon.plg");
+	disconnect();
+else:
+	printf("As you want sir.\n");
+print("\n\n");
+printf("Done, enjoy your plugin!\n\n");
 
