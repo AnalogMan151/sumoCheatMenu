@@ -11,6 +11,7 @@ extern int i_resetEXP;
 extern int i_walkThruWalls;
 extern int i_shinyPokemon;
 extern int i_instantEgg;
+extern int i_allItems;
 extern int i_allMedicine;
 extern int i_allBerries;
 extern int i_allClothesMale;
