@@ -32,10 +32,11 @@ A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMe
   5. Max Battle Points
 
 - Items
-  1. All medicine items x 950
-  2. All Berries x 150
-  3. All male clothes
-  4. All female clothes
+  1. All Items x 950
+  2. All Medicine Items x 950
+  3. All Berries x 150
+  4. All Male Clothes
+  5. All Female Clothes
 
 - Misc
   1. Instant message speed
