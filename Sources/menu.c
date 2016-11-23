@@ -12,12 +12,14 @@ int i_resetEXP;
 int i_walkThruWalls;
 int i_shinyPokemon;
 int i_instantEgg;
+int i_allItems;
 int i_allMedicine;
 int i_allBerries;
 int i_allClothesMale;
 int i_allClothesFemale;
 int i_toggleOutlines;
 int i_rematchTrainers;
+int i_pcAnywhere;
 
 void	my_menus(void)
 {
@@ -72,6 +74,7 @@ void	my_menus(void)
 	exit_spoiler();
 	
 	new_spoiler("Items");
+        i_allItems = new_entry("All Items    x950", allItems);
 		i_allMedicine = new_entry("All Medicine x950", allMedicine);
 		i_allBerries = new_entry("All Berries  x950", allBerries);
 		i_allClothesMale = new_entry("All Clothes (Male)", allClothesMale);
@@ -80,6 +83,8 @@ void	my_menus(void)
 	
 	new_spoiler("Misc");
 		new_entry("Instant Text Speed", instantText);
+        	i_pcAnywhere = new_entry("Access PC Anywhere", pcAnywhere);
+        	set_note("Hold START while opening options menu", i_pcAnywhere);
 		i_rematchTrainers = new_entry("Rematch Trainers *", rematchTrainers);
 		set_note("Hold L & talk to Trainer", i_rematchTrainers);
 		i_toggleOutlines = new_entry(statusOutlines, toggleOutlines);
