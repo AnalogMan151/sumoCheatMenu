@@ -12,6 +12,7 @@ int i_resetEXP;
 int i_walkThruWalls;
 int i_shinyPokemon;
 int i_instantEgg;
+int i_allItems;
 int i_allMedicine;
 int i_allBerries;
 int i_allClothesMale;
@@ -73,6 +74,7 @@ void	my_menus(void)
 	exit_spoiler();
 	
 	new_spoiler("Items");
+        i_allItems = new_entry("All Items    x950", allItems);
 		i_allMedicine = new_entry("All Medicine x950", allMedicine);
 		i_allBerries = new_entry("All Berries  x950", allBerries);
 		i_allClothesMale = new_entry("All Clothes (Male)", allClothesMale);
