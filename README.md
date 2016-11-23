@@ -39,8 +39,9 @@ A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMe
 
 - Misc
   1. Instant message speed
-  2. Re-match trainers (Hold L and speak to Trainer)
-  3. Black outline toogle ON/OFF for player and Pokémon.
+  2. Access PC from Anywhere (Hold START while opening Option menu)
+  3. Re-match trainers (Hold L and speak to Trainer)
+  4. Black outline toogle ON/OFF for player and Pokémon.
 
 In this release I have chosen to remove any codes that could make illegitimate Pokémon such as Catch Trainer's Pokémon, Learn any TM, and Pokémon spawning.
 
