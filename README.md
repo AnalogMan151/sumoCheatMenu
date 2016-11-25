@@ -34,7 +34,7 @@ A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMe
 - Items
   1. All Items x 950
   2. All Medicine Items x 950
-  3. All Berries x 150
+  3. All Berries x 950
   4. All Male Clothes
   5. All Female Clothes
 
