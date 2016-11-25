@@ -125,6 +125,8 @@ user = raw_input();
 if (user == "yes" or user == "y"):
 	print("");
 	printf("You got it!");
+	printf("What is the IP address?");
+	HOST = raw_input();
 	printf("Sending the plugin right now...\n");
 	connect(HOST, PORT);
 	send(FTP_FOLDER + SUN_TID, "Sun.plg");
