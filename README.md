@@ -43,6 +43,8 @@ A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMe
   2. Access PC from Anywhere (Hold START while opening Option menu)
   3. Re-match trainers (Hold L and speak to Trainer)
   4. Black outline toogle ON/OFF for player and Pokémon.
+  5. Change gender to male (WARNING: Will reset appearance to default, including hair)
+  6. Change gender to female (WARNING: Will reset appearance to default, including hair)
 
 In this release I have chosen to remove any codes that could make illegitimate Pokémon such as Catch Trainer's Pokémon, Learn any TM, and Pokémon spawning.
 
