@@ -34,8 +34,6 @@ void	my_menus(void)
 	new_unselectable_entry("Press Y to see notes (*)");
 	new_separator();
 	
-	new_line();
-	
 	new_spoiler("Exp Multiplier");
 		new_unselectable_entry(currentEXP);
 		i_increaseEXP = new_entry("Increase Exp Rate + 1", increaseEXP);
@@ -90,10 +88,14 @@ void	my_menus(void)
 		i_rematchTrainers = new_entry("Rematch Trainers *", rematchTrainers);
 		set_note("Hold L & talk to Trainer", i_rematchTrainers);
 		i_toggleOutlines = new_entry(statusOutlines, toggleOutlines);
-        new_line();
-        new_unselectable_entry("Warning: Changes clothes to default!");
-        i_genderMale = new_radio_entry("Change Gender to Male", genderMale);
-        i_genderFemale = new_radio_entry("Change Gender to Female", genderFemale);
+        new_spoiler("Gender Codes");
+            new_unselectable_entry("Scroll down for cheats");
+            new_line();
+            new_unselectable_entry("Warning: Resets appearance");
+            new_unselectable_entry("         to default");
+            i_genderMale = new_radio_entry("Change Gender to Male", genderMale);
+            i_genderFemale = new_radio_entry("Change Gender to Female", genderFemale);
+        exit_spoiler();
 	exit_spoiler();
 
 }
