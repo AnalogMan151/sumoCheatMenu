@@ -20,6 +20,8 @@ int i_allClothesFemale;
 int i_toggleOutlines;
 int i_rematchTrainers;
 int i_pcAnywhere;
+int i_genderMale;
+int i_genderFemale;
 
 void	my_menus(void)
 {
@@ -55,8 +57,8 @@ void	my_menus(void)
 		i_shinyPokemon = new_entry("Wild Pokemon Shiny *", shinyPokemon);
 		set_note("Enable  = START+L\nDisable = START+R", i_shinyPokemon);
 		new_entry("Rename any Pokemon", renamePokemon);
-		i_instantEgg = new_entry("Instant Egg from Nursery *", instantEgg);
-		set_note("Hold START & talk to Nursery NPC", i_instantEgg);
+		i_instantEgg = new_entry("Instant Egg from Nursary *", instantEgg);
+		set_note("Hold START & talk to Nursary NPC", i_instantEgg);
 		new_entry("Instant Egg Hatching", instantHatch);
 	exit_spoiler();
 	
@@ -83,11 +85,15 @@ void	my_menus(void)
 	
 	new_spoiler("Misc");
 		new_entry("Instant Text Speed", instantText);
-        	i_pcAnywhere = new_entry("Access PC Anywhere", pcAnywhere);
-        	set_note("Hold START while opening options menu", i_pcAnywhere);
+        i_pcAnywhere = new_entry("Access PC Anywhere *", pcAnywhere);
+        set_note("Hold START while opening options menu", i_pcAnywhere);
 		i_rematchTrainers = new_entry("Rematch Trainers *", rematchTrainers);
 		set_note("Hold L & talk to Trainer", i_rematchTrainers);
 		i_toggleOutlines = new_entry(statusOutlines, toggleOutlines);
+        new_line();
+        new_unselectable_entry("Warning: Changes clothes to default!");
+        i_genderMale = new_radio_entry("Change Gender to Male", genderMale);
+        i_genderFemale = new_radio_entry("Change Gender to Female", genderFemale);
 	exit_spoiler();
 
 }
