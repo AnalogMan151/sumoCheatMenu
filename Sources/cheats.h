@@ -41,5 +41,7 @@ void    pcAnywhere(void);
 void	rematchTrainers(void);
 void	toggleOutlines(void);
 void	updateOutlines(void);
+void    genderMale(void);
+void    genderFemale(void);
 
 #endif

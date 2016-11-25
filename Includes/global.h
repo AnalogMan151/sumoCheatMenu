@@ -19,5 +19,7 @@ extern int i_allClothesFemale;
 extern int i_toggleOutlines;
 extern int i_rematchTrainers;
 extern int i_pcAnywhere;
+extern int i_genderMale;
+extern int i_genderFemale;
 
 #endif
