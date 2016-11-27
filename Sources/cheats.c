@@ -3,6 +3,7 @@
 
 
 char	*builder_name = "AnalogMan";
+u8      matchingHair;
 
 /********************************
 *				*
@@ -99,11 +100,9 @@ void	resetEXP(void)
 void	runFaster(void)
 {
 	if (!is_pressed(BUTTON_B))
-	{
 		WRITEU32(0x39AF74, 0x3F800000);
-	} else {
+	else
 		WRITEU32(0x39AF74, 0x3FB00000);
-	} 
 }
 
 // Disables occational tripping animation
@@ -490,9 +489,7 @@ void    allMedicine(void)
     memcpy((void *)(address + offset), buffer, 0x40);
 	
     if (any_is_pressed(0x0000CFFE)) // Any button but A
-    {
 		disableCheat(i_allMedicine);
-    }
 }
 
 // Gives all berries and sets them to quantity 950 (credit to Nanquitas for method)
@@ -519,9 +516,7 @@ void    allBerries(void)
 	WRITEU32(0x108 + offset, 0xEDAB0);
 	
     if (any_is_pressed(0x0000CFFE)) // Any button but A
-    {
 		disableCheat(i_allBerries);
-    }
 }
 
 // Function to add clothes to inventory
@@ -535,72 +530,57 @@ u32		clothesFunction(u32 offset, u8 data, u32 loop_num)
 	return(offset);
 }
 
-// All Clothes (Male)
-void	allClothesMale(void)
+// All Clothes
+void	allClothes(void)
 {
 	u32 offset = 0x33116620;
 	
-	offset = clothesFunction(offset, 0x1, 0x3A);
-	offset = clothesFunction(offset, 0x0, 0x87);
-	offset = clothesFunction(offset, 0x1, 0x14);
-	offset = clothesFunction(offset, 0x0, 0x20);
-	offset = clothesFunction(offset, 0x1, 0x100);
-	offset = clothesFunction(offset, 0x0, 0x8F);
-	offset = clothesFunction(offset, 0x1, 0x69);
-	offset = clothesFunction(offset, 0x0, 0xC7);
-	offset = clothesFunction(offset, 0x1, 0x25);
-	offset = clothesFunction(offset, 0x0, 0x79);
-	offset = clothesFunction(offset, 0x1, 0x5F);
-	offset = clothesFunction(offset, 0x0, 0x66);
-	offset = clothesFunction(offset, 0x1, 0x6D);
-	clothesFunction(offset, 0x0, 0x44);
+    if (READU8(0x330D67D5) == 0x0)
+    {
+        offset = clothesFunction(offset, 0x1, 0x3A);
+        offset = clothesFunction(offset, 0x0, 0x87);
+        offset = clothesFunction(offset, 0x1, 0x14);
+        offset = clothesFunction(offset, 0x0, 0x20);
+        offset = clothesFunction(offset, 0x1, 0x100);
+        offset = clothesFunction(offset, 0x0, 0x8F);
+        offset = clothesFunction(offset, 0x1, 0x69);
+        offset = clothesFunction(offset, 0x0, 0xC7);
+        offset = clothesFunction(offset, 0x1, 0x25);
+        offset = clothesFunction(offset, 0x0, 0x79);
+        offset = clothesFunction(offset, 0x1, 0x5F);
+        offset = clothesFunction(offset, 0x0, 0x66);
+        offset = clothesFunction(offset, 0x1, 0x6D);
+        clothesFunction(offset, 0x0, 0x44);
+    } else {
+        offset = clothesFunction(offset, 0x1, 0x5E);
+        offset = clothesFunction(offset, 0x0, 0x20);
+        offset = clothesFunction(offset, 0x1, 0x23);
+        offset = clothesFunction(offset, 0x0, 0x20);
+        offset = clothesFunction(offset, 0x1, 0x14);
+        offset = clothesFunction(offset, 0x0, 0x20);
+        offset = clothesFunction(offset, 0x1, 0x18A);
+        offset = clothesFunction(offset, 0x0, 0x5);
+        offset = clothesFunction(offset, 0x1, 0xF9);
+        offset = clothesFunction(offset, 0x0, 0x37);
+        offset = clothesFunction(offset, 0x1, 0x7E);
+        offset = clothesFunction(offset, 0x0, 0x20);
+        offset = clothesFunction(offset, 0x1, 0xA7);
+        offset = clothesFunction(offset, 0x0, 0x1E);
+        offset = clothesFunction(offset, 0x1, 0x91);
+        clothesFunction(offset, 0x0, 0x20);
+    }
 	
-	WRITEU32(0xF8 + 0x33116620, 0x3010101);
-	WRITEU32(0x2C8 + 0x33116620, 0x3010101);
-	WRITEU32(0x3B4 + 0x33116620, 0x1010103);
-	WRITEU32(0x450 + 0x33116620, 0x1030000);
-	WRITEU32(0x514 + 0x33116620, 0x3000000);
-	
-	if (any_is_pressed(0x0000CFFE))
-	{
-		disableCheat(i_allClothesMale);
-	}
-}
-
-// All Clothes (Female)
-void	allClothesFemale(void)
-{
-	u32 offset = 0x33116620;
-	
-	offset = clothesFunction(offset, 0x1, 0x5E);
-	offset = clothesFunction(offset, 0x0, 0x20);
-	offset = clothesFunction(offset, 0x1, 0x23);
-	offset = clothesFunction(offset, 0x0, 0x20);
-	offset = clothesFunction(offset, 0x1, 0x14);
-	offset = clothesFunction(offset, 0x0, 0x20);
-	offset = clothesFunction(offset, 0x1, 0x18A);
-	offset = clothesFunction(offset, 0x0, 0x5);
-	offset = clothesFunction(offset, 0x1, 0xF9);
-	offset = clothesFunction(offset, 0x0, 0x37);
-	offset = clothesFunction(offset, 0x1, 0x7E);
-	offset = clothesFunction(offset, 0x0, 0x20);
-	offset = clothesFunction(offset, 0x1, 0xA7);
-	offset = clothesFunction(offset, 0x0, 0x1E);
-	offset = clothesFunction(offset, 0x1, 0x91);
-	clothesFunction(offset, 0x0, 0x20);
-	
-	WRITEU32(0x100 + 0x33116620, 0x3010101);
-	WRITEU32(0x288 + 0x33116620, 0x3010101);
-	WRITEU32(0x3B4 + 0x33116620, 0x1010103);
-	WRITEU32(0x450 + 0x33116620, 0x1030000);
-	WRITEU32(0x514 + 0x33116620, 0x3000000);
+    offset = 0x33116620;
+    
+	WRITEU32(0xF8 + offset, 0x3010101);
+	WRITEU32(0x2C8 + offset, 0x3010101);
+	WRITEU32(0x3B4 + offset, 0x1010103);
+	WRITEU32(0x450 + offset, 0x1030000);
+	WRITEU32(0x514 + offset, 0x3000000);
 	
 	if (any_is_pressed(0x0000CFFE))
-	{
-		disableCheat(i_allClothesFemale);
-	}
+		disableCheat(i_allClothes);
 }
-
 
 /********************************
 *				*
@@ -650,9 +630,7 @@ void    pcAnywhere(void)
     WRITEU32(0x373C48, 0xEB088755);
     
     if (is_pressed(BUTTON_ST))
-    {
         WRITEU32(0x5959A8, 0x1AF77D09);
-    }
 }
 
 // Re-battle trainer that have already been fought. Active by holding L and talking to them
@@ -672,11 +650,9 @@ void	rematchTrainers(void)
 void	toggleOutlines(void)
 {
 	if (READU32(0x41B748) == 0xE5802004)
-	{
 		WRITEU32(0x41B748, 0xE320F000);
-	} else {
+	else
 		WRITEU32(0x41B748, 0xE5802004);
-	}
 	updateOutlines();
 	disableCheat(i_toggleOutlines);
 }
@@ -685,46 +661,99 @@ void	toggleOutlines(void)
 void	updateOutlines(void)
 {
 	if (READU32(0x41B748) == 0xE5802004)
-	{
-		xsprintf(statusOutlines, "Disable Outlines");
-	} else {
-		xsprintf(statusOutlines, "Enable Outlines");
-	}
+		xsprintf(statusOutlines, "Disable Outlines *");
+	else
+		xsprintf(statusOutlines, "Enable Outlines  *");
 }
-// Changes current gender to default male appearance
-void    genderMale(void)
+// Changes current gender and skin tone. Sets clothes and hair to default with gender change.
+void    switchLooks(void)
 {
     u32 offset = 0x330D67D4;
-        
-    WRITEU8(0x01 + offset, 0x00);
-    WRITEU32(0x50 + offset, 0x808300);
-    WRITEU32(0x54 + offset, 0x40000);
-    WRITEU32(0x58 + offset, 0x10040B);
-    WRITEU32(0x5C + offset, 0x1C01);
-    WRITEU32(0x60 + offset, 0x12904);
-    WRITEU32(0x64 + offset, 0x00);
-        
-    if (any_is_pressed(0x0000CFFE))
-    {
-        disableCheat(i_genderMale);
-    }
-}
     
-// Changes current gender to default female appearance
-void    genderFemale(void)
-{
-    u32 offset = 0x330D67D4;
-        
-    WRITEU8(0x01 + offset, 0x01);
-    WRITEU32(0x50 + offset, 0x808304);
-    WRITEU32(0x54 + offset, 0x40000);
-    WRITEU32(0x58 + offset, 0x100405);
-    WRITEU32(0x5C + offset, 0x3001);
-    WRITEU32(0x60 + offset, 0x12C04);
+    if (currentGender == 0x00 && currentGender != READU8(0x330D67D5))
+    {
+        WRITEU8(0x01 + offset, currentGender);
+        WRITEU32(0x50 + offset, 0x800000 + (matchingHair * 0x100) + currentSkintone);
+        WRITEU32(0x54 + offset, 0x40000);
+        WRITEU32(0x58 + offset, 0x10040C);
+        WRITEU32(0x5C + offset, 0x1C01);
+    } else if (currentGender == 0x01 && currentGender != READU8(0x330D67D5))
+    {
+        WRITEU8(0x01 + offset, currentGender);
+        WRITEU32(0x50 + offset, 0x800000 + (matchingHair * 0x100) + currentSkintone);
+        WRITEU32(0x54 + offset, 0x40000);
+        WRITEU32(0x58 + offset, 0x100405);
+        WRITEU32(0x5C + offset, 0x3001);
+    } else {
+        WRITEU8(0x50 + offset, currentSkintone);
+    }
+    
     WRITEU32(0x64 + offset, 0x00);
         
     if (any_is_pressed(0x0000CFFE))
+        disableCheat(i_switchLooks);
+}
+
+// Updates menu with current gender
+void    updateGender(void)
+{
+    if (currentGender == 0x00)
+        xsprintf(storedGender, "Current Gender: Male   *");
+    if (currentGender == 0x01)
+        xsprintf(storedGender, "Current Gender: Female *");
+}
+
+// Updates menu with current skintone and changes hair color to match
+void    updateSkintone(void)
+{
+    if (currentSkintone == 0x00 || currentSkintone == 0x04)
     {
-        disableCheat(i_genderFemale);
+        matchingHair = 0x83;
+        xsprintf(storedSkintone, "Current Skintone: A *");
     }
+    if (currentSkintone == 0x08 || currentSkintone == 0x0C)
+    {
+        matchingHair = 0x04;
+        xsprintf(storedSkintone, "Current Skintone: B *");
+    }
+    if (currentSkintone == 0x10 || currentSkintone == 0x14)
+    {
+        matchingHair = 0x48;
+        xsprintf(storedSkintone, "Current Skintone: C *");
+    }
+    if (currentSkintone == 0x18 || currentSkintone == 0x1C)
+    {
+        matchingHair = 0x08;
+        xsprintf(storedSkintone, "Current Skintone: D *");
+    }
+}
+
+// Cycles through gender choices
+void    setGender(void)
+{
+    if (currentGender == 0x00)
+    {
+        currentGender++;
+        currentSkintone += 0x4;
+    } else {
+        currentGender--;
+        currentSkintone -= 0x4;
+    }
+    
+    updateGender();
+    disableCheat(i_setGender);
+}
+
+// Cycles through skintone choices
+void    setSkintone(void)
+{
+    if (currentSkintone == 0x18)
+        currentSkintone = 0x0;
+    else if (currentSkintone == 0x1C)
+        currentSkintone = 0x4;
+    else
+        currentSkintone += 0x8;
+    
+    updateSkintone();
+    disableCheat(i_setSkintone);
 }
