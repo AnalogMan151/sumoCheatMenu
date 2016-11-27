@@ -35,7 +35,8 @@ A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMe
   1. All Items x 950
   2. All Medicine Items x 950
   3. All Berries x 950
-  4. All Clothes
+  4. All TMs
+  5. All Clothes
 
 - Misc
   1. Change Gender (Open a menu to see change. WARNING: This will reset clothes and hair) 
