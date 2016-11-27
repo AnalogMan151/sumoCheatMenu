@@ -18,6 +18,7 @@ int i_shinyPokemon;
 int i_instantEgg;
 int i_allItems;
 int i_allMedicine;
+int i_allTMs;
 int i_allBerries;
 int i_allClothes;
 int i_toggleOutlines;
@@ -86,6 +87,7 @@ void	my_menus(void)
         i_allItems = new_entry("All Items    x950", allItems);
 		i_allMedicine = new_entry("All Medicine x950", allMedicine);
 		i_allBerries = new_entry("All Berries  x950", allBerries);
+        i_allTMs = new_entry("All TMs", allTMs);
 		i_allClothes = new_entry("All Clothes", allClothes);
 	exit_spoiler();
 	

@@ -15,6 +15,7 @@ extern int i_shinyPokemon;
 extern int i_instantEgg;
 extern int i_allItems;
 extern int i_allMedicine;
+extern int i_allTMs;
 extern int i_allBerries;
 extern int i_allClothes;
 extern int i_toggleOutlines;
