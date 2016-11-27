@@ -33,15 +33,18 @@ void    allItems(void);
 void	allMedicine(void);
 void	allBerries(void);
 u32		clothesFunction(u32 offset, u8 data, u32 loop_num);
-void	allClothesMale(void);
-void	allClothesFemale(void);
+void	allClothes(void);
 
 void	instantText(void);
 void    pcAnywhere(void);
 void	rematchTrainers(void);
 void	toggleOutlines(void);
 void	updateOutlines(void);
-void    genderMale(void);
-void    genderFemale(void);
+void    switchLooks(void);
+void    setGender(void);
+void    updateGender(void);
+void    setSkintone(void);
+void    updateSkintone(void);
+
 
 #endif
