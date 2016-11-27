@@ -92,7 +92,7 @@ void	my_menus(void)
 	exit_spoiler();
 	
 	new_spoiler("Misc");
-        new_spoiler("Gender & Skintone");
+        new_spoiler("Gender & Skin Tone");
             new_unselectable_entry("WARNING: Gender change resets");
             new_unselectable_entry("         clothes & hair");
             new_line();
