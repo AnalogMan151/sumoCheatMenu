@@ -31,6 +31,7 @@ void	maxBP(void);
 
 void    allItems(void);
 void	allMedicine(void);
+void    allTMs(void);
 void	allBerries(void);
 u32		clothesFunction(u32 offset, u8 data, u32 loop_num);
 void	allClothes(void);
