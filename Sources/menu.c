@@ -1,7 +1,11 @@
 #include "cheats.h"
 
-char    statusOutlines[40] = "Disable Outlines";
-char	currentEXP[40] = "Current EXP rate: 1x";
+char    statusOutlines[40] = "Value not found";
+char	currentEXP[40] = "Value not found";
+char    storedGender[40] = "Value not found";
+char    storedSkintone[40] = "Value not found";
+u8      currentGender;
+u8      currentSkintone;
 
 // Index numbers for cheats with notes or disableCheat() commands
 int i_increaseEXP;
@@ -14,25 +18,31 @@ int i_shinyPokemon;
 int i_instantEgg;
 int i_allItems;
 int i_allMedicine;
+int i_allTMs;
 int i_allBerries;
-int i_allClothesMale;
-int i_allClothesFemale;
+int i_allClothes;
 int i_toggleOutlines;
 int i_rematchTrainers;
 int i_pcAnywhere;
+int i_setGender;
+int i_setSkintone;
+int i_switchLooks;
+
 
 void	my_menus(void)
 {
 	set_hid_address(0x10002000);
-	
+	currentGender = READU8(0x330D67D5);
+    currentSkintone = READU8(0x330D6824);
+    
 	updateOutlines();
 	exp_x();
 	updateEXP();
+    updateGender();
+    updateSkintone();
 	
 	new_unselectable_entry("Press Y to see notes (*)");
 	new_separator();
-	
-	new_line();
 	
 	new_spoiler("Exp Multiplier");
 		new_unselectable_entry(currentEXP);
@@ -77,17 +87,28 @@ void	my_menus(void)
         i_allItems = new_entry("All Items    x950", allItems);
 		i_allMedicine = new_entry("All Medicine x950", allMedicine);
 		i_allBerries = new_entry("All Berries  x950", allBerries);
-		i_allClothesMale = new_entry("All Clothes (Male)", allClothesMale);
-		i_allClothesFemale = new_entry("All Clothes (Female)", allClothesFemale);
+        i_allTMs = new_entry("All TMs", allTMs);
+		i_allClothes = new_entry("All Clothes", allClothes);
 	exit_spoiler();
 	
 	new_spoiler("Misc");
+        new_spoiler("Gender & Skintone");
+            new_unselectable_entry("WARNING: Gender change resets");
+            new_unselectable_entry("         clothes & hair");
+            new_line();
+            i_setGender = new_entry(storedGender, setGender);
+            set_note("Open a menu to see change", i_setGender);
+            i_setSkintone = new_entry(storedSkintone, setSkintone);
+            set_note("Ride Pokemon to see change\nor switch genders", i_setSkintone);
+            i_switchLooks = new_entry("Apply Changes", switchLooks);
+        exit_spoiler();
 		new_entry("Instant Text Speed", instantText);
-        	i_pcAnywhere = new_entry("Access PC Anywhere *", pcAnywhere);
-        	set_note("Hold START while opening options menu", i_pcAnywhere);
+        i_pcAnywhere = new_entry("Access PC Anywhere *", pcAnywhere);
+        set_note("Hold START while opening options menu", i_pcAnywhere);
 		i_rematchTrainers = new_entry("Rematch Trainers *", rematchTrainers);
 		set_note("Hold L & talk to Trainer", i_rematchTrainers);
 		i_toggleOutlines = new_entry(statusOutlines, toggleOutlines);
+        set_note("Open a menu to see change", i_toggleOutlines);
 	exit_spoiler();
 
 }
