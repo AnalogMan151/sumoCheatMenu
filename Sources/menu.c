@@ -20,6 +20,8 @@ int i_allClothesFemale;
 int i_toggleOutlines;
 int i_rematchTrainers;
 int i_pcAnywhere;
+int i_genderMale;
+int i_genderFemale;
 
 void	my_menus(void)
 {
@@ -31,8 +33,6 @@ void	my_menus(void)
 	
 	new_unselectable_entry("Press Y to see notes (*)");
 	new_separator();
-	
-	new_line();
 	
 	new_spoiler("Exp Multiplier");
 		new_unselectable_entry(currentEXP);
@@ -83,11 +83,19 @@ void	my_menus(void)
 	
 	new_spoiler("Misc");
 		new_entry("Instant Text Speed", instantText);
-        	i_pcAnywhere = new_entry("Access PC Anywhere *", pcAnywhere);
-        	set_note("Hold START while opening options menu", i_pcAnywhere);
+        i_pcAnywhere = new_entry("Access PC Anywhere *", pcAnywhere);
+        set_note("Hold START while opening options menu", i_pcAnywhere);
 		i_rematchTrainers = new_entry("Rematch Trainers *", rematchTrainers);
 		set_note("Hold L & talk to Trainer", i_rematchTrainers);
 		i_toggleOutlines = new_entry(statusOutlines, toggleOutlines);
+        new_spoiler("Gender Codes");
+            new_unselectable_entry("Scroll down for cheats");
+            new_line();
+            new_unselectable_entry("Warning: Resets appearance");
+            new_unselectable_entry("         to default");
+            i_genderMale = new_radio_entry("Change Gender to Male", genderMale);
+            i_genderFemale = new_radio_entry("Change Gender to Female", genderFemale);
+        exit_spoiler();
 	exit_spoiler();
 
 }

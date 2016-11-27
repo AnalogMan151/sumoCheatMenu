@@ -691,3 +691,40 @@ void	updateOutlines(void)
 		xsprintf(statusOutlines, "Enable Outlines");
 	}
 }
+// Changes current gender to default male appearance
+void    genderMale(void)
+{
+    u32 offset = 0x330D67D4;
+        
+    WRITEU8(0x01 + offset, 0x00);
+    WRITEU32(0x50 + offset, 0x808300);
+    WRITEU32(0x54 + offset, 0x40000);
+    WRITEU32(0x58 + offset, 0x10040B);
+    WRITEU32(0x5C + offset, 0x1C01);
+    WRITEU32(0x60 + offset, 0x12904);
+    WRITEU32(0x64 + offset, 0x00);
+        
+    if (any_is_pressed(0x0000CFFE))
+    {
+        disableCheat(i_genderMale);
+    }
+}
+    
+// Changes current gender to default female appearance
+void    genderFemale(void)
+{
+    u32 offset = 0x330D67D4;
+        
+    WRITEU8(0x01 + offset, 0x01);
+    WRITEU32(0x50 + offset, 0x808304);
+    WRITEU32(0x54 + offset, 0x40000);
+    WRITEU32(0x58 + offset, 0x100405);
+    WRITEU32(0x5C + offset, 0x3001);
+    WRITEU32(0x60 + offset, 0x12C04);
+    WRITEU32(0x64 + offset, 0x00);
+        
+    if (any_is_pressed(0x0000CFFE))
+    {
+        disableCheat(i_genderFemale);
+    }
+}
