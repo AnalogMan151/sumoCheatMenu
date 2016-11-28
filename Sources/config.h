@@ -11,7 +11,7 @@ unsigned char *null_img = (void *)0x0;
 
 #define SPLASH				BACKGROUND
 
-#define UI_OFFSET			15
+#define UI_OFFSET			13
 
 #define	CREDIT_LABEL			credit_logo
 #define CREDIT_LABEL_POS_X		0

@@ -13,6 +13,10 @@ A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMe
   2. No trip animation
   3. Walk through Walls (Hold R)
 
+- Appearance Modifiers
+  1. Change Gender (Open a menu to see change. WARNING: This will reset clothes and hair) 
+  2. Change Skin Tone (Ride a Pokémon or change gender to see change)
+
 - Pokémon Modifiers
   1. 100% Catch Rate
   2. Wild Pokémon are shiny (START+L to enable, START+R to disable)
@@ -34,15 +38,15 @@ A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMe
 - Items
   1. All Items x 950
   2. All Medicine Items x 950
-  3. All Berries x 150
-  4. All Male Clothes
-  5. All Female Clothes
+  3. All Berries x 950
+  4. All TMs
+  5. All Clothes
 
 - Misc
   1. Instant message speed
   2. Access PC from Anywhere (Hold START while opening Option menu)
   3. Re-match trainers (Hold L and speak to Trainer)
-  4. Black outline toogle ON/OFF for player and Pokémon.
+  4. Black outline toogle ON/OFF for player and Pokémon. (Open a menu to see change)
 
 In this release I have chosen to remove any codes that could make illegitimate Pokémon such as Catch Trainer's Pokémon, Learn any TM, and Pokémon spawning.
 
