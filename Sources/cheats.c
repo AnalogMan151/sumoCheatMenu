@@ -744,22 +744,22 @@ void    updateSkintone(void)
     if (currentSkintone == 0x00 || currentSkintone == 0x04)
     {
         matchingHair = 0x83;
-        xsprintf(storedSkintone, "Current Skintone: A");
+        xsprintf(storedSkintone, "Current Skin Tone: A");
     }
     if (currentSkintone == 0x08 || currentSkintone == 0x0C)
     {
         matchingHair = 0x04;
-        xsprintf(storedSkintone, "Current Skintone: B");
+        xsprintf(storedSkintone, "Current Skin Tone: B");
     }
     if (currentSkintone == 0x10 || currentSkintone == 0x14)
     {
         matchingHair = 0x48;
-        xsprintf(storedSkintone, "Current Skintone: C");
+        xsprintf(storedSkintone, "Current Skin Tone: C");
     }
     if (currentSkintone == 0x18 || currentSkintone == 0x1C)
     {
         matchingHair = 0x08;
-        xsprintf(storedSkintone, "Current Skintone: D");
+        xsprintf(storedSkintone, "Current Skin Tone: D");
     }
 }
 
