@@ -40,39 +40,60 @@ void	my_menus(void)
 	updateEXP();
     updateGender();
     updateSkintone();
+    WRITEU32(0X3DFFD0, 0XE3A01000); // Disables inGame NFC to allow NTR connection outside of Festival Plaza
 	
-	new_unselectable_entry("Press Y to see notes (*)");
+	new_unselectable_entry("Entries w/ an orange background");
+    new_unselectable_entry("have notes. Press (Y) to view.");
+
 	new_separator();
 	
-	new_spoiler("Exp Multiplier");
+	new_spoiler("EXP Multiplier");
 		new_unselectable_entry(currentEXP);
-		i_increaseEXP = new_entry("Increase Exp Rate + 1", increaseEXP);
-		i_increaseEXP10 = new_entry("Increase Exp Rate +10", increaseEXP10);
-		i_decreaseEXP = new_entry("Decrease Exp Rate - 1", decreaseEXP);
+        new_separator();
+		i_increaseEXP = new_entry("Increase EXP Rate + 1", increaseEXP);
+		i_increaseEXP10 = new_entry("Increase EXP Rate +10", increaseEXP10);
+		i_decreaseEXP = new_entry("Decrease EXP Rate - 1", decreaseEXP);
 		i_decreaseEXP10 = new_entry("Decrease EXP Rate -10", decreaseEXP10);
 		i_resetEXP = new_entry("Reset EXP Rate", resetEXP);
+        new_line();
 	exit_spoiler();
 	
 	new_spoiler("Movement Modifiers");
 		new_entry("Run Faster", runFaster);
 		new_entry("Never Trip", neverTrip);
-		i_walkThruWalls = new_entry("Walk Through Walls *", walkThruWalls);
+		i_walkThruWalls = new_entry("Walk Through Walls", walkThruWalls);
 		set_note("Activate = Hold R", i_walkThruWalls);
+        new_line();
 	exit_spoiler();
 	
+    new_spoiler("Appearance Modifiers");
+        new_unselectable_entry("WARNING: Gender change resets");
+        new_unselectable_entry("         clothes & hair");
+        new_line();
+        i_setGender = new_entry(storedGender, setGender);
+        set_note("Open a menu to see change", i_setGender);
+        i_setSkintone = new_entry(storedSkintone, setSkintone);
+        set_note("Ride Pokemon to see change\nor switch genders", i_setSkintone);
+        new_separator();
+        i_switchLooks = new_entry("Apply Changes", switchLooks);
+        new_line();
+    exit_spoiler();
+    
 	new_spoiler("Pokemon Modifiers");
 		new_entry("100% Capture Rate", catch100);
-		i_shinyPokemon = new_entry("Wild Pokemon Shiny *", shinyPokemon);
+		i_shinyPokemon = new_entry("Wild Pokemon Shiny", shinyPokemon);
 		set_note("Enable  = START+L\nDisable = START+R", i_shinyPokemon);
 		new_entry("Rename any Pokemon", renamePokemon);
-		i_instantEgg = new_entry("Instant Egg from Nursary *", instantEgg);
+		i_instantEgg = new_entry("Instant Egg from Nursary", instantEgg);
 		set_note("Hold START & talk to Nursary NPC", i_instantEgg);
 		new_entry("Instant Egg Hatching", instantHatch);
+        new_line();
 	exit_spoiler();
 	
 	new_spoiler("QR Codes");
 		new_entry("Remove Island Scan Wait", removeIslandScanWait);
 		new_entry("QR Scan Point 100", qrScan100);
+        new_line();
 	exit_spoiler();
 	
 	new_spoiler("Currency Manipulators");
@@ -81,6 +102,7 @@ void	my_menus(void)
 		new_entry("Total Festival Coins 9,999,999", totalCoins);
 		new_entry("Total Thumbs Up 1,500,000", totalThumbs);
 		new_entry("Maximum Battle Points (BP)", maxBP);
+        new_line();
 	exit_spoiler();
 	
 	new_spoiler("Items");
@@ -89,26 +111,18 @@ void	my_menus(void)
 		i_allBerries = new_entry("All Berries  x950", allBerries);
         i_allTMs = new_entry("All TMs", allTMs);
 		i_allClothes = new_entry("All Clothes", allClothes);
+        new_line();
 	exit_spoiler();
 	
 	new_spoiler("Misc");
-        new_spoiler("Gender & Skintone");
-            new_unselectable_entry("WARNING: Gender change resets");
-            new_unselectable_entry("         clothes & hair");
-            new_line();
-            i_setGender = new_entry(storedGender, setGender);
-            set_note("Open a menu to see change", i_setGender);
-            i_setSkintone = new_entry(storedSkintone, setSkintone);
-            set_note("Ride Pokemon to see change\nor switch genders", i_setSkintone);
-            i_switchLooks = new_entry("Apply Changes", switchLooks);
-        exit_spoiler();
 		new_entry("Instant Text Speed", instantText);
-        i_pcAnywhere = new_entry("Access PC Anywhere *", pcAnywhere);
+        i_pcAnywhere = new_entry("Access PC Anywhere", pcAnywhere);
         set_note("Hold START while opening options menu", i_pcAnywhere);
-		i_rematchTrainers = new_entry("Rematch Trainers *", rematchTrainers);
+		i_rematchTrainers = new_entry("Rematch Trainers", rematchTrainers);
 		set_note("Hold L & talk to Trainer", i_rematchTrainers);
 		i_toggleOutlines = new_entry(statusOutlines, toggleOutlines);
         set_note("Open a menu to see change", i_toggleOutlines);
+        new_line();
 	exit_spoiler();
 
 }

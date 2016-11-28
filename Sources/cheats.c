@@ -696,9 +696,9 @@ void	toggleOutlines(void)
 void	updateOutlines(void)
 {
 	if (READU32(0x41B748) == 0xE5802004)
-		xsprintf(statusOutlines, "Disable Outlines *");
+		xsprintf(statusOutlines, "Disable Outlines");
 	else
-		xsprintf(statusOutlines, "Enable Outlines  *");
+		xsprintf(statusOutlines, "Enable Outlines");
 }
 // Changes current gender and skin tone. Sets clothes and hair to default with gender change.
 void    switchLooks(void)
@@ -733,9 +733,9 @@ void    switchLooks(void)
 void    updateGender(void)
 {
     if (currentGender == 0x00)
-        xsprintf(storedGender, "Current Gender: Male   *");
+        xsprintf(storedGender, "Current Gender: Male");
     if (currentGender == 0x01)
-        xsprintf(storedGender, "Current Gender: Female *");
+        xsprintf(storedGender, "Current Gender: Female");
 }
 
 // Updates menu with current skintone and changes hair color to match
@@ -744,22 +744,22 @@ void    updateSkintone(void)
     if (currentSkintone == 0x00 || currentSkintone == 0x04)
     {
         matchingHair = 0x83;
-        xsprintf(storedSkintone, "Current Skintone: A *");
+        xsprintf(storedSkintone, "Current Skintone: A");
     }
     if (currentSkintone == 0x08 || currentSkintone == 0x0C)
     {
         matchingHair = 0x04;
-        xsprintf(storedSkintone, "Current Skintone: B *");
+        xsprintf(storedSkintone, "Current Skintone: B");
     }
     if (currentSkintone == 0x10 || currentSkintone == 0x14)
     {
         matchingHair = 0x48;
-        xsprintf(storedSkintone, "Current Skintone: C *");
+        xsprintf(storedSkintone, "Current Skintone: C");
     }
     if (currentSkintone == 0x18 || currentSkintone == 0x1C)
     {
         matchingHair = 0x08;
-        xsprintf(storedSkintone, "Current Skintone: D *");
+        xsprintf(storedSkintone, "Current Skintone: D");
     }
 }
 
