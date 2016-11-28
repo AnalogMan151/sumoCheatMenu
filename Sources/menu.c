@@ -115,7 +115,7 @@ void	my_menus(void)
 	exit_spoiler();
 	
 	new_spoiler("Misc");
-		new_entry("Instant Text Speed", instantText);
+        new_entry("Instant Text Speed", instantText);
         i_pcAnywhere = new_entry("Access PC Anywhere", pcAnywhere);
         set_note("Hold START while opening options menu", i_pcAnywhere);
 		i_rematchTrainers = new_entry("Rematch Trainers", rematchTrainers);
