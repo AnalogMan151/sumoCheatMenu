@@ -700,6 +700,13 @@ void	updateOutlines(void)
 	else
 		xsprintf(statusOutlines, "Enable Outlines");
 }
+
+/********************************
+*				*
+*	Gender & Skin Tone	*
+*				*
+********************************/
+
 // Changes current gender and skin tone. Sets clothes and hair to default with gender change.
 void    switchLooks(void)
 {
