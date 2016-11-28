@@ -492,6 +492,41 @@ void    allMedicine(void)
 		disableCheat(i_allMedicine);
 }
 
+// Gives all TMs
+void    allTMs(void)
+{
+    static const u8 buffer[] =
+    {
+        0x6A, 0x06, 0x00, 0x00, 0x6B, 0x06, 0x00, 0x00,
+        0x6C, 0x06, 0x00, 0x00, 0xB2, 0x06, 0x00, 0x00,
+        0xB3, 0x06, 0x00, 0x00, 0xB4, 0x06, 0x00, 0x00,
+        0xB5, 0x06, 0x00, 0x00, 0xB6, 0x06, 0x00, 0x00,
+        0xA4, 0x05, 0x00, 0x00, 0xA5, 0x05, 0x00, 0x00,
+        0xA6, 0x05, 0x00, 0x00, 0xA7, 0x05, 0x00, 0x00,
+        0xA8, 0x05, 0x00, 0x00, 0xA9, 0x05, 0x00, 0x00,
+    };
+    
+    u32 data;
+    u32 offset;
+    u32 address;
+    
+    offset = 0x330D62CC;
+    data = 0x548;
+    for (int i = 0; i < 0x5C; i++)
+    {
+        WRITEU32(offset, data);
+        offset += 4;
+        data += 1;
+    }
+    address = 0x330D62CC;
+    offset = 0x170;
+    memcpy((void *)(address + offset), buffer, 0x38);
+    WRITEU32(address + 0x1A8, 0x6E1);
+    
+    if (any_is_pressed(0x0000CFFE)) // Any button but A
+        disableCheat(i_allTMs);
+}
+
 // Gives all berries and sets them to quantity 950 (credit to Nanquitas for method)
 void    allBerries(void)
 {
@@ -661,10 +696,17 @@ void	toggleOutlines(void)
 void	updateOutlines(void)
 {
 	if (READU32(0x41B748) == 0xE5802004)
-		xsprintf(statusOutlines, "Disable Outlines *");
+		xsprintf(statusOutlines, "Disable Outlines");
 	else
-		xsprintf(statusOutlines, "Enable Outlines  *");
+		xsprintf(statusOutlines, "Enable Outlines");
 }
+
+/********************************
+*				*
+*	Gender & Skin Tone	*
+*				*
+********************************/
+
 // Changes current gender and skin tone. Sets clothes and hair to default with gender change.
 void    switchLooks(void)
 {
@@ -698,9 +740,9 @@ void    switchLooks(void)
 void    updateGender(void)
 {
     if (currentGender == 0x00)
-        xsprintf(storedGender, "Current Gender: Male   *");
+        xsprintf(storedGender, "Current Gender: Male");
     if (currentGender == 0x01)
-        xsprintf(storedGender, "Current Gender: Female *");
+        xsprintf(storedGender, "Current Gender: Female");
 }
 
 // Updates menu with current skintone and changes hair color to match
@@ -709,22 +751,22 @@ void    updateSkintone(void)
     if (currentSkintone == 0x00 || currentSkintone == 0x04)
     {
         matchingHair = 0x83;
-        xsprintf(storedSkintone, "Current Skintone: A *");
+        xsprintf(storedSkintone, "Current Skin Tone: A");
     }
     if (currentSkintone == 0x08 || currentSkintone == 0x0C)
     {
         matchingHair = 0x04;
-        xsprintf(storedSkintone, "Current Skintone: B *");
+        xsprintf(storedSkintone, "Current Skin Tone: B");
     }
     if (currentSkintone == 0x10 || currentSkintone == 0x14)
     {
         matchingHair = 0x48;
-        xsprintf(storedSkintone, "Current Skintone: C *");
+        xsprintf(storedSkintone, "Current Skin Tone: C");
     }
     if (currentSkintone == 0x18 || currentSkintone == 0x1C)
     {
         matchingHair = 0x08;
-        xsprintf(storedSkintone, "Current Skintone: D *");
+        xsprintf(storedSkintone, "Current Skin Tone: D");
     }
 }
 
