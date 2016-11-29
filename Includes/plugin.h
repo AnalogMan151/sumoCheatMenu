@@ -6,7 +6,6 @@
 #include "result.h"
 #include "common.h"
 #include "hid.h"
-#include "global.h"
 #include <string.h>
 
 #define MAX(x, y) (x > y ? x : y)
@@ -93,7 +92,7 @@ int	new_entry(char *text, void(*f)());
 ** int new_spoiler(char *text)
 ** *text:  a pointer to the spoiler's text
 ** Return value: the index of the spoiler in the menu
-** Create a new spoiler and define it as the default location 
+** Create a new spoiler and define it as the default location
 ** for the nexts new_entry calls
 */
 int	new_spoiler(char *text);
@@ -128,7 +127,7 @@ int	new_unselectable_entry(char *text);
 /*
 ** int new_spearator(void)
 ** Return value: the index of the entry
-** Create a separator in the menu which can't be selected 
+** Create a separator in the menu which can't be selected
 */
 int	new_separator(void);
 

@@ -1,6 +1,7 @@
 #ifndef CHEATS_H
 #define CHEATS_H
 #include "plugin.h"
+#include "global.h"
 
 void	exp_x(void);
 void	updateEXP(void);
@@ -33,7 +34,7 @@ void    allItems(void);
 void	allMedicine(void);
 void    allTMs(void);
 void	allBerries(void);
-u32		clothesFunction(u32 offset, u8 data, u32 loop_num);
+u32		clothesFunction(u32 offset, u8 data, u16 loop_num);
 void	allClothes(void);
 
 void	instantText(void);
