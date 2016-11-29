@@ -1,52 +1,25 @@
 #include "cheats.h"
 
-char    statusOutlines[40] = "Value not found";
-char	currentEXP[40] = "Value not found";
-char    storedGender[40] = "Value not found";
-char    storedSkintone[40] = "Value not found";
-u8      currentGender;
-u8      currentSkintone;
-
-// Index numbers for cheats with notes or disableCheat() commands
-int i_increaseEXP;
-int i_increaseEXP10;
-int i_decreaseEXP;
-int i_decreaseEXP10;
-int i_resetEXP;
-int i_walkThruWalls;
-int i_shinyPokemon;
-int i_instantEgg;
-int i_allItems;
-int i_allMedicine;
-int i_allTMs;
-int i_allBerries;
-int i_allClothes;
-int i_toggleOutlines;
-int i_rematchTrainers;
-int i_pcAnywhere;
-int i_setGender;
-int i_setSkintone;
-int i_switchLooks;
-
+char	*builder_name = "AnalogMan";
 
 void	my_menus(void)
 {
 	set_hid_address(0x10002000);
 	currentGender = READU8(0x330D67D5);
     currentSkintone = READU8(0x330D6824);
-    
+
 	updateOutlines();
 	exp_x();
 	updateEXP();
     updateGender();
     updateSkintone();
     WRITEU32(0X3DFFD0, 0XE3A01000); // Disables inGame NFC to allow NTR connection outside of Festival Plaza
-	
+
 	new_unselectable_entry("Entries w/ an orange background");
     new_unselectable_entry("have notes. Press (Y) to view.");
 
 	new_separator();
-	
+
 	new_spoiler("EXP Multiplier");
 		new_unselectable_entry(currentEXP);
         new_separator();
@@ -57,7 +30,7 @@ void	my_menus(void)
 		i_resetEXP = new_entry("Reset EXP Rate", resetEXP);
         new_line();
 	exit_spoiler();
-	
+
 	new_spoiler("Movement Modifiers");
 		new_entry("Run Faster", runFaster);
 		new_entry("Never Trip", neverTrip);
@@ -65,7 +38,7 @@ void	my_menus(void)
 		set_note("Activate = Hold R", i_walkThruWalls);
         new_line();
 	exit_spoiler();
-	
+
     new_spoiler("Appearance Modifiers");
         new_unselectable_entry("WARNING: Gender change resets");
         new_unselectable_entry("         clothes & hair");
@@ -78,7 +51,7 @@ void	my_menus(void)
         i_switchLooks = new_entry("Apply Changes", switchLooks);
         new_line();
     exit_spoiler();
-    
+
 	new_spoiler("Pokemon Modifiers");
 		new_entry("100% Capture Rate", catch100);
 		i_shinyPokemon = new_entry("Wild Pokemon Shiny", shinyPokemon);
@@ -89,13 +62,13 @@ void	my_menus(void)
 		new_entry("Instant Egg Hatching", instantHatch);
         new_line();
 	exit_spoiler();
-	
+
 	new_spoiler("QR Codes");
 		new_entry("Remove Island Scan Wait", removeIslandScanWait);
 		new_entry("QR Scan Point 100", qrScan100);
         new_line();
 	exit_spoiler();
-	
+
 	new_spoiler("Currency Manipulators");
 		new_entry("Maximum PokeDollars", maxMoney);
 		new_entry("Maximum Festival Coins", maxCoins);
@@ -104,7 +77,7 @@ void	my_menus(void)
 		new_entry("Maximum Battle Points (BP)", maxBP);
         new_line();
 	exit_spoiler();
-	
+
 	new_spoiler("Items");
         i_allItems = new_entry("All Items    x950", allItems);
 		i_allMedicine = new_entry("All Medicine x950", allMedicine);
@@ -113,7 +86,7 @@ void	my_menus(void)
 		i_allClothes = new_entry("All Clothes", allClothes);
         new_line();
 	exit_spoiler();
-	
+
 	new_spoiler("Misc");
         new_entry("Instant Text Speed", instantText);
         i_pcAnywhere = new_entry("Access PC Anywhere", pcAnywhere);
@@ -126,6 +99,3 @@ void	my_menus(void)
 	exit_spoiler();
 
 }
-
-
-
