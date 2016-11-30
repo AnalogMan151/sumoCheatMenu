@@ -60,11 +60,10 @@ void    pcAnywhere(void)
 // Re-battle trainer that have already been fought. Active by holding L and talking to them
 void	rematchTrainers(void)
 {
-	if (!is_pressed(BUTTON_L))
+    WRITEU32(0x0049D200, 0xE5911004);
+    WRITEU32(0x0049D204, 0xE5900044);
+	if (is_pressed(BUTTON_L))
 	{
-		WRITEU32(0x0049D200, 0xE5911004);
-		WRITEU32(0x0049D204, 0xE5900044);
-	} else {
 		WRITEU32(0x0049D200, 0xE3A00000);
 		WRITEU32(0x0049D204, 0xE12FFF1E);
 	}
