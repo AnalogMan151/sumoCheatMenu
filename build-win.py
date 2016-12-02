@@ -23,7 +23,7 @@ def allFolderFile(pattern, ext):
 SUN_TID 	= "0004000000164800"
 MOON_TID 	= "0004000000175E00"
 NAME 		= "SUMO"
-FTP_FOLDER	= "/3ds/ntr/plugin/"
+FTP_FOLDER	= "/plugin/"
 HOST		= "192.168.1.133"
 PORT		= "5000"
 COPYTOPATH	= NAME + ".plg"
@@ -119,7 +119,7 @@ printf("Copying the plugin in each folder...");
 shutil.copy2(COPYTOPATH, "./" + FTP_FOLDER + SUN_TID + "/Sun.plg");
 shutil.copy2(COPYTOPATH, "./" + FTP_FOLDER + MOON_TID + "/Moon.plg");
 printf("Creating the zip folder...");
-shutil.make_archive(NAME, 'zip', "./3ds/ntr/plugin");
+shutil.make_archive(NAME, 'zip', "./plugin");
 printf("Should I send the plugin on your console? (y/N)");
 user = raw_input();
 if (user == "yes" or user == "y"):
@@ -136,4 +136,3 @@ else:
     printf("As you want sir.\n");
 print("\n\n");
 printf("Done, enjoy your plugin!\n\n");
-
