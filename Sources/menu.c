@@ -59,8 +59,8 @@ void	my_menus(void) {
 		i_shinyPokemon = new_entry("Wild Pokemon Shiny", shinyPokemon);
 		set_note("Enable  = START+L\nDisable = START+R", i_shinyPokemon);
 		new_entry("Rename any Pokemon", renamePokemon);
-		i_instantEgg = new_entry("Instant Egg from Nursary", instantEgg);
-		set_note("Hold START & talk to Nursary NPC", i_instantEgg);
+		i_instantEgg = new_entry("Instant Egg from Nursery", instantEgg);
+		set_note("Hold START & talk to Nursery NPC", i_instantEgg);
 		new_entry("Instant Egg Hatching", instantHatch);
         new_line();
 	exit_spoiler();

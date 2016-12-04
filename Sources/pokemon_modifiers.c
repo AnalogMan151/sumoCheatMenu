@@ -40,7 +40,7 @@ void	renamePokemon(void) {
 }
 
 
-// Egg instantly ready when talking to Nursary NPC while holding START
+// Egg instantly ready when talking to Nursery NPC while holding START
 void	instantEgg(void) {
     WRITEU32(0x00444A6C, 0xE2800E1E);
     WRITEU32(0x00444A70, 0xE1D000D0);
