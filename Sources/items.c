@@ -10,14 +10,13 @@
 ********************************/
 
 // Gives all items and sets them to quantity 950 (credit to Nanquitas for method)
-void    allItems(void)
-{
+void    allItems(void) {
     u32    data;
     u32    offset;
     u32    address;
 
     offset = 0x0330D5934;
-    static const u8    buffer[] =
+    static const u8    buffer1[] =
     {
         0x01, 0xD8, 0x0E, 0x00, 0x02, 0xD8, 0x0E, 0x00,
         0x03, 0xD8, 0x0E, 0x00, 0x04, 0xD8, 0x0E, 0x00,
@@ -35,11 +34,10 @@ void    allItems(void)
     };
 
     address = 0x00;
-    memcpy((void *)(address + offset), buffer, 0x68);
+    memcpy((void *)(address + offset), buffer1, 0x68);
 
     data = 0x000ED844;
-   for (int i = 0; i < 0x2D; i++)
-   {
+   for (int i = 0; i < 0x2D; i++) {
        WRITEU32(0x00000068 + offset, data);
        offset += 0x04;
        data += 0x01;
@@ -66,8 +64,7 @@ void    allItems(void)
     memcpy((void *)(address + offset), buffer2, 0x50);
 
     data = 0x000ED8D9;
-   for (int i = 0; i < 0x6F; i++)
-   {
+   for (int i = 0; i < 0x6F; i++) {
        WRITEU32(0x00000170 + offset, data);
        offset += 0x04;
        data += 0x01;
@@ -144,8 +141,7 @@ void    allItems(void)
     memcpy((void *)(address + offset), buffer3, 0x01E8);
 
     data = 0x000EDA8C;
-    for (int i = 0; i < 0x22; i++)
-    {
+    for (int i = 0; i < 0x22; i++) {
         WRITEU32(0x00000514 + offset, data);
         offset += 0x04;
         data += 0x01;
@@ -194,8 +190,7 @@ void    allItems(void)
 
 
 // Gives all medicine items and sets them to quantity 950 (credit to Nanquitas for method)
-void    allMedicine(void)
-{
+void    allMedicine(void) {
     u32    data;
     u32    offset;
     u32    address;
@@ -214,8 +209,7 @@ void    allMedicine(void)
 
 	offset = 0x330D647C;
     data = 0x000ED811;
-    for (int i = 0; i < 0x26; i++)
-    {
+    for (int i = 0; i < 0x26; i++) {
         WRITEU32(0x00000000 + offset, data);
         offset += 0x04;
         data += 0x01;
@@ -229,8 +223,7 @@ void    allMedicine(void)
 }
 
 // Gives all TMs
-void    allTMs(void)
-{
+void    allTMs(void) {
     static const u8 buffer[] =
     {
         0x6A, 0x06, 0x00, 0x00, 0x6B, 0x06, 0x00, 0x00,
@@ -248,8 +241,7 @@ void    allTMs(void)
 
     offset = 0x330D62CC;
     data = 0x00000548;
-    for (int i = 0; i < 0x5C; i++)
-    {
+    for (int i = 0; i < 0x5C; i++) {
         WRITEU32(offset, data);
         offset += 0x04;
         data += 0x01;
@@ -264,15 +256,13 @@ void    allTMs(void)
 }
 
 // Gives all berries and sets them to quantity 950 (credit to Nanquitas for method)
-void    allBerries(void)
-{
+void    allBerries(void) {
     u32    data;
     u32    offset;
 
 	offset = 0x330D657C;
     data = 0x000ED895;
-    for (int i = 0; i < 0x40; i++)
-    {
+    for (int i = 0; i < 0x40; i++) {
         WRITEU32(0x00000000 + offset, data);
         offset += 0x04;
         data += 0x01;
@@ -288,10 +278,8 @@ void    allBerries(void)
 }
 
 // Function to add clothes to inventory
-u32		clothesFunction(u32 offset, u8 data, u16 loop_num)
-{
-	for (int i = 0; i < loop_num; i++)
-	{
+u32		clothesFunction(u32 offset, u8 data, u16 loop_num) {
+	for (int i = 0; i < loop_num; i++) {
 		WRITEU8(0x00000000 + offset, data);
 		offset += 0x01;
 	}
@@ -299,12 +287,10 @@ u32		clothesFunction(u32 offset, u8 data, u16 loop_num)
 }
 
 // All Clothes
-void	allClothes(void)
-{
+void	allClothes(void) {
 	u32 offset = 0x33116620;
 
-    if (READU8(0x330D67D5) == 0x00)
-    {
+    if (READU8(0x330D67D5) == 0x00) {
         offset = clothesFunction(offset, 0x01, 0x003A);
         offset = clothesFunction(offset, 0x00, 0x0087);
         offset = clothesFunction(offset, 0x01, 0x0014);

@@ -35,8 +35,7 @@ t_img_infos		credit_label_infos = { 0, 0, 0 };
 t_img_infos		note_background_infos = { 0, 0, 0 };
 
 
-void	init_img(void)
-{
+void	init_img(void) {
 	ui_offset = UI_OFFSET;
 	background_img = (unsigned char *)BACKGROUND;
 	//splash_img = SPLASH;

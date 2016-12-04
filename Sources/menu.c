@@ -2,18 +2,20 @@
 
 char	*builder_name = "AnalogMan";
 
-void	my_menus(void)
-{
+
+void	my_menus(void) {
 	set_hid_address(0x10002000);
 	currentGender = READU8(0x330D67D5);
     currentSkintone = READU8(0x330D6824);
 
-	updateOutlines();
+
 	exp_x();
 	updateEXP();
+    updateNFC();
     updateGender();
     updateSkintone();
-    WRITEU32(0X3DFFD0, 0XE3A01000); // Disables inGame NFC to allow NTR connection outside of Festival Plaza
+    updateOutlines();
+
 
 	new_unselectable_entry("Entries w/ an orange background");
     new_unselectable_entry("have notes. Press (Y) to view.");
@@ -46,7 +48,7 @@ void	my_menus(void)
         i_setGender = new_entry(storedGender, setGender);
         set_note("Open a menu to see change", i_setGender);
         i_setSkintone = new_entry(storedSkintone, setSkintone);
-        set_note("Ride Pokemon to see change\nor switch genders", i_setSkintone);
+        set_note("Ride Pokemon to see change\nor save & reboot", i_setSkintone);
         new_separator();
         i_switchLooks = new_entry("Apply Changes", switchLooks);
         new_line();
@@ -95,7 +97,8 @@ void	my_menus(void)
 		set_note("Hold L & talk to Trainer", i_rematchTrainers);
 		i_toggleOutlines = new_entry(statusOutlines, toggleOutlines);
         set_note("Open a menu to see change", i_toggleOutlines);
+        i_toggleNFC = new_entry(statusNFC, toggleNFC);
+        set_note("Disables NFC in order to\nallow stable NTR connection", i_toggleNFC);
         new_line();
 	exit_spoiler();
-
 }

@@ -10,8 +10,7 @@
  ********************************/
 
 // Sets the stage for Experience Modifier code by setting EXP rate to 1x
-void	exp_x()
-{
+void	exp_x(void) {
     WRITEU32(0x00595800, 0xE1D002B2);
     WRITEU32(0x00595804, 0xE92D4002);
     WRITEU32(0x00595808, 0xE3A01001);
@@ -22,20 +21,17 @@ void	exp_x()
 
 
 // Reads current EXP modifier and prints it to the menu
-void	updateEXP(void)
-{
+void	updateEXP(void) {
     u8 exp_rate = READU8(0x00595808);
     xsprintf(currentEXP, "Current EXP rate: %dx", exp_rate);
 }
 
 
 // Increases EXP modifier by 1 each time its called, updates menu and then deactivates
-void	increaseEXP(void)
-{
+void	increaseEXP(void) {
     // Prevent going above maximum exp_rate (0xFF)
     u8 exp_rate = READU8(0x00595808);
-    if (exp_rate < 0xFF)
-    {
+    if (exp_rate < 0xFF) {
         exp_rate++;
         WRITEU8(0x00595808, exp_rate);
         updateEXP();
@@ -45,12 +41,10 @@ void	increaseEXP(void)
 
 
 // Increases EXP modifier by 10 each time its called, updates menu and then deactivates
-void	increaseEXP10(void)
-{
+void	increaseEXP10(void) {
     // Prevent going above maximum exp_rate (0xFF)
     u8 exp_rate = READU8(0x00595808);
-    if (exp_rate < 0xF5)
-    {
+    if (exp_rate < 0xF5) {
         exp_rate += 10;
         WRITEU8(0x00595808, exp_rate);
         updateEXP();
@@ -60,12 +54,10 @@ void	increaseEXP10(void)
 
 
 // Decrease EXP modifier by 1 each time its called, updates menu and then deactivates
-void	decreaseEXP(void)
-{
+void	decreaseEXP(void) {
     // Prevent going below minimum exp_rate (0x0)
     u8 exp_rate = READU8(0x00595808);
-    if (exp_rate > 0x00)
-    {
+    if (exp_rate > 0x00) {
         exp_rate--;
         WRITEU8(0x00595808, exp_rate);
         updateEXP();
@@ -75,12 +67,10 @@ void	decreaseEXP(void)
 
 
 // Decrease EXP modifier by 10 each time its called, updates menu and then deactivates
-void	decreaseEXP10(void)
-{
+void	decreaseEXP10(void) {
     // Prevent going below minimum exp_rate (0x0)
     u8 exp_rate = READU8(0x00595808);
-    if (exp_rate > 0x0A)
-    {
+    if (exp_rate > 0x0A) {
         exp_rate -= 10;
         WRITEU8(0x00595808, exp_rate);
         updateEXP();
@@ -90,8 +80,7 @@ void	decreaseEXP10(void)
 
 
 // Resets EXP modifier back to 1x each time its called, updates menu and then deactivates
-void	resetEXP(void)
-{
+void	resetEXP(void) {
     WRITEU8(0x00595808, 0x01);
     updateEXP();
     disableCheat(i_resetEXP);

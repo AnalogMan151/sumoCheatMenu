@@ -3,6 +3,7 @@
 #include "cheats.h"
 
 char    statusOutlines[40] = "Value not found",
+        statusNFC[40] = "Value not found",
 	    currentEXP[40] = "Value not found",
         storedGender[40] = "Value not found",
         storedSkintone[40] = "Value not found";
@@ -29,4 +30,5 @@ int i_increaseEXP,
     i_pcAnywhere,
     i_setGender,
     i_setSkintone,
-    i_switchLooks;
+    i_switchLooks,
+    i_toggleNFC;
