@@ -11,16 +11,14 @@
 ********************************/
 
 // Sets text speed to instant
-void	instantText(void)
-{
+void	instantText(void) {
 	WRITEU32(0x003BF26C, 0xE3A05003);
 	WRITEU32(0x003BE9C8, 0xE3A04003);
 }
 
 
 // Access PC from anywhere by holding START while opening options menu
-void    pcAnywhere(void)
-{
+void    pcAnywhere(void) {
     u32    offset;
     u32    address;
 
@@ -58,12 +56,10 @@ void    pcAnywhere(void)
 
 
 // Re-battle trainer that have already been fought. Active by holding L and talking to them
-void	rematchTrainers(void)
-{
+void	rematchTrainers(void) {
     WRITEU32(0x0049D200, 0xE5911004);
     WRITEU32(0x0049D204, 0xE5900044);
-	if (is_pressed(BUTTON_L))
-	{
+	if (is_pressed(BUTTON_L)) {
 		WRITEU32(0x0049D200, 0xE3A00000);
 		WRITEU32(0x0049D204, 0xE12FFF1E);
 	}
@@ -71,8 +67,7 @@ void	rematchTrainers(void)
 
 
 // Toggles model outlines for player and Pokemon off and on
-void	toggleOutlines(void)
-{
+void	toggleOutlines(void) {
 	if (READU32(0x0041B748) == 0xE5802004)
 		WRITEU32(0x0041B748, 0xE320F000);
 	else
@@ -83,10 +78,30 @@ void	toggleOutlines(void)
 
 
 // Updates code name on menu depending on current enable / disable status
-void	updateOutlines(void)
-{
+void	updateOutlines(void) {
 	if (READU32(0x0041B748) == 0xE5802004)
 		xsprintf(statusOutlines, "Disable Outlines");
 	else
 		xsprintf(statusOutlines, "Enable Outlines");
+}
+
+
+// Disables inGame NFC to allow NTR connection outside of Festival Plaza. Press L+R to activate or deactivate.
+void    toggleNFC(void) {
+    if (READU32(0x003DFFD0) != 0xE3A01000) {
+        WRITEU32(0x003DFFD0, 0xE3A01000);
+        disableCheat(i_toggleNFC);
+    } else {
+        WRITEU32(0x003DFFD0, 0xE3A01001);
+        disableCheat(i_toggleNFC);
+    }
+    updateNFC();
+}
+
+
+void    updateNFC(void) {
+    if(READU32(0x003DFFD0) == 0xE3A01001)
+        xsprintf(statusNFC, "Enable  NTR Debug Connection");
+    else
+        xsprintf(statusNFC, "Disable NTR Debug Connection");
 }

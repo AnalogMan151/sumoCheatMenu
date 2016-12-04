@@ -10,8 +10,7 @@
 ********************************/
 
 // 100% Catch rate for Pokemon
-void	catch100(void)
-{
+void	catch100(void) {
 	WRITEU32(0x0059585C, 0xE5D00008);
 	WRITEU32(0x00595860, 0xE92D4003);
 	WRITEU32(0x00595864, 0xE59D0010);
@@ -26,8 +25,7 @@ void	catch100(void)
 
 
 // Make wild Pokemon shiny. Activate with START+L and deactivate with START+R
-void	shinyPokemon(void)
-{
+void	shinyPokemon(void) {
 	if (is_pressed(BUTTON_ST + BUTTON_L))
 		WRITEU32(0x003183EC, 0xEA00001C);
 
@@ -37,15 +35,13 @@ void	shinyPokemon(void)
 
 
 // Rename any Pokemon at the Name Rater
-void	renamePokemon(void)
-{
+void	renamePokemon(void) {
 	WRITEU32(0x004A84F8, 0xE3A00001);
 }
 
 
 // Egg instantly ready when talking to Nursary NPC while holding START
-void	instantEgg(void)
-{
+void	instantEgg(void) {
     WRITEU32(0x00444A6C, 0xE2800E1E);
     WRITEU32(0x00444A70, 0xE1D000D0);
     WRITEU32(0x00444A74, 0xE12FFF1E);
@@ -59,8 +55,7 @@ void	instantEgg(void)
 
 
 // Instant egg hatching in one step
-void	instantHatch(void)
-{
+void	instantHatch(void) {
 	WRITEU32(0x005958C0, 0xE59D000C);
 	WRITEU32(0x005958C4, 0xE59F500C);
 	WRITEU32(0x005958C8, 0xE1500005);

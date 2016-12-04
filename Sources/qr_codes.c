@@ -10,17 +10,14 @@
 ********************************/
 
 // Remove 24 hour wait time for island scanning
-void	removeIslandScanWait(void)
-{
+void	removeIslandScanWait(void) {
 	WRITEU32(0x0043DAA8, 0xE3A00000);
 }
 
 
 // Sets QR Scan points to 100 allowing you to Island Scan
-void	qrScan100(void)
-{
-	if (READU32(0x0067206C) != 0x00)
-	{
+void	qrScan100(void) {
+	if (READU32(0x0067206C) != 0x00) {
 		u32 offset;
 
 		// offset = READU32(0x04 + READU32(0x24 + READU32(0x0067206C)));

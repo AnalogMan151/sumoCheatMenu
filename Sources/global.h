@@ -3,6 +3,7 @@
 
 extern char currentEXP[40],
             statusOutlines[40],
+            statusNFC[40],
             storedGender[40],
             storedSkintone[40];
 
@@ -24,7 +25,8 @@ extern int  i_increaseEXP,
             i_pcAnywhere,
             i_setGender,
             i_setSkintone,
-            i_switchLooks;
+            i_switchLooks,
+            i_toggleNFC;
 
 extern u8   currentGender,
             currentSkintone;
