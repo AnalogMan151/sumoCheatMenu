@@ -86,7 +86,7 @@ void	updateOutlines(void) {
 }
 
 
-// Disables inGame NFC to allow NTR connection outside of Festival Plaza. Press L+R to activate or deactivate.
+// Disables inGame NFC to allow NTR connection outside of Festival Plaza.
 void    toggleNFC(void) {
     if (READU32(0x003DFFD0) != 0xE3A01000) {
         WRITEU32(0x003DFFD0, 0xE3A01000);
