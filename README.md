@@ -46,7 +46,8 @@ A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMe
   1. Instant message speed
   2. Access PC from Anywhere (Hold START while opening Option menu)
   3. Re-match trainers (Hold L and speak to Trainer)
-  4. Black outline toogle ON/OFF for player and Pokémon. (Open a menu to see change)
+  4. Black outline toggle ON/OFF for player and Pokémon. (Open a menu to see change)
+  5. NTR Debugger toggle to allow access from NTR Debugger outside of Festival Plaza (Disables in-game NFC while active)
 
 In this release I have chosen to remove any codes that could make illegitimate Pokémon such as Catch Trainer's Pokémon, Learn any TM, and Pokémon spawning.
 
