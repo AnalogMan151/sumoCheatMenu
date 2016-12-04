@@ -83,6 +83,7 @@ $RECYCLE.BIN/
 # Production Files
 # =========================
 
+SUMO.plg
 Sun.plg
 Moon.plg
 obj/
