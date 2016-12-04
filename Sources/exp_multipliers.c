@@ -1,4 +1,4 @@
-// Filename: exp_modifiers.c
+// Filename: exp_multipliers.c
 
 #include "cheats.h"
 #include "hid.h"
