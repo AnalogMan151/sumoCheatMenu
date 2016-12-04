@@ -4,9 +4,9 @@
 #include "hid.h"
 
 /********************************
- *				*
- *	  EXP Multipliers		*
- *				*
+ *				                *
+ *	    EXP Multipliers		    *
+ *				                *
  ********************************/
 
 // Sets the stage for Experience Modifier code by setting EXP rate to 1x
