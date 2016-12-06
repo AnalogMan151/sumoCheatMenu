@@ -11,6 +11,10 @@ void	decreaseEXP(void);
 void	decreaseEXP10(void);
 void	resetEXP(void);
 
+void   updateTime(void);
+void   increaseTime(void);
+void   decreaseTime(void);
+
 void	runFaster(void);
 void	neverTrip(void);
 void	walkThruWalls(void);
