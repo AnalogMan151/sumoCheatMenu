@@ -12,6 +12,7 @@ void	my_menus(void) {
 	exp_x();
 	updateEXP();
     updateNFC();
+    updateTime();
     updateGender();
     updateSkintone();
     updateOutlines();
@@ -33,13 +34,13 @@ void	my_menus(void) {
         new_line();
 	exit_spoiler();
 
-	new_spoiler("Movement Modifiers");
-		new_entry("Run Faster", runFaster);
-		new_entry("Never Trip", neverTrip);
-		i_walkThruWalls = new_entry("Walk Through Walls", walkThruWalls);
-		set_note("Activate = Hold R", i_walkThruWalls);
+    new_spoiler("Time Modifiers");
+        new_unselectable_entry(currentTime);
+        new_separator();
+        i_increaseTime = new_entry("Increase Hour +1", increaseTime);
+        i_decreaseTime = new_entry("Decrease Hour -1", decreaseTime);
         new_line();
-	exit_spoiler();
+    exit_spoiler();
 
     new_spoiler("Appearance Modifiers");
         new_unselectable_entry("WARNING: Gender change resets");
@@ -53,6 +54,14 @@ void	my_menus(void) {
         i_switchLooks = new_entry("Apply Changes", switchLooks);
         new_line();
     exit_spoiler();
+
+    new_spoiler("Movement Modifiers");
+		new_entry("Run Faster", runFaster);
+		new_entry("Never Trip", neverTrip);
+		i_walkThruWalls = new_entry("Walk Through Walls", walkThruWalls);
+		set_note("Activate = Hold R", i_walkThruWalls);
+        new_line();
+	exit_spoiler();
 
 	new_spoiler("Pokemon Modifiers");
 		new_entry("100% Capture Rate", catch100);
@@ -88,7 +97,11 @@ void	my_menus(void) {
 		i_allClothes = new_entry("All Clothes", allClothes);
         new_line();
 	exit_spoiler();
-
+    new_line();
+    new_line();
+    new_line();
+    new_line();
+    new_unselectable_entry("Continued");
 	new_spoiler("Misc");
         new_entry("Instant Text Speed", instantText);
         i_pcAnywhere = new_entry("Access PC Anywhere", pcAnywhere);

@@ -3,6 +3,7 @@
 #include "cheats.h"
 
 char    statusOutlines[40] = "Value not found",
+        currentTime[40] = "Value not found",
         statusNFC[40] = "Value not found",
 	    currentEXP[40] = "Value not found",
         storedGender[40] = "Value not found",
@@ -17,6 +18,8 @@ int i_increaseEXP,
     i_decreaseEXP,
     i_decreaseEXP10,
     i_resetEXP,
+    i_increaseTime,
+    i_decreaseTime,
     i_walkThruWalls,
     i_shinyPokemon,
     i_instantEgg,

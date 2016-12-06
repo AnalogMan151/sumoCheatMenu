@@ -1,21 +1,25 @@
 # Pokémon Sun & Moon Cheat Plugin
 ## A cheats plugin for NTR CFW
 
-A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMenu](https://github.com/RyDog199/blankCheatMenu) base which in turn was based off [@Nanquitas](https://github.com/Nanquitas/) work. 
+A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMenu](https://github.com/RyDog199/blankCheatMenu) base which in turn was based off [@Nanquitas](https://github.com/Nanquitas/) work.
 
 ### Cheats include:
 
 - EXP Modifiers
   1. Dynamic EXP multiplier adjustable from 0x to 255x
-  
+
+- Time Modifiers (Changes time of day in game without affecting 3DS clock)
+  1. Increase Hour +1
+  2. Decrease Hour -1
+
+- Appearance Modifiers
+  1. Change Gender (Open a menu to see change. WARNING: This will reset clothes and hair)
+  2. Change Skin Tone (Ride a Pokémon or change gender to see change)
+
 - Movement Modifiers
   1. Run Faster
   2. No trip animation
   3. Walk through Walls (Hold R)
-
-- Appearance Modifiers
-  1. Change Gender (Open a menu to see change. WARNING: This will reset clothes and hair) 
-  2. Change Skin Tone (Ride a Pokémon or change gender to see change)
 
 - Pokémon Modifiers
   1. 100% Catch Rate
@@ -51,4 +55,4 @@ A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMe
 
 In this release I have chosen to remove any codes that could make illegitimate Pokémon such as Catch Trainer's Pokémon, Learn any TM, and Pokémon spawning.
 
-This is a work in progress and a learning exercise. The Gateshark cheats these codes were derived from can be found in the resources folder. 
+This is a work in progress and a learning exercise. The Gateshark cheats these codes were derived from can be found in the resources folder.

@@ -2,6 +2,7 @@
 #define GLOBAL_H
 
 extern char currentEXP[40],
+            currentTime[40],
             statusOutlines[40],
             statusNFC[40],
             storedGender[40],
@@ -12,6 +13,8 @@ extern int  i_increaseEXP,
             i_decreaseEXP,
             i_decreaseEXP10,
             i_resetEXP,
+            i_increaseTime,
+            i_decreaseTime,
             i_walkThruWalls,
             i_shinyPokemon,
             i_instantEgg,
