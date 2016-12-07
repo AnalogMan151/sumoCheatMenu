@@ -23,7 +23,7 @@ void	exp_x(void) {
 // Reads current EXP modifier and prints it to the menu
 void	updateEXP(void) {
     u8 exp_rate = READU8(0x00595808);
-    xsprintf(currentEXP, "Current EXP rate: %dx", exp_rate);
+    xsprintf(currentEXP, "Current EXP rate: %3dx", exp_rate);
 }
 
 
