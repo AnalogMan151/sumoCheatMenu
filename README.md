@@ -28,9 +28,13 @@ A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMe
   4. Instant Egg available from Nursery (Hold START and speak with NPC)
   5. Instant Hatching
 
-- QR Codes
-  1. Removal of 24h wait time between Island Scans
-  2. 100 QR Scan Points
+- Items
+  1. All Items x 950
+  2. All Medicine Items x 950
+  3. All Berries x 950
+  4. All PokéBeans x 255
+  5. All TMs
+  6. All Clothes
 
 - Currency Manipulators
   1. Max PokéDollars
@@ -39,12 +43,9 @@ A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMe
   4. 1,500,000 photo Thumbs Up
   5. Max Battle Points
 
-- Items
-  1. All Items x 950
-  2. All Medicine Items x 950
-  3. All Berries x 950
-  4. All TMs
-  5. All Clothes
+- QR Codes
+  1. Removal of 24h wait time between Island Scans
+  2. 100 QR Scan Points
 
 - Misc
   1. Instant message speed

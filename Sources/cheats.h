@@ -38,6 +38,7 @@ void    allItems(void);
 void	allMedicine(void);
 void    allTMs(void);
 void	allBerries(void);
+void    allBeans(void);
 u32		clothesFunction(u32 offset, u8 data, u16 loop_num);
 void	allClothes(void);
 

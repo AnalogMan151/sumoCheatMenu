@@ -277,6 +277,21 @@ void    allBerries(void) {
 		disableCheat(i_allBerries);
 }
 
+
+// Gives all PokeBeans and sets them to quantity of 255
+void    allBeans(void) {
+    u32 offset;
+    offset = 0x30000000;
+
+    for (int i = 0; i < 0x0F; i++) {
+    WRITEU8(0x03115490 + offset, 0xFF);
+    offset += 0x01;
+    }
+    if (any_is_pressed(0x0000CFFE)) // Any button but A
+		disableCheat(i_allBeans);
+}
+
+
 // Function to add clothes to inventory
 u32		clothesFunction(u32 offset, u8 data, u16 loop_num) {
 	for (int i = 0; i < loop_num; i++) {
