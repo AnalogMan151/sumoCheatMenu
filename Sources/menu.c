@@ -74,9 +74,13 @@ void	my_menus(void) {
         new_line();
 	exit_spoiler();
 
-	new_spoiler("QR Codes");
-		new_entry("Remove Island Scan Wait", removeIslandScanWait);
-		new_entry("QR Scan Point 100", qrScan100);
+    new_spoiler("Items");
+        i_allItems = new_entry("All Items     x950", allItems);
+		i_allMedicine = new_entry("All Medicine  x950", allMedicine);
+		i_allBerries = new_entry("All Berries   x950", allBerries);
+        i_allBeans = new_entry("All PokeBeans x255", allBeans);
+        i_allTMs = new_entry("All TMs", allTMs);
+		i_allClothes = new_entry("All Clothes", allClothes);
         new_line();
 	exit_spoiler();
 
@@ -89,19 +93,18 @@ void	my_menus(void) {
         new_line();
 	exit_spoiler();
 
-	new_spoiler("Items");
-        i_allItems = new_entry("All Items    x950", allItems);
-		i_allMedicine = new_entry("All Medicine x950", allMedicine);
-		i_allBerries = new_entry("All Berries  x950", allBerries);
-        i_allTMs = new_entry("All TMs", allTMs);
-		i_allClothes = new_entry("All Clothes", allClothes);
+    new_spoiler("QR Codes");
+		new_entry("Remove Island Scan Wait", removeIslandScanWait);
+		new_entry("QR Scan Point 100", qrScan100);
         new_line();
 	exit_spoiler();
+
     new_line();
     new_line();
     new_line();
     new_line();
     new_unselectable_entry("Continued");
+    
 	new_spoiler("Misc");
         new_entry("Instant Text Speed", instantText);
         i_pcAnywhere = new_entry("Access PC Anywhere", pcAnywhere);
