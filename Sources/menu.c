@@ -16,6 +16,7 @@ void	my_menus(void) {
     updateGender();
     updateSkintone();
     updateOutlines();
+    updateBattleStats();
 
 
 	new_unselectable_entry("Entries w/ an orange background");
@@ -34,45 +35,61 @@ void	my_menus(void) {
         new_line();
 	exit_spoiler();
 
-    new_spoiler("Time Modifiers");
-        new_unselectable_entry(currentTime);
-        new_separator();
-        i_increaseTime = new_entry("Increase Hour +1", increaseTime);
-        i_decreaseTime = new_entry("Decrease Hour -1", decreaseTime);
-        new_line();
+    new_spoiler("Modifiers");
+        new_spoiler("Time");
+            new_unselectable_entry(currentTime);
+            new_separator();
+            i_increaseTime = new_entry("Increase Hour +1", increaseTime);
+            i_decreaseTime = new_entry("Decrease Hour -1", decreaseTime);
+            new_line();
+        exit_spoiler();
+
+        new_spoiler("Appearance");
+            new_unselectable_entry("WARNING: Gender change");
+            new_unselectable_entry("resets clothes & hair");
+            new_line();
+            i_setGender = new_entry(storedGender, setGender);
+            set_note("Open a menu to see change", i_setGender);
+            i_setSkintone = new_entry(storedSkintone, setSkintone);
+            set_note("Ride Pokemon to see change\nor save & reboot", i_setSkintone);
+            new_separator();
+            i_switchLooks = new_entry("Apply Changes", switchLooks);
+            new_line();
+        exit_spoiler();
+
+        new_spoiler("Battle");
+            new_entry("100% Capture Rate", catch100);
+            i_shinyPokemon = new_entry("Wild Pokemon Shiny", shinyPokemon);
+            set_note("Enable  = L+START\nDisable = R+START", i_shinyPokemon);
+            i_maxBattleStats = new_entry(statusBattleStats, maxBattleStats);
+            new_line();
+        exit_spoiler();
+
+        new_spoiler("Movement");
+    		new_entry("Run Faster", runFaster);
+    		new_entry("Never Trip", neverTrip);
+    		i_walkThruWalls = new_entry("Walk Through Walls", walkThruWalls);
+    		set_note("Activate = Hold R", i_walkThruWalls);
+            new_line();
+    	exit_spoiler();
+
+        new_spoiler("Pokemon");
+    		new_entry("Rename any Pokemon", renamePokemon);
+    		i_instantEgg = new_entry("Instant Egg from Nursery", instantEgg);
+    		set_note("Hold L & talk to Nursery NPC", i_instantEgg);
+    		new_entry("Instant Egg Hatching", instantHatch);
+            new_line();
+    	exit_spoiler();
+
+        new_spoiler("Currency");
+    		new_entry("Maximum PokeDollars", maxMoney);
+            new_entry("Maximum Battle Points (BP)", maxBP);
+    		new_entry("Maximum Festival Coins", maxCoins);
+    		new_entry("Total Festival Coins 9,999,999", totalCoins);
+    		new_entry("Total Thumbs Up 1,500,000", totalThumbs);
+            new_line();
+    	exit_spoiler();
     exit_spoiler();
-
-    new_spoiler("Appearance Modifiers");
-        new_unselectable_entry("WARNING: Gender change resets");
-        new_unselectable_entry("         clothes & hair");
-        new_line();
-        i_setGender = new_entry(storedGender, setGender);
-        set_note("Open a menu to see change", i_setGender);
-        i_setSkintone = new_entry(storedSkintone, setSkintone);
-        set_note("Ride Pokemon to see change\nor save & reboot", i_setSkintone);
-        new_separator();
-        i_switchLooks = new_entry("Apply Changes", switchLooks);
-        new_line();
-    exit_spoiler();
-
-    new_spoiler("Movement Modifiers");
-		new_entry("Run Faster", runFaster);
-		new_entry("Never Trip", neverTrip);
-		i_walkThruWalls = new_entry("Walk Through Walls", walkThruWalls);
-		set_note("Activate = Hold R", i_walkThruWalls);
-        new_line();
-	exit_spoiler();
-
-	new_spoiler("Pokemon Modifiers");
-		new_entry("100% Capture Rate", catch100);
-		i_shinyPokemon = new_entry("Wild Pokemon Shiny", shinyPokemon);
-		set_note("Enable  = START+L\nDisable = START+R", i_shinyPokemon);
-		new_entry("Rename any Pokemon", renamePokemon);
-		i_instantEgg = new_entry("Instant Egg from Nursery", instantEgg);
-		set_note("Hold START & talk to Nursery NPC", i_instantEgg);
-		new_entry("Instant Egg Hatching", instantHatch);
-        new_line();
-	exit_spoiler();
 
     new_spoiler("Items");
         i_allItems = new_entry("All Items     x950", allItems);
@@ -84,31 +101,16 @@ void	my_menus(void) {
         new_line();
 	exit_spoiler();
 
-	new_spoiler("Currency Manipulators");
-		new_entry("Maximum PokeDollars", maxMoney);
-		new_entry("Maximum Festival Coins", maxCoins);
-		new_entry("Total Festival Coins 9,999,999", totalCoins);
-		new_entry("Total Thumbs Up 1,500,000", totalThumbs);
-		new_entry("Maximum Battle Points (BP)", maxBP);
-        new_line();
-	exit_spoiler();
+    new_spoiler("Misc");
+        new_spoiler("QR Codes");
+    		new_entry("Remove Island Scan Wait", removeIslandScanWait);
+    		new_entry("QR Scan Point 100", qrScan100);
+            new_line();
+    	exit_spoiler();
 
-    new_spoiler("QR Codes");
-		new_entry("Remove Island Scan Wait", removeIslandScanWait);
-		new_entry("QR Scan Point 100", qrScan100);
-        new_line();
-	exit_spoiler();
-
-    new_line();
-    new_line();
-    new_line();
-    new_line();
-    new_unselectable_entry("Continued");
-    
-	new_spoiler("Misc");
         new_entry("Instant Text Speed", instantText);
         i_pcAnywhere = new_entry("Access PC Anywhere", pcAnywhere);
-        set_note("Hold START while opening options menu", i_pcAnywhere);
+        set_note("Hold L while opening options menu", i_pcAnywhere);
 		i_rematchTrainers = new_entry("Rematch Trainers", rematchTrainers);
 		set_note("Hold L & talk to Trainer", i_rematchTrainers);
 		i_toggleOutlines = new_entry(statusOutlines, toggleOutlines);

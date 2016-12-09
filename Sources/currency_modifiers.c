@@ -1,11 +1,11 @@
-// Filename: currency_manipulators.c
+// Filename: currency_modifiers.c
 
 #include "cheats.h"
 #include "hid.h"
 
 /********************************
 *				*
-*     Currency Manipulators	*
+*     Currency Modifiers	*
 *				*
 ********************************/
 
