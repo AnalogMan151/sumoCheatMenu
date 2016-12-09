@@ -50,7 +50,7 @@ void    pcAnywhere(void) {
     WRITEU32(0x0037D560, 0xEB086104);
     WRITEU32(0x00373C48, 0xEB088755);
 
-    if (is_pressed(BUTTON_ST))
+    if (is_pressed(BUTTON_L))
         WRITEU32(0x005959A8, 0x1AF77D09);
 }
 
