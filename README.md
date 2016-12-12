@@ -52,7 +52,7 @@ A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMe
 
 - Misc
   1. Instant message speed
-  2. Access PC from Anywhere (Hold L while opening Option menu)
+  2. Access PC from Anywhere (Hold Y while opening Options menu)
   3. Re-match trainers (Hold L and speak to Trainer)
   4. Black outline toggle ON/OFF for player and Pokémon. (Open a menu to see change)
   5. NTR Debugger toggle to allow access from NTR Debugger outside of Festival Plaza (Disables in-game NFC while active)
