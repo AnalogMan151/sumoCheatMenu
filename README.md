@@ -20,6 +20,7 @@ A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMe
   1. 100% Capture Rate
   2. Wild Pokémon are Shiny (L+START to enable and R+START to disable)
   3. Stat Stages +6 (Raises all stat stages to max)
+  4. Unlimited Z-Moves without Z-Crystal
 
 - Movement Modifiers
   1. Run Faster
