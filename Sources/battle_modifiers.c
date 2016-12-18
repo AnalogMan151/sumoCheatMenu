@@ -59,3 +59,68 @@ void    maxBattleStats(void) {
     updateBattleStats();
     disableCheat(i_maxBattleStats);
 }
+
+// 100% Catch rate for Pokemon
+void	catch100(void) {
+	WRITEU32(0x0059585C, 0xE5D00008);
+	WRITEU32(0x00595860, 0xE92D4003);
+	WRITEU32(0x00595864, 0xE59D0010);
+	WRITEU32(0x00595868, 0xE59F100C);
+	WRITEU32(0x0059586C, 0xE1510000);
+	WRITEU32(0x00595870, 0x024000F8);
+	WRITEU32(0x00595874, 0x058D0010);
+	WRITEU32(0x00595878, 0xE8BD8003);
+	WRITEU32(0x0059587C, 0x006D839C);
+	WRITEU32(0x0048F1E0, 0xEB04199D);
+}
+
+
+// Make wild Pokemon shiny. Activate with START+L and deactivate with START+R
+void	shinyPokemon(void) {
+	if (is_pressed(BUTTON_ST + BUTTON_L))
+		WRITEU32(0x003183EC, 0xEA00001C);
+
+	if (is_pressed(BUTTON_ST + BUTTON_R))
+		WRITEU32(0x003183EC, 0x0A00001C);
+}
+
+
+// Use Z-Moves without the need of a Z-Crystal
+void    zMoves(void) {
+    u32 offset = 0x00595900;
+    u32 address = 0x00;
+
+    static const u8    buffer[] =
+    {
+        0x05, 0x40, 0x2D, 0xE9, 0x06, 0x00, 0xA0, 0xE1,
+        0x00, 0x00, 0x00, 0xEA, 0x05, 0x40, 0x2D, 0xE9,
+        0x50, 0x20, 0x9D, 0xE5, 0x0C, 0x10, 0x9F, 0xE5,
+        0x02, 0x00, 0x51, 0xE1, 0xB4, 0x10, 0xD5, 0x01,
+        0x00, 0x10, 0xA0, 0x11, 0x05, 0x80, 0xBD, 0xE8,
+        0x28, 0xBA, 0x78, 0x00
+    };
+
+    memcpy((void *)(address + offset), buffer, 0x2C);
+
+    if (READU32(0x0036D0EC) != 0xE3A00001) {
+        WRITEU32(0x00313DC0, 0xEB0A06CE);
+        WRITEU32(0x00313E30, 0xEB0A06B5);
+        WRITEU32(0x0036D0EC, 0xE3A00001);
+    } else {
+        WRITEU32(0x00313DC0, 0xE1D510B4);
+        WRITEU32(0x00313E30, 0xE1D510B4);
+        WRITEU32(0x0036D0EC, 0xE3A00000);
+    }
+
+    updateZMove();
+    disableCheat(i_zMoves);
+}
+
+
+// Updates menu text for Z-Move cheat
+void    updateZMove(void) {
+    if (READU32(0x0036D0EC) != 0xE3A00001)
+        xsprintf(statusZMove, "Enable  Z-Moves w/o Z-Crystal");
+    else
+        xsprintf(statusZMove, "Disable Z-Moves w/o Z-Crystal");
+}

@@ -9,31 +9,6 @@
 *				*
 ********************************/
 
-// 100% Catch rate for Pokemon
-void	catch100(void) {
-	WRITEU32(0x0059585C, 0xE5D00008);
-	WRITEU32(0x00595860, 0xE92D4003);
-	WRITEU32(0x00595864, 0xE59D0010);
-	WRITEU32(0x00595868, 0xE59F100C);
-	WRITEU32(0x0059586C, 0xE1510000);
-	WRITEU32(0x00595870, 0x024000F8);
-	WRITEU32(0x00595874, 0x058D0010);
-	WRITEU32(0x00595878, 0xE8BD8003);
-	WRITEU32(0x0059587C, 0x006D839C);
-	WRITEU32(0x0048F1E0, 0xEB04199D);
-}
-
-
-// Make wild Pokemon shiny. Activate with START+L and deactivate with START+R
-void	shinyPokemon(void) {
-	if (is_pressed(BUTTON_ST + BUTTON_L))
-		WRITEU32(0x003183EC, 0xEA00001C);
-
-	if (is_pressed(BUTTON_ST + BUTTON_R))
-		WRITEU32(0x003183EC, 0x0A00001C);
-}
-
-
 // Rename any Pokemon at the Name Rater
 void	renamePokemon(void) {
 	WRITEU32(0x004A84F8, 0xE3A00001);

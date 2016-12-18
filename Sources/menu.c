@@ -13,6 +13,7 @@ void	my_menus(void) {
 	updateEXP();
     updateNFC();
     updateTime();
+    updateZMove();
     updateGender();
     updateSkintone();
     updateOutlines();
@@ -62,6 +63,7 @@ void	my_menus(void) {
             i_shinyPokemon = new_entry("Wild Pokemon Shiny", shinyPokemon);
             set_note("Enable  = L+START\nDisable = R+START", i_shinyPokemon);
             i_maxBattleStats = new_entry(statusBattleStats, maxBattleStats);
+            i_zMoves = new_entry(statusZMove, zMoves);
             new_line();
         exit_spoiler();
 

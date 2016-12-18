@@ -17,13 +17,15 @@ void    decreaseTime(void);
 
 void    updateBattleStats(void);
 void    maxBattleStats(void);
+void	catch100(void);
+void	shinyPokemon(void);
+void    zMoves(void);
+void    updateZMove(void);
 
 void	runFaster(void);
 void	neverTrip(void);
 void	walkThruWalls(void);
 
-void	catch100(void);
-void	shinyPokemon(void);
 void	renamePokemon(void);
 void	instantEgg(void);
 void	instantHatch(void);
