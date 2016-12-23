@@ -9,7 +9,37 @@
 *				*
 ********************************/
 
-u8      matchingHair;
+int i_setGender,
+    i_setSkintone,
+    i_switchLooks;
+
+char storedGender[40] = "Undefined",
+     storedSkintone[40] = "Undefined";
+
+u8 matchingHair,
+   currentGender,
+   currentSkintone;
+
+// Appearance menu entry
+void    appearanceMenu(void) {
+    currentGender = READU8(0x330D67D5);
+    currentSkintone = READU8(0x330D6824);
+    updateGender();
+    updateSkintone();
+    new_spoiler("Appearance");
+        new_unselectable_entry("WARNING: Gender change");
+        new_unselectable_entry("resets clothes & hair");
+        new_line();
+        i_setGender = new_entry(storedGender, setGender);
+        set_note("Open a menu to see change", i_setGender);
+        i_setSkintone = new_entry(storedSkintone, setSkintone);
+        set_note("Ride Pokemon to see change\nor save & reboot", i_setSkintone);
+        new_separator();
+        i_switchLooks = new_entry("Apply Changes", switchLooks);
+        new_line();
+    exit_spoiler();
+}
+
 
 // Changes current gender and skin tone. Sets clothes and hair to default with gender change.
 void    switchLooks(void) {

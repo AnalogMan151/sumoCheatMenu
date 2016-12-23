@@ -9,6 +9,25 @@
  *                              *
  ********************************/
 
+ int i_increaseTime,
+     i_decreaseTime;
+
+char currentTime[40] = "Undefined";
+
+
+// Time menu entry
+void    timeMenu(void) {
+    updateTime();
+    new_spoiler("Time");
+        new_unselectable_entry(currentTime);
+        new_separator();
+        i_increaseTime = new_entry("Increase Hour +1", increaseTime);
+        i_decreaseTime = new_entry("Decrease Hour -1", decreaseTime);
+        new_line();
+    exit_spoiler();
+}
+
+
  // Reads current time offset and prints it to the menu
  void	updateTime(void) {
      u32 timeOffset = READU32(0x330D9238);

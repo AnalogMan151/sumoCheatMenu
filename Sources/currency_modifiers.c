@@ -9,6 +9,20 @@
 *				*
 ********************************/
 
+
+// Currency menu entry
+void    currencyMenu(void) {
+    new_spoiler("Currency");
+        new_entry("Maximum PokeDollars", maxMoney);
+        new_entry("Maximum Battle Points (BP)", maxBP);
+        new_entry("Maximum Festival Coins", maxCoins);
+        new_entry("Total Festival Coins 9,999,999", totalCoins);
+        new_entry("Total Thumbs Up 1,500,000", totalThumbs);
+        new_line();
+    exit_spoiler();
+}
+
+
 // Set PokeDollars to 9,999,999
 void	maxMoney(void) {
 	WRITEU32(0x330D8FC0, 0x0098967F);

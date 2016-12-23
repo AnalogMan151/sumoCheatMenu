@@ -9,6 +9,21 @@
 *				*
 ********************************/
 
+int i_walkThruWalls;
+
+
+// Movement menu entry
+void    movementMenu(void) {
+    new_spoiler("Movement");
+        new_entry("Run Faster", runFaster);
+        new_entry("Never Trip", neverTrip);
+        i_walkThruWalls = new_entry("Walk Through Walls", walkThruWalls);
+        set_note("Activate = Hold R", i_walkThruWalls);
+        new_line();
+    exit_spoiler();
+}
+
+
 // Increases run speed to 1.375x
 void	runFaster(void) {
     WRITEU32(0x0039AF74, 0x3F800000);
