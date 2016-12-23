@@ -9,6 +9,21 @@
 *				*
 ********************************/
 
+int i_instantEgg;
+
+
+// Pokémon menu entry
+void    pokemonMenu(void) {
+    new_spoiler("Pokemon");
+        new_entry("Rename any Pokemon", renamePokemon);
+        i_instantEgg = new_entry("Instant Egg from Nursery", instantEgg);
+        set_note("Hold L & talk to Nursery NPC", i_instantEgg);
+        new_entry("Instant Egg Hatching", instantHatch);
+        new_line();
+    exit_spoiler();
+}
+
+
 // Rename any Pokemon at the Name Rater
 void	renamePokemon(void) {
 	WRITEU32(0x004A84F8, 0xE3A00001);

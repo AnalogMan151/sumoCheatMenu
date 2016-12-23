@@ -9,6 +9,28 @@
 *				*
 ********************************/
 
+int i_allItems,
+    i_allMedicine,
+    i_allTMs,
+    i_allBerries,
+    i_allBeans,
+    i_allClothes;
+
+
+// Item menu entry
+void    itemMenu(void) {
+    new_spoiler("Items");
+        i_allItems = new_entry("All Items     x950", allItems);
+        i_allMedicine = new_entry("All Medicine  x950", allMedicine);
+        i_allBerries = new_entry("All Berries   x950", allBerries);
+        i_allBeans = new_entry("All PokeBeans x255", allBeans);
+        i_allTMs = new_entry("All TMs", allTMs);
+        i_allClothes = new_entry("All Clothes", allClothes);
+        new_line();
+    exit_spoiler();
+}
+
+
 // Gives all items and sets them to quantity 950 (credit to Nanquitas for method)
 void    allItems(void) {
     u32    data;

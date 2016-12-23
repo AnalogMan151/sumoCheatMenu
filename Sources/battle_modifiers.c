@@ -9,8 +9,30 @@
  *                              *
  ********************************/
 
-//Sets all in-battle stats to +6 ranks
+ int i_shinyPokemon,
+     i_maxBattleStats,
+     i_zMoves;
 
+char statusBattleStats[40] = "Undefined",
+     statusZMove[40] = "Undefined";
+
+
+// Battle menu entry
+void    battleMenu(void) {
+    updateZMove();
+    updateBattleStats();
+    new_spoiler("Battle");
+        new_entry("100% Capture Rate", catch100);
+        i_shinyPokemon = new_entry("Wild Pokemon Shiny", shinyPokemon);
+        set_note("Enable  = L+START\nDisable = R+START", i_shinyPokemon);
+        i_maxBattleStats = new_entry(statusBattleStats, maxBattleStats);
+        i_zMoves = new_entry(statusZMove, zMoves);
+        new_line();
+    exit_spoiler();
+}
+
+
+//Sets all in-battle stats to +6 ranks
 void    updateBattleStats(void) {
     if (READU32(0x0029A048) != 0xEA0BEE6C)
         xsprintf(statusBattleStats, "Enable  Stat Stages +6");

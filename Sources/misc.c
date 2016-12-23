@@ -10,6 +10,36 @@
 *				*
 ********************************/
 
+
+char statusOutlines[40] = "Undefined",
+     statusNFC[40] = "Undefined";
+     
+int i_toggleOutlines,
+    i_rematchTrainers,
+    i_pcAnywhere,
+    i_toggleNFC;
+
+
+// Misc menu entry
+void    miscMenu(void) {
+    updateNFC();
+    updateOutlines();
+    new_spoiler("Misc");
+        qrMenu();
+        new_entry("Instant Text Speed", instantText);
+        i_pcAnywhere = new_entry("Access PC Anywhere", pcAnywhere);
+        set_note("Hold Y while opening options menu", i_pcAnywhere);
+        i_rematchTrainers = new_entry("Rematch Trainers", rematchTrainers);
+        set_note("Hold L & talk to Trainer", i_rematchTrainers);
+        i_toggleOutlines = new_entry(statusOutlines, toggleOutlines);
+        set_note("Open a menu to see change", i_toggleOutlines);
+        i_toggleNFC = new_entry(statusNFC, toggleNFC);
+        set_note("Disables NFC in order to\nallow stable NTR connection", i_toggleNFC);
+        new_line();
+    exit_spoiler();
+}
+
+
 // Sets text speed to instant
 void	instantText(void) {
 	WRITEU32(0x003BF26C, 0xE3A05003);
@@ -82,7 +112,7 @@ void	updateOutlines(void) {
 	if (READU32(0x0041B748) == 0xE5802004)
 		xsprintf(statusOutlines, "Disable Outlines");
 	else
-		xsprintf(statusOutlines, "Enable Outlines");
+		xsprintf(statusOutlines, "Enable  Outlines");
 }
 
 
