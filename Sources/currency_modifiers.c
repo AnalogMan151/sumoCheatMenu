@@ -13,17 +13,17 @@
 // Currency menu entry
 void    currencyMenu(void) {
     new_spoiler("Currency");
-        new_entry("Maximum PokeDollars", maxMoney);
+        new_entry("Maximum Poke Dollars", maxMoney);
         new_entry("Maximum Battle Points (BP)", maxBP);
         new_entry("Maximum Festival Coins", maxCoins);
-        new_entry("Total Festival Coins 9,999,999", totalCoins);
+        new_entry("Total Festival Coins 2,000,000", totalCoins);
         new_entry("Total Thumbs Up 1,500,000", totalThumbs);
         new_line();
     exit_spoiler();
 }
 
 
-// Set PokeDollars to 9,999,999
+// Set Poke Dollars to 9,999,999
 void	maxMoney(void) {
 	WRITEU32(0x330D8FC0, 0x0098967F);
 }
@@ -34,9 +34,13 @@ void	maxCoins(void) {
 }
 
 
-// Set total Festival Coins to 9,999,999
+// Set total Festival Coins to 2,000,000
 void	totalCoins(void) {
-	WRITEU32(0x33124D5C, 0x0098967F);
+    u32 total = 2000000;
+    u32 current = READU32(0x33124D58);
+    u32 spent = total - current;
+    WRITEU32(0x3313DCE8, spent);
+	WRITEU32(0x33124D5C, total);
 }
 
 

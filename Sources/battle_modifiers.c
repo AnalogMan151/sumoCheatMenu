@@ -14,21 +14,31 @@
      i_zMoves;
 
 char statusBattleStats[40] = "Undefined",
-     statusZMove[40] = "Undefined";
+     statusZMove[40] = "Undefined",
+     statusShiny[40] = "Undefined";
 
 
 // Battle menu entry
 void    battleMenu(void) {
     updateZMove();
     updateBattleStats();
+    updateShiny();
     new_spoiler("Battle");
+        //new_entry("Alola Rattata", alolaRat);
         new_entry("100% Capture Rate", catch100);
-        i_shinyPokemon = new_entry("Wild Pokemon Shiny", shinyPokemon);
-        set_note("Enable  = L+START\nDisable = R+START", i_shinyPokemon);
+        i_shinyPokemon = new_entry(statusShiny, shinyPokemon);
         i_maxBattleStats = new_entry(statusBattleStats, maxBattleStats);
         i_zMoves = new_entry(statusZMove, zMoves);
         new_line();
     exit_spoiler();
+}
+
+// Alola Ratatta
+void    alolaRat(void) {
+    u32 offset = 0x341C87B8;
+    WRITEU16(0x0000 + offset, 0x0013);
+    WRITEU8(0x0004 + offset, 0x0005);
+    WRITEU8(0x0005 + offset, 0x0001);
 }
 
 
@@ -96,14 +106,23 @@ void	catch100(void) {
 	WRITEU32(0x0048F1E0, 0xEB04199D);
 }
 
+// Updates status of cheat in menu
+void    updateShiny(void) {
+    if (READU32(0x003183EC) == 0xEA00001C)
+        xsprintf(statusShiny, "Disable Wild Pokemon Shiny");
+    else
+        xsprintf(statusShiny, "Enable  Wild Pokemon Shiny");
+}
+
 
 // Make wild Pokemon shiny. Activate with START+L and deactivate with START+R
 void	shinyPokemon(void) {
-	if (is_pressed(BUTTON_ST + BUTTON_L))
-		WRITEU32(0x003183EC, 0xEA00001C);
-
-	if (is_pressed(BUTTON_ST + BUTTON_R))
+	if (READU32(0x003183EC) == 0xEA00001C)
 		WRITEU32(0x003183EC, 0x0A00001C);
+    else
+        WRITEU32(0x003183EC, 0xEA00001C);
+    updateShiny();
+    disableCheat(i_shinyPokemon);
 }
 
 
