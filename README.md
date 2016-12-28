@@ -14,13 +14,13 @@ A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMe
 
 - Appearance Modifiers
   1. Change Gender (Open a menu to see change. WARNING: This will reset clothes and hair)
-  2. Change Skin Tone (Ride a Pokémon or change gender to see change)
+  2. Change Skin Tone (Ride a Pokémon or save and reload)
 
 - Battle Modifiers
   1. 100% Capture Rate
-  2. Wild Pokémon are Shiny (L+START to enable and R+START to disable)
+  2. Wild Pokémon are Shiny
   3. Stat Stages +6 (Raises all stat stages to max)
-  4. Unlimited Z-Moves without Z-Crystal
+  4. Z-Moves without Z-Crystal
 
 - Movement Modifiers
   1. Run Faster
@@ -33,19 +33,20 @@ A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMe
   3. Instant Hatching
 
 - Currency Modifiers
-  1. Max PokéDollars
+  1. Max Poké Dollars
   2. Max Festival Coins
-  3. 9,999,999 total Festival Coins
+  3. 2,000,000 total Festival Coins
   4. 1,500,000 photo Thumbs Up
   5. Max Battle Points
 
 - Items
-  1. All Items x 950
-  2. All Medicine Items x 950
-  3. All Berries x 950
-  4. All PokéBeans x 255
-  5. All TMs
-  6. All Clothes
+  1. All Poké Balls x 100
+  2. All Items x 100
+  3. All Medicine Items x 100
+  4. All Berries x 100
+  5. All Poké Beans x 100
+  6. All TMs
+  7. All Clothes
 
 - QR Codes
   1. Removal of 24h wait time between Island Scans

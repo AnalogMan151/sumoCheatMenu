@@ -40,12 +40,14 @@ void    updateSkintone(void);
 
 // Battle Modifiers
 void    battleMenu(void);
+void    alolaRat(void);
 void    updateBattleStats(void);
 void    maxBattleStats(void);
 void	catch100(void);
 void	shinyPokemon(void);
 void    zMoves(void);
 void    updateZMove(void);
+void    updateShiny(void);
 
 
 // Movement Modifiers
@@ -73,6 +75,7 @@ void	maxBP(void);
 
 // Item Modifiers
 void    itemMenu(void);
+void    allPokeBalls(void);
 void    allItems(void);
 void	allMedicine(void);
 void    allTMs(void);
