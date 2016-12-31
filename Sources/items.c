@@ -9,7 +9,8 @@
 *				*
 ********************************/
 
-int i_allPokeBalls,
+int i_increaseQuantity,
+    i_allPokeBalls,
     i_allItems,
     i_allMedicine,
     i_allTMs,
@@ -17,26 +18,52 @@ int i_allPokeBalls,
     i_allBeans,
     i_allClothes;
 
+char selectedQuantity[40] = "Undefined";
+
+static u16 quantity = 50;
+
 
 // Item menu entry
 void    itemMenu(void) {
+    updateQuantity();
     new_spoiler("Items");
-        i_allPokeBalls = new_entry("All Poke Balls x100", allPokeBalls);
-        i_allItems = new_entry("All Items      x100", allItems);
-        i_allMedicine = new_entry("All Medicine   x100", allMedicine);
-        i_allBerries = new_entry("All Berries    x100", allBerries);
-        i_allBeans = new_entry("All Poke Beans x100", allBeans);
+        new_unselectable_entry(selectedQuantity);
+        i_increaseQuantity = new_entry("Increase Quantity +50", increaseQuantity);
+        new_separator();
+
+        i_allPokeBalls = new_entry("All Poke Balls", allPokeBalls);
+        i_allItems = new_entry("All Items", allItems);
+        i_allMedicine = new_entry("All Medicine", allMedicine);
+        i_allBerries = new_entry("All Berries", allBerries);
+        i_allBeans = new_entry("All Poke Beans", allBeans);
         i_allTMs = new_entry("All TMs", allTMs);
         i_allClothes = new_entry("All Clothes", allClothes);
         new_line();
     exit_spoiler();
 }
 
+// Updates item quantity on menu
+void    updateQuantity(void) {
+    xsprintf(selectedQuantity, "Quantity: %3d", quantity);
+}
+
+
+// Increases item quantity by 50
+void    increaseQuantity(void) {
+    if (quantity == 999)
+        quantity = 0;
+    if (quantity == 950)
+        quantity = 999;
+    if (quantity < 950)
+        quantity += 50;
+    updateQuantity();
+    disableCheat(i_increaseQuantity);
+}
+
 
 // Gives only Poké Balls and sets quantity to 100
 void    allPokeBalls(void) {
     u32 offset = 0x330D5934;
-    u32 quantity = 100;
     u32 value;
     int existingIndex = 0;
     bool skip;
@@ -94,7 +121,6 @@ void    allPokeBalls(void) {
 // Gives all items and sets them to quantity 100
 void    allItems(void) {
     u32    offset = 0x330D5934; // Start of Item Inventory
-    u16    quantity = 100; // Number of each item to give
 
     // Array of legal items
     static const u16    allItems[335] =
@@ -156,7 +182,6 @@ void    allItems(void) {
 // Gives all medicine and sets them to quantity 100
 void    allMedicine(void) {
     u32    offset = 0x330D647C; // Start of Medicine Inventory
-    u16    quantity = 100; // Number of each item to give
 
     // Array of legal items
     static const u16    allMedicine[54] =
@@ -182,7 +207,6 @@ void    allMedicine(void) {
 // Gives all TMs
 void    allTMs(void) {
     u32    offset = 0x330D62CC; // Start of TM Inventory
-    u16    quantity = 1; // Number of each item to give
 
     // Array of legal items
     static const u16    allTMs[100] =
@@ -204,7 +228,7 @@ void    allTMs(void) {
 
     // Writes the array to inventory
     for (int i = 0; i < 100; i++) {
-       WRITEU32(offset + i*4, allTMs[i] + (quantity << 10));
+       WRITEU32(offset + i*4, allTMs[i] + (1 << 10));
     }
 
     if (any_is_pressed(0x0000CFFE)) // Any button but A disables cheat
@@ -215,7 +239,6 @@ void    allTMs(void) {
 // Gives all Berries and sets quantity to 100
 void    allBerries(void) {
     u32    offset = 0x330D657C; // Start of Berry Inventory
-    u16    quantity = 100; // Number of each item to give
 
     // Array of legal items
     static const u16    allBerries[67] =
@@ -244,7 +267,7 @@ void    allBerries(void) {
 // Gives all PokeBeans and sets them to quantity of 100
 void    allBeans(void) {
     for (int i = 0; i < 15; i++) {
-    WRITEU8(0x33115490 + i, 0x64);
+    WRITEU8(0x33115490 + i, 0xFF);
     }
 
     if (any_is_pressed(0x0000CFFE)) // Any button but A

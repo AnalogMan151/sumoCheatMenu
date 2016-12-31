@@ -9,7 +9,7 @@
  *                              *
  ********************************/
 
- int i_shinyPokemon,
+int  i_shinyPokemon,
      i_maxBattleStats,
      i_zMoves;
 

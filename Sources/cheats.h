@@ -2,6 +2,24 @@
 #define CHEATS_H
 #include "plugin.h"
 
+enum {
+    TOGGLEOUTLINES,
+    REMATCHTRAINERS,
+    PCANYWHERE,
+    TOGGLENFC
+} e_identifiers;
+
+// Helpers
+
+void    disable_entry(int identifier);
+void    update_status(int state, int identifier);
+void    new_entry_note(char *str, const char * const note, void (*function)(void));
+void    new_entry_index(char *str, void (*function)(void), int identifier);
+void    new_entry_index_note(char *str, const char * const note, void (*function)(void), int identifier);
+void    new_toggle_entry(char *str, void (*function)(void), int identifier);
+void    new_toggle_entry_note(char *str, char *note, void (*function)(void), int identifier);
+
+
 // Pokémon Spawner
 void    pokemonSpawnMenu(void);
 void    updateSpawn(void);
@@ -75,6 +93,8 @@ void	maxBP(void);
 
 // Item Modifiers
 void    itemMenu(void);
+void    updateQuantity(void);
+void    increaseQuantity(void);
 void    allPokeBalls(void);
 void    allItems(void);
 void	allMedicine(void);

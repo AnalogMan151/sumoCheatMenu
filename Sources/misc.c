@@ -10,31 +10,24 @@
 *				*
 ********************************/
 
-
 char statusOutlines[40] = "Undefined",
      statusNFC[40] = "Undefined";
-     
-int i_toggleOutlines,
-    i_rematchTrainers,
-    i_pcAnywhere,
-    i_toggleNFC;
-
 
 // Misc menu entry
 void    miscMenu(void) {
     updateNFC();
     updateOutlines();
     new_spoiler("Misc");
-        qrMenu();
+//        qrMenu();
         new_entry("Instant Text Speed", instantText);
-        i_pcAnywhere = new_entry("Access PC Anywhere", pcAnywhere);
-        set_note("Hold Y while opening options menu", i_pcAnywhere);
-        i_rematchTrainers = new_entry("Rematch Trainers", rematchTrainers);
-        set_note("Hold L & talk to Trainer", i_rematchTrainers);
-        i_toggleOutlines = new_entry(statusOutlines, toggleOutlines);
-        set_note("Open a menu to see change", i_toggleOutlines);
-        i_toggleNFC = new_entry(statusNFC, toggleNFC);
-        set_note("Disables NFC in order to\nallow stable NTR connection", i_toggleNFC);
+        new_entry_index("Access PC Anywhere", pcAnywhere, PCANYWHERE);
+        set_note("Hold Y while opening options menu", PCANYWHERE);
+        new_entry_index("Rematch Trainers", rematchTrainers, REMATCHTRAINERS);
+        set_note("Hold L & talk to Trainer", REMATCHTRAINERS);
+        new_entry_index(statusOutlines, toggleOutlines, TOGGLEOUTLINES);
+        set_note("Open a menu to see change", TOGGLEOUTLINES);
+        new_entry_index(statusNFC, toggleNFC, TOGGLENFC);
+        set_note("Disables NFC in order to\nallow stable NTR connection", TOGGLENFC);
         new_line();
     exit_spoiler();
 }
@@ -103,7 +96,7 @@ void	toggleOutlines(void) {
 	else
 		WRITEU32(0x0041B748, 0xE5802004);
 	updateOutlines();
-	disableCheat(i_toggleOutlines);
+	disableCheat(TOGGLEOUTLINES);
 }
 
 
@@ -118,14 +111,12 @@ void	updateOutlines(void) {
 
 // Disables inGame NFC to allow NTR connection outside of Festival Plaza.
 void    toggleNFC(void) {
-    if (READU32(0x003DFFD0) != 0xE3A01000) {
+    if (READU32(0x003DFFD0) != 0xE3A01000)
         WRITEU32(0x003DFFD0, 0xE3A01000);
-        disableCheat(i_toggleNFC);
-    } else {
+    else
         WRITEU32(0x003DFFD0, 0xE3A01001);
-        disableCheat(i_toggleNFC);
-    }
     updateNFC();
+    disableCheat(TOGGLENFC);
 }
 
 

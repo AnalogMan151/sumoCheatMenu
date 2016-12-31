@@ -12,15 +12,15 @@ void	my_menus(void) {
 	new_separator();
 
 //    pokemonSpawnMenu();
-    expMenu();
-    new_spoiler("Modifiers");
-        timeMenu();
-        appearanceMenu();
-        battleMenu();
-        movementMenu();
-        pokemonMenu();
-    exit_spoiler();
-    currencyMenu();
-    itemMenu();
+//    expMenu();
+//    new_spoiler("Modifiers");
+//        timeMenu();
+//        appearanceMenu();
+//        battleMenu();
+//        movementMenu();
+//        pokemonMenu();
+//    exit_spoiler();
+//    currencyMenu();
+//    itemMenu();
     miscMenu();
 }
