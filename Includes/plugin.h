@@ -50,7 +50,7 @@ void	init_img(void);
 /* void menu(void)
 ** Initialize the menu
 */
-void	menu(void);
+//void	menu(void);
 
 /*
 ** void set_default_speed(int speed)
@@ -152,8 +152,6 @@ void	set_note(const char *text, int index);
 ** Disable an entry
 */
 void    disableCheat(int index);
-
-void    xsprintf(char *buffer, char *fmt, ...);
 void	new_log(int log_type, char *text, ...);
 
 #endif

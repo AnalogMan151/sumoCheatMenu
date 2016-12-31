@@ -10,33 +10,22 @@
 *				*
 ********************************/
 
-
-char statusOutlines[40] = "Undefined",
-     statusNFC[40] = "Undefined";
-     
-int i_toggleOutlines,
-    i_rematchTrainers,
-    i_pcAnywhere,
-    i_toggleNFC;
-
+char statusOutlines[10] = "Undefined",
+     statusNFC[10] = "Undefined";
 
 // Misc menu entry
 void    miscMenu(void) {
-    updateNFC();
-    updateOutlines();
     new_spoiler("Misc");
-        qrMenu();
+//        qrMenu();
         new_entry("Instant Text Speed", instantText);
-        i_pcAnywhere = new_entry("Access PC Anywhere", pcAnywhere);
-        set_note("Hold Y while opening options menu", i_pcAnywhere);
-        i_rematchTrainers = new_entry("Rematch Trainers", rematchTrainers);
-        set_note("Hold L & talk to Trainer", i_rematchTrainers);
-        i_toggleOutlines = new_entry(statusOutlines, toggleOutlines);
-        set_note("Open a menu to see change", i_toggleOutlines);
-        i_toggleNFC = new_entry(statusNFC, toggleNFC);
-        set_note("Disables NFC in order to\nallow stable NTR connection", i_toggleNFC);
+        new_entry_managed_note("Access PC Anywhere", "Hold Y while opening options menu", pcAnywhere, PCANYWHERE, 0);
+        new_entry_managed_note("Rematch Trainers", "Hold L & talk to Trainer", rematchTrainers, REMATCHTRAINERS, 0);
+        new_entry_managed_note("Outlines", "Open a menu to see change", toggleOutlines, TOGGLEOUTLINES, AUTO_DISABLE);
+        new_entry_managed_note("NTR Debug Connection", "Disables NFC in order to\nallow stable NTR connection", toggleNFC, TOGGLENFC, AUTO_DISABLE);
         new_line();
     exit_spoiler();
+    updateNFC();
+    updateOutlines();
 }
 
 
@@ -103,35 +92,37 @@ void	toggleOutlines(void) {
 	else
 		WRITEU32(0x0041B748, 0xE5802004);
 	updateOutlines();
-	disableCheat(i_toggleOutlines);
 }
 
 
 // Updates code name on menu depending on current enable / disable status
 void	updateOutlines(void) {
+    char buf[10];
+
 	if (READU32(0x0041B748) == 0xE5802004)
-		xsprintf(statusOutlines, "Disable Outlines");
+		xsprintf(buf, "DISABLE ");
 	else
-		xsprintf(statusOutlines, "Enable  Outlines");
+		xsprintf(buf, "ENABLE  ");
+    add_prefix(buf, TOGGLEOUTLINES);
 }
 
 
 // Disables inGame NFC to allow NTR connection outside of Festival Plaza.
 void    toggleNFC(void) {
-    if (READU32(0x003DFFD0) != 0xE3A01000) {
+    if (READU32(0x003DFFD0) != 0xE3A01000)
         WRITEU32(0x003DFFD0, 0xE3A01000);
-        disableCheat(i_toggleNFC);
-    } else {
+    else
         WRITEU32(0x003DFFD0, 0xE3A01001);
-        disableCheat(i_toggleNFC);
-    }
     updateNFC();
 }
 
 
 void    updateNFC(void) {
+    char buf[10];
+
     if(READU32(0x003DFFD0) == 0xE3A01001)
-        xsprintf(statusNFC, "Enable  NTR Debug Connection");
+        xsprintf(buf, "ENABLE  ");
     else
-        xsprintf(statusNFC, "Disable NTR Debug Connection");
+        xsprintf(buf, "DISABLE ");
+    add_prefix(buf, TOGGLENFC);
 }

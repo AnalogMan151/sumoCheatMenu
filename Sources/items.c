@@ -9,38 +9,65 @@
 *				*
 ********************************/
 
-int i_allPokeBalls,
-    i_allItems,
-    i_allMedicine,
-    i_allTMs,
-    i_allBerries,
-    i_allBeans,
-    i_allClothes;
+
+char selectedQuantity[4];
+
+static u16 quantity = 50;
 
 
 // Item menu entry
 void    itemMenu(void) {
+
     new_spoiler("Items");
-        i_allPokeBalls = new_entry("All Poke Balls x100", allPokeBalls);
-        i_allItems = new_entry("All Items      x100", allItems);
-        i_allMedicine = new_entry("All Medicine   x100", allMedicine);
-        i_allBerries = new_entry("All Berries    x100", allBerries);
-        i_allBeans = new_entry("All Poke Beans x100", allBeans);
-        i_allTMs = new_entry("All TMs", allTMs);
-        i_allClothes = new_entry("All Clothes", allClothes);
+        new_entry_managed("Increase Quantity +50", increaseQuantity, INCREASEQUANTITY, AUTO_DISABLE);
+        new_separator();
+
+        new_entry_managed("All Poke Balls      xCCC", allPokeBalls, ALLPOKEBALLS, EXECUTE_ONCE);
+        new_entry_managed("All Items           xCCC", allItems, ALLITEMS, EXECUTE_ONCE);
+        new_entry_managed("All Medicine        xCCC", allMedicine, ALLMEDICINE, EXECUTE_ONCE);
+        new_entry_managed("All Berries         xCCC", allBerries, ALLBERRIES, EXECUTE_ONCE);
+        new_entry_managed("All Poke Beans      xCCC", allBeans, ALLBEANS, EXECUTE_ONCE);
+        new_entry_managed("All TMs", allTMs, ALLTMS, EXECUTE_ONCE);
+        new_entry_managed("All Clothes", allClothes, ALLCLOTHES, EXECUTE_ONCE);
         new_line();
     exit_spoiler();
+    updateQuantity();
+}
+
+// Updates item quantity on menu
+void    updateQuantity(void) {
+    char buf[5];
+
+    xsprintf(buf, "x%-3d", quantity);
+    replace_pattern("x***", buf, ALLPOKEBALLS);
+    replace_pattern("x***", buf, ALLITEMS);
+    replace_pattern("x***", buf, ALLMEDICINE);
+    replace_pattern("x***", buf, ALLBERRIES);
+    if (quantity > 255)
+        replace_pattern("x***", "x255", ALLBEANS);
+    else
+        replace_pattern("x***", buf, ALLBEANS);
+}
+
+
+// Increases item quantity by 50
+void    increaseQuantity(void) {
+    if (quantity == 999)
+        quantity = 0;
+    if (quantity == 950)
+        quantity = 999;
+    if (quantity < 950)
+        quantity += 50;
+    updateQuantity();
 }
 
 
 // Gives only Poké Balls and sets quantity to 100
 void    allPokeBalls(void) {
     u32 offset = 0x330D5934;
-    u32 quantity = 100;
     u32 value;
     int existingIndex = 0;
     bool skip;
-    static bool done;
     static const u32 pokeballs[25] = {
       1,   2,   3,   4,   5,
       6,   7,   8,   9,  10,
@@ -57,7 +84,7 @@ void    allPokeBalls(void) {
     999, 999, 999, 999, 999
     };
 
-    for (int itemCount = 0; (itemCount < 335) && !done; itemCount++) { // Iterates through inventory
+    for (int itemCount = 0; (itemCount < 335); itemCount++) { // Iterates through inventory
     	value = READU32(offset + itemCount*4) & 0x3FF; // Reads inventory slot
     	if (value == 0x0) { // Checks if end of inventory was reached
     		for (int i = 0; i < 25; i++) { // Iterates through Poké Balls to add
@@ -72,7 +99,6 @@ void    allPokeBalls(void) {
     				itemCount++;
     			}
     		}
-            done = true;
     		break;
     	}
     	for (int ballCheck = 0; ballCheck < 25; ballCheck++) { // Checks if inventory slot is already a Poké Ball and sets quantity
@@ -84,17 +110,12 @@ void    allPokeBalls(void) {
     		}
     	}
     }
-    if (any_is_pressed(0x0000CFFE)) { // Any button but A disables cheat
-        done = false;
-        disableCheat(i_allPokeBalls);
-    }
 }
 
 
 // Gives all items and sets them to quantity 100
 void    allItems(void) {
     u32    offset = 0x330D5934; // Start of Item Inventory
-    u16    quantity = 100; // Number of each item to give
 
     // Array of legal items
     static const u16    allItems[335] =
@@ -147,16 +168,12 @@ void    allItems(void) {
     for (int i = 0; i < 335; i++) {
        WRITEU32(offset + i*4, allItems[i] + (quantity << 10));
     }
-
-    if (any_is_pressed(0x0000CFFE)) // Any button but A disables cheat
-        disableCheat(i_allItems);
 }
 
 
 // Gives all medicine and sets them to quantity 100
 void    allMedicine(void) {
     u32    offset = 0x330D647C; // Start of Medicine Inventory
-    u16    quantity = 100; // Number of each item to give
 
     // Array of legal items
     static const u16    allMedicine[54] =
@@ -174,15 +191,11 @@ void    allMedicine(void) {
     for (int i = 0; i < 54; i++) {
        WRITEU32(offset + i*4, allMedicine[i] + (quantity << 10));
     }
-
-    if (any_is_pressed(0x0000CFFE)) // Any button but A disables cheat
-        disableCheat(i_allMedicine);
 }
 
 // Gives all TMs
 void    allTMs(void) {
     u32    offset = 0x330D62CC; // Start of TM Inventory
-    u16    quantity = 1; // Number of each item to give
 
     // Array of legal items
     static const u16    allTMs[100] =
@@ -204,18 +217,14 @@ void    allTMs(void) {
 
     // Writes the array to inventory
     for (int i = 0; i < 100; i++) {
-       WRITEU32(offset + i*4, allTMs[i] + (quantity << 10));
+       WRITEU32(offset + i*4, allTMs[i] + (1 << 10));
     }
-
-    if (any_is_pressed(0x0000CFFE)) // Any button but A disables cheat
-        disableCheat(i_allTMs);
 }
 
 
 // Gives all Berries and sets quantity to 100
 void    allBerries(void) {
     u32    offset = 0x330D657C; // Start of Berry Inventory
-    u16    quantity = 100; // Number of each item to give
 
     // Array of legal items
     static const u16    allBerries[67] =
@@ -235,20 +244,17 @@ void    allBerries(void) {
     for (int i = 0; i < 67; i++) {
        WRITEU32(offset + i*4, allBerries[i] + (quantity << 10));
     }
-
-    if (any_is_pressed(0x0000CFFE)) // Any button but A disables cheat
-        disableCheat(i_allBerries);
 }
 
 
 // Gives all PokeBeans and sets them to quantity of 100
 void    allBeans(void) {
     for (int i = 0; i < 15; i++) {
-    WRITEU8(0x33115490 + i, 0x64);
+        if (quantity > 255)
+            WRITEU8(0x33115490 + i, 0xFF);
+        else
+            WRITEU8(0x33115490 + i, quantity);
     }
-
-    if (any_is_pressed(0x0000CFFE)) // Any button but A
-		disableCheat(i_allBeans);
 }
 
 
@@ -306,7 +312,4 @@ void	allClothes(void) {
 	WRITEU32(0x000003B4 + offset, 0x01010103);
 	WRITEU32(0x00000450 + offset, 0x01030000);
 	WRITEU32(0x00000514 + offset, 0x03000000);
-
-	if (any_is_pressed(0x0000CFFE))
-		disableCheat(i_allClothes);
 }
