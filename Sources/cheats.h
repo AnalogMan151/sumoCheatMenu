@@ -2,11 +2,28 @@
 #define CHEATS_H
 #include "plugin.h"
 
+typedef enum
+{
+    EXECUTE_ONCE = BIT(0),
+    EXECUTED = BIT(1),
+    TOGGLE = BIT(2),
+    TOGGLE_ENABLE = BIT(3),
+    AUTO_DISABLE = BIT(4)
+}               entry_flags;
+
 enum {
     TOGGLEOUTLINES,
     REMATCHTRAINERS,
     PCANYWHERE,
-    TOGGLENFC
+    TOGGLENFC,
+    INCREASEQUANTITY,
+    ALLPOKEBALLS,
+    ALLITEMS,
+    ALLMEDICINE,
+    ALLTMS,
+    ALLBERRIES,
+    ALLBEANS,
+    ALLCLOTHES
 } e_identifiers;
 
 // Helpers
@@ -14,10 +31,16 @@ enum {
 void    disable_entry(int identifier);
 void    update_status(int state, int identifier);
 void    new_entry_note(char *str, const char * const note, void (*function)(void));
-void    new_entry_index(char *str, void (*function)(void), int identifier);
-void    new_entry_index_note(char *str, const char * const note, void (*function)(void), int identifier);
-void    new_toggle_entry(char *str, void (*function)(void), int identifier);
-void    new_toggle_entry_note(char *str, char *note, void (*function)(void), int identifier);
+void    new_entry_managed(char *str, void (*function)(void), int identifier, int flags);
+void    new_entry_managed_note(char *str, const char * const note, void (*function)(void), int identifier, int flags);
+void    new_entry_arg(char *name, void (*function)(u32), u32 arg, int identifier, int flags);
+void    new_entry_arg_note(char *name, char *note, void (*function)(u32), u32 arg, int identifier, int flags);
+void    new_super_unselectable_entry(char *str, void (*f)());
+void    execute_all(void);
+void    replace_pattern(char *pattern, char *replace_str, int identifier);
+void    add_prefix(char *prefix, int identifier);
+void    add_suffix(char *suffix, int identifier);
+void    xsprintf(char *dst, char *fmt, ...);
 
 
 // Pokémon Spawner

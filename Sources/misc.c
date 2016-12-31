@@ -10,26 +10,22 @@
 *				*
 ********************************/
 
-char statusOutlines[40] = "Undefined",
-     statusNFC[40] = "Undefined";
+char statusOutlines[10] = "Undefined",
+     statusNFC[10] = "Undefined";
 
 // Misc menu entry
 void    miscMenu(void) {
-    updateNFC();
-    updateOutlines();
     new_spoiler("Misc");
 //        qrMenu();
         new_entry("Instant Text Speed", instantText);
-        new_entry_index("Access PC Anywhere", pcAnywhere, PCANYWHERE);
-        set_note("Hold Y while opening options menu", PCANYWHERE);
-        new_entry_index("Rematch Trainers", rematchTrainers, REMATCHTRAINERS);
-        set_note("Hold L & talk to Trainer", REMATCHTRAINERS);
-        new_entry_index(statusOutlines, toggleOutlines, TOGGLEOUTLINES);
-        set_note("Open a menu to see change", TOGGLEOUTLINES);
-        new_entry_index(statusNFC, toggleNFC, TOGGLENFC);
-        set_note("Disables NFC in order to\nallow stable NTR connection", TOGGLENFC);
+        new_entry_managed_note("Access PC Anywhere", "Hold Y while opening options menu", pcAnywhere, PCANYWHERE, 0);
+        new_entry_managed_note("Rematch Trainers", "Hold L & talk to Trainer", rematchTrainers, REMATCHTRAINERS, 0);
+        new_entry_managed_note("Outlines", "Open a menu to see change", toggleOutlines, TOGGLEOUTLINES, AUTO_DISABLE);
+        new_entry_managed_note("NTR Debug Connection", "Disables NFC in order to\nallow stable NTR connection", toggleNFC, TOGGLENFC, AUTO_DISABLE);
         new_line();
     exit_spoiler();
+    updateNFC();
+    updateOutlines();
 }
 
 
@@ -96,16 +92,18 @@ void	toggleOutlines(void) {
 	else
 		WRITEU32(0x0041B748, 0xE5802004);
 	updateOutlines();
-	disableCheat(TOGGLEOUTLINES);
 }
 
 
 // Updates code name on menu depending on current enable / disable status
 void	updateOutlines(void) {
+    char buf[10];
+
 	if (READU32(0x0041B748) == 0xE5802004)
-		xsprintf(statusOutlines, "Disable Outlines");
+		xsprintf(buf, "DISABLE ");
 	else
-		xsprintf(statusOutlines, "Enable  Outlines");
+		xsprintf(buf, "ENABLE  ");
+    add_prefix(buf, TOGGLEOUTLINES);
 }
 
 
@@ -116,13 +114,15 @@ void    toggleNFC(void) {
     else
         WRITEU32(0x003DFFD0, 0xE3A01001);
     updateNFC();
-    disableCheat(TOGGLENFC);
 }
 
 
 void    updateNFC(void) {
+    char buf[10];
+
     if(READU32(0x003DFFD0) == 0xE3A01001)
-        xsprintf(statusNFC, "Enable  NTR Debug Connection");
+        xsprintf(buf, "ENABLE  ");
     else
-        xsprintf(statusNFC, "Disable NTR Debug Connection");
+        xsprintf(buf, "DISABLE ");
+    add_prefix(buf, TOGGLENFC);
 }

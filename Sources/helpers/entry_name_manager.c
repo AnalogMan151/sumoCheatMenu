@@ -117,3 +117,43 @@ void    add_prefix(char *prefix, int identifier)
 exit:
     return;
 }
+
+void    replace_pattern(char *pattern, char *replace_str, int identifier)
+{
+    char    buf[40];
+    char    *p_pattern;
+    char    *p_buf;
+    char    *p_result;
+    
+    char *src = get_displayed_name(identifier);
+    if (!src) return;
+    strcpy(buf, src);
+    p_pattern = pattern;
+    p_buf = buf;
+again:
+    while(*p_pattern != *p_buf && *p_buf != '\0')
+        p_buf++;        
+    if(*p_pattern == *p_buf && *p_pattern != '\0' && *p_buf != '\0')
+    {
+        p_result = p_buf;
+        while((*p_pattern == *p_buf || *p_pattern == '*' ) && *p_pattern != '\0' && *p_buf != '\0')
+        {
+            p_pattern++;
+            p_buf++;
+        }
+        if(*p_pattern != '\0' && *p_buf != '\0')
+        {
+            p_buf = p_result + 1;
+            p_result = NULL;
+            p_pattern = pattern;
+            goto again;
+        }
+        if(*p_pattern != '\0' && *p_buf == '\0')
+            return;
+        if(*p_pattern == '\0')
+        {
+            strncpy(p_result, replace_str, strlen(replace_str));
+            strcpy(src, buf);
+        }
+    }   
+}

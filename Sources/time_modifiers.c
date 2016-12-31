@@ -40,10 +40,10 @@ void    timeMenu(void) {
         strcpy(timeType, "Sun");
         timeHours = 0;
      } else if (timeOffset < 12) {
-        strcpy(timeType, "Sun");
+        xsprintf(timeType, "Sun");
         timeHours = timeOffset;
      } else if (timeOffset >= 12) {
-        strcpy(timeType, "Moon");
+        xsprintf(timeType, "Moon");
         timeHours = timeOffset - 12;
      }
 

@@ -6,13 +6,40 @@
 // The menu can handle a maximum of 300 entries
 #define MAX_STORAGE    100
 
+
+
 typedef struct  s_entry_data
 {
     char        name[40];
     char        displayed[40];
     int         identifier;
     int         index;
+    int         flags;
+    u32         arg;
+    void        (*f)(u32);
 }               t_entry_data;
+
+#define ENTRY_COUNT 300
+
+typedef enum
+{
+    STATE = BIT(0),
+    FREEZE = BIT(1),
+    SELECTABLE = BIT(2),
+    NOTE = BIT(3)
+}               menu_flags;
+
+typedef struct s_menu
+{
+    int         count;
+    int         status;
+    u32         flags[ENTRY_COUNT];
+    u32         spoiler[ENTRY_COUNT];
+    int         args[ENTRY_COUNT];
+    const char  *text[ENTRY_COUNT];
+    const char  *note[ENTRY_COUNT];
+    void        (*f[ENTRY_COUNT])();
+}             t_menu;
 
 /*
 ** index_manager.c
