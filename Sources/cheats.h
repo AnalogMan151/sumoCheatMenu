@@ -137,12 +137,10 @@ void	qrScan100(void);
 // Misc
 void    miscMenu(void);
 void	instantText(void);
-void    pcAnywhere(void);
+void    pcAnywhere(u32 state);
 void	rematchTrainers(void);
-void	toggleOutlines(void);
-void	updateOutlines(void);
-void    toggleNFC(void);
-void    updateNFC(void);
+void	toggleOutlines(u32 state);
+void    toggleNFC(u32 state);
 
 
 #endif
