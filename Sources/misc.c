@@ -13,7 +13,7 @@
 // Misc menu entry
 void    miscMenu(void) {
     new_spoiler("Misc");
-//        qrMenu();
+        qrMenu();
         new_entry("Instant Text Speed", instantText);
         new_entry_arg_note("Access PC Anywhere", "Open Options submenu", pcAnywhere, 0, PCANYWHERE, TOGGLE);
         new_entry_managed_note("Rematch Trainers", "Hold L & talk to Trainer", rematchTrainers, REMATCHTRAINERS, 0);
