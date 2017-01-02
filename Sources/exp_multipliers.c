@@ -24,9 +24,9 @@ void    expMenu(void) {
     new_spoiler("EXP Multiplier");
         new_unselectable_entry(currentEXP);
         new_separator();
-        i_increaseEXP1 = new_entry("Increase 1's", increaseEXP1);
-        i_increaseEXP10 = new_entry("Increase 10's", increaseEXP10);
-        i_increaseEXP100 = new_entry("Increase 100's", increaseEXP100);
+        new_entry_managed("Increase 1's", increaseEXP1, INCREASEEXP1, AUTO_DISABLE);
+        new_entry_managed("Increase 10's", increaseEXP10, INCREASEEXP10, AUTO_DISABLE);
+        new_entry_managed("Increase 100's", increaseEXP100, INCREASEEXP100, AUTO_DISABLE);
         new_line();
     exit_spoiler();
 }
@@ -67,7 +67,6 @@ void	increaseEXP1(void) {
 
     WRITEU8(0x00595808, exp_rate);
     updateEXP();
-    disableCheat(i_increaseEXP1);
 }
 
 
@@ -88,7 +87,6 @@ void	increaseEXP10(void) {
 
     WRITEU8(0x00595808, exp_rate);
     updateEXP();
-    disableCheat(i_increaseEXP10);
 }
 
 
@@ -109,5 +107,4 @@ void	increaseEXP100(void) {
 
     WRITEU8(0x00595808, exp_rate);
     updateEXP();
-    disableCheat(i_increaseEXP100);
 }

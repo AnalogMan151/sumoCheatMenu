@@ -9,18 +9,14 @@
 *	Pokemon Spawner   	*
 *				*
 ********************************/
-int i_increaseID1,
-    i_increaseID10,
-    i_increaseID100,
-    i_increaseLVL1,
-    i_increaseLVL10,
-    i_activateSpawn;
 
 int spawnID = 1,
-    spawnLVL = 5;
+    spawnLVL = 5,
+    spawnForm = 0;
 
 char currentSpawn[40],
-     currentLVL[40];
+     currentLVL[40],
+     currentForm[7] = "Normal";
 
 // Pokémon Spawner menu entry
 void    pokemonSpawnMenu(void) {
@@ -30,19 +26,18 @@ void    pokemonSpawnMenu(void) {
         new_unselectable_entry(currentSpawn);
         new_unselectable_entry(currentLVL);
         new_spoiler("Change ID");
-        i_increaseID1 = new_entry("Increase Spawn ID 1's", increaseID1);
-        i_increaseID10 = new_entry("Increase Spawn ID 10's", increaseID10);
-        i_increaseID100 = new_entry("Increase Spawn ID 100's", increaseID100);
+        new_entry_managed("Increase Spawn ID 1's", increaseID1, INCREASEID1, AUTO_DISABLE);
+        new_entry_managed("Increase Spawn ID 10's", increaseID10, INCREASEID10, AUTO_DISABLE);
+        new_entry_managed("Increase Spawn ID 100's", increaseID100, INCREASEID100, AUTO_DISABLE);
         exit_spoiler();
         new_spoiler("Change LVL");
-        i_increaseLVL1 = new_entry("Increase Level 1's", increaseLVL1);
-        i_increaseLVL10 = new_entry("Increase Level 10's", increaseLVL10);
+        new_entry_managed("Increase Level 1's", increaseLVL1, INCREASELVL1, AUTO_DISABLE);
+        new_entry_managed("Increase Level 10's", increaseLVL10, INCREASELVL10, AUTO_DISABLE);
         exit_spoiler();
         new_spoiler("Change Form");
-        new_unselectable_entry("Not yet supported");
+        new_entry_managed("Change Form", changeForm, CHANGEFORM, AUTO_DISABLE);
         exit_spoiler();
-        i_activateSpawn = new_entry("Activate", activateSpawn);
-        set_note("Hold L to encounter Pokemon", i_activateSpawn);
+        new_entry_arg("Activate", activateSpawn, 0, ACTIVATESPAWN, TOGGLE);
         new_line();
     exit_spoiler();
 }
@@ -56,31 +51,42 @@ void    updateSpawn(void) {
         spawnLVL = 1;
     if (spawnLVL > 100)
         spawnLVL = 100;
+    xsprintf(currentForm, (spawnForm) ? "Alola" : "Normal");
     spawnPokemon *array;
     array = &pokemonID[spawnID - 1];
     xsprintf(currentSpawn, "Pokemon: %3d %s", array->id, array->name);
-    xsprintf(currentLVL, "Level: %3d  Form: Normal" , spawnLVL);
+    xsprintf(currentLVL, "Level: %3d  Form: %s" , spawnLVL, currentForm);
 }
 
 
 // Redirects stack calls to custom location with selected data
-void    activateSpawn(void) {
-    u32 offset = 0x005957E0;
-    WRITEU32(0x00 + offset, 0xE1D500B0);
-    WRITEU32(0x04 + offset, 0xE12FFF1E);
-    WRITEU32(0x08 + offset, 0xE5C40004);
-    WRITEU32(0x0C + offset, 0xE59F0000);
-    WRITEU32(0x10 + offset, 0xE12FFF1E);
-    WRITEU32(0x14 + offset, spawnID);
-    WRITEU32(0x18 + offset, spawnLVL);
+void    activateSpawn(u32 state) {
+    u32 offset = 0x003988DC;
+    static u32 original[3];
+    if (state) {
+        original[0] = READU32(0x00 + offset);
+        original[1] = READU32(0x10 + offset);
+        original[2] = READU32(0x2C + offset);
 
-    offset = 0x003988DC;
-    WRITEU32(0x00 + offset, 0xEB07F3BF);
-    WRITEU32(0x10 + offset, 0xEB07F3BB);
-    WRITEU32(0x1C + offset, 0xEB07F3B4);
+        WRITEU32(0x00 + offset, 0xEB07F3BF);
+        WRITEU32(0x10 + offset, 0xEB07F3BB);
+        WRITEU32(0x2C + offset, 0xEB07F3B4);
 
-    if (is_pressed(BUTTON_L))
-        WRITEU32(0x005957E4, 0xE59F000C);
+        offset = 0x005957E0;
+        WRITEU32(0x00 + offset, 0xE1D500B0);
+        WRITEU32(0x04 + offset, 0xE59F000C);
+        WRITEU32(0x08 + offset, 0xE5C40004);
+        WRITEU32(0x0C + offset, 0xE59F0000);
+        WRITEU32(0x10 + offset, 0xE12FFF1E);
+        WRITEU32(0x14 + offset, (spawnForm) ? spawnID + 0x800 : spawnID);
+        WRITEU32(0x18 + offset, spawnLVL);
+
+
+    } else {
+        WRITEU32(0x00 + offset, original[0]);
+        WRITEU32(0x10 + offset, original[1]);
+        WRITEU32(0x2C + offset, original[2]);
+    }
 }
 
 
@@ -97,8 +103,9 @@ void	increaseID1(void) {
     else
         ones = 0;
     spawnID += ones;
+    spawnForm = 0;
     updateSpawn();
-    disableCheat(i_increaseID1);
+    disable_entry(ACTIVATESPAWN);
 }
 
 
@@ -115,8 +122,9 @@ void	increaseID10(void) {
     else
         tens = 0;
     spawnID += (tens * 10);
+    spawnForm = 0;
     updateSpawn();
-    disableCheat(i_increaseID10);
+    disable_entry(ACTIVATESPAWN);
 }
 
 
@@ -133,8 +141,9 @@ void	increaseID100(void) {
     else
         hundreds = 0;
     spawnID += (hundreds * 100);
+    spawnForm = 0;
     updateSpawn();
-    disableCheat(i_increaseID100);
+    disable_entry(ACTIVATESPAWN);
 }
 
 
@@ -152,7 +161,7 @@ void	increaseLVL1(void) {
         ones = 0;
     spawnLVL += ones;
     updateSpawn();
-    disableCheat(i_increaseLVL1);
+    disable_entry(ACTIVATESPAWN);
 }
 
 
@@ -168,5 +177,41 @@ void	increaseLVL10(void) {
         tens = 0;
     spawnLVL += (tens * 10);
     updateSpawn();
-    disableCheat(i_increaseLVL10);
+    disable_entry(ACTIVATESPAWN);
+}
+
+
+// Changes spawn Form
+void    changeForm(void) {
+    spawnForm = (alolaCheck(spawnID) && !spawnForm) ? 1 : 0;
+
+    updateSpawn();
+    disable_entry(ACTIVATESPAWN);
+}
+
+
+// Checks if ID is on Alola Form List
+bool    alolaCheck(u32 id) {
+    switch(id) {
+        case 19:  // Rattata
+        case 20:  // Raticate
+        case 26:  // Raichu
+        case 27:  // Sandshrew
+        case 28:  // Sandslash
+        case 37:  // Vulpix
+        case 38:  // Ninetails
+        case 50:  // Diglett
+        case 51:  // Dugtrio
+        case 52:  // Meowth
+        case 53:  // Persian
+        case 74:  // Geodude
+        case 75:  // Graveler
+        case 76:  // Golem
+        case 88:  // Grimer
+        case 89:  // Muk
+        case 105: // Marowak
+        case 103: // Exeggutor
+            return true;
+        }
+    return false;
 }

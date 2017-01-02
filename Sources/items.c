@@ -271,7 +271,7 @@ u32		clothesFunction(u32 offset, u8 data, u16 loop_num) {
 void	allClothes(void) {
 	u32 offset = 0x33116620;
 
-    if (READU8(0x330D67D5) == 0x00) {
+    if (READU8(0x330D67D5) == 0x00) { //Check if character is male
         offset = clothesFunction(offset, 0x01, 0x003A);
         offset = clothesFunction(offset, 0x00, 0x0087);
         offset = clothesFunction(offset, 0x01, 0x0014);
@@ -286,7 +286,7 @@ void	allClothes(void) {
         offset = clothesFunction(offset, 0x00, 0x0066);
         offset = clothesFunction(offset, 0x01, 0x006D);
         clothesFunction(offset, 0x00, 0x0044);
-    } else {
+    } else {                         // Else character is female
         offset = clothesFunction(offset, 0x01, 0x005E);
         offset = clothesFunction(offset, 0x00, 0x0020);
         offset = clothesFunction(offset, 0x01, 0x0023);

@@ -9,13 +9,6 @@
 *				*
 ********************************/
 
-int i_setGender,
-    i_setSkintone,
-    i_switchLooks;
-
-char storedGender[40] = "Undefined",
-     storedSkintone[40] = "Undefined";
-
 u8 matchingHair,
    currentGender,
    currentSkintone;
@@ -24,20 +17,18 @@ u8 matchingHair,
 void    appearanceMenu(void) {
     currentGender = READU8(0x330D67D5);
     currentSkintone = READU8(0x330D6824);
-    updateGender();
-    updateSkintone();
     new_spoiler("Appearance");
         new_unselectable_entry("WARNING: Gender change");
         new_unselectable_entry("resets clothes & hair");
         new_line();
-        i_setGender = new_entry(storedGender, setGender);
-        set_note("Open a menu to see change", i_setGender);
-        i_setSkintone = new_entry(storedSkintone, setSkintone);
-        set_note("Ride Pokemon to see change\nor save & reboot", i_setSkintone);
+        new_entry_managed_note("Current Gender: XXXXXX", "Open a menu to see change", setGender, SETGENDER, AUTO_DISABLE);
+        new_entry_managed_note("Current Skin Tone: X", "Ride Pokemon to see change\nor save & reboot", setSkintone, SETSKINTONE, AUTO_DISABLE);
         new_separator();
-        i_switchLooks = new_entry("Apply Changes", switchLooks);
+        new_entry_managed("Apply Changes", switchLooks, SWITCHLOOKS, EXECUTE_ONCE);
         new_line();
     exit_spoiler();
+    updateGender();
+    updateSkintone();
 }
 
 
@@ -64,9 +55,6 @@ void    switchLooks(void) {
     }
 
     WRITEU32(0x00000064 + offset, 0x00000000);
-
-    if (any_is_pressed(0x0000CFFE))
-        disableCheat(i_switchLooks);
 }
 
 
@@ -81,16 +69,12 @@ void    setGender(void) {
     }
 
     updateGender();
-    disableCheat(i_setGender);
 }
 
 
 // Updates menu with current gender
 void    updateGender(void) {
-    if (currentGender == 0x00)
-        xsprintf(storedGender, "Current Gender: Male");
-    if (currentGender == 0x01)
-        xsprintf(storedGender, "Current Gender: Female");
+    replace_pattern(": ******", (currentGender == 0x00) ? ": Male  " : ": Female", SETGENDER);
 }
 
 
@@ -104,7 +88,6 @@ void    setSkintone(void) {
         currentSkintone += 0x08;
 
     updateSkintone();
-    disableCheat(i_setSkintone);
 }
 
 
@@ -112,18 +95,18 @@ void    setSkintone(void) {
 void    updateSkintone(void) {
     if (currentSkintone == 0x00 || currentSkintone == 0x04) {
         matchingHair = 0x83;
-        xsprintf(storedSkintone, "Current Skin Tone: A");
+        replace_pattern(": *", ": A", SETSKINTONE);
     }
     if (currentSkintone == 0x08 || currentSkintone == 0x0C) {
         matchingHair = 0x04;
-        xsprintf(storedSkintone, "Current Skin Tone: B");
+        replace_pattern(": *", ": B", SETSKINTONE);
     }
     if (currentSkintone == 0x10 || currentSkintone == 0x14) {
         matchingHair = 0x48;
-        xsprintf(storedSkintone, "Current Skin Tone: C");
+        replace_pattern(": *", ": C", SETSKINTONE);
     }
     if (currentSkintone == 0x18 || currentSkintone == 0x1C) {
         matchingHair = 0x08;
-        xsprintf(storedSkintone, "Current Skin Tone: D");
+        replace_pattern(": *", ": D", SETSKINTONE);
     }
 }
