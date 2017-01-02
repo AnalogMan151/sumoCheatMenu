@@ -18,7 +18,7 @@ def allFolderFile(pattern, ext):
     for dirpath, dirnames, filenames in os.walk(pattern):
         for filename in [f for f in filenames if f.endswith(ext)]:
             s+= os.path.join(dirpath, filename) + ' '
-        return s;
+    return s;
 
 SUN_TID 	= "0004000000164800"
 MOON_TID 	= "0004000000175E00"
