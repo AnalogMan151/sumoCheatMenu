@@ -23,7 +23,33 @@ enum {
     ALLTMS,
     ALLBERRIES,
     ALLBEANS,
-    ALLCLOTHES
+    ALLCLOTHES,
+    SETGENDER,
+    SETSKINTONE,
+    SWITCHLOOKS,
+    SHINYPOKEMON,
+    MAXBATTLESTATS,
+    ZMOVES,
+    INCREASECURRENCYQUANTITY,
+    MAXMONEY,
+    MAXBP,
+    MAXCOINS,
+    TOTALCOINS,
+    TOTALTHUMBS,
+    INCREASEEXP1,
+    INCREASEEXP10,
+    INCREASEEXP100,
+    WALKTHROUGHWALLS,
+    INSTANTEGG,
+    ACTIVATESPAWN,
+    INCREASEID1,
+    INCREASEID10,
+    INCREASEID100,
+    INCREASELVL1,
+    INCREASELVL10,
+    INCREASETIME,
+    DECREASETIME,
+    CHANGEFORM
 } e_identifiers;
 
 // Helpers
@@ -51,7 +77,9 @@ void    increaseID10(void);
 void    increaseID100(void);
 void    increaseLVL1(void);
 void    increaseLVL10(void);
-void    activateSpawn(void);
+void    activateSpawn(u32 state);
+void    changeForm(void);
+bool    alolaCheck(u32 id);
 
 
 // EXP Multipliers
@@ -82,13 +110,10 @@ void    updateSkintone(void);
 // Battle Modifiers
 void    battleMenu(void);
 void    alolaRat(void);
-void    updateBattleStats(void);
-void    maxBattleStats(void);
+void    maxBattleStats(u32 state);
 void	catch100(void);
-void	shinyPokemon(void);
-void    zMoves(void);
-void    updateZMove(void);
-void    updateShiny(void);
+void	shinyPokemon(u32 state);
+void    zMoves(u32 state);
 
 
 // Movement Modifiers
@@ -112,6 +137,8 @@ void	maxCoins(void);
 void	totalCoins(void);
 void	totalThumbs(void);
 void	maxBP(void);
+void    increaseCurrencyQuantity(void);
+void    updateCurrencyQuantity(void);
 
 
 // Item Modifiers

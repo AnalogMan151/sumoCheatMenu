@@ -9,9 +9,6 @@
  *                              *
  ********************************/
 
- int i_increaseTime,
-     i_decreaseTime;
-
 char currentTime[40] = "Undefined";
 
 
@@ -21,8 +18,8 @@ void    timeMenu(void) {
     new_spoiler("Time");
         new_unselectable_entry(currentTime);
         new_separator();
-        i_increaseTime = new_entry("Increase Hour +1", increaseTime);
-        i_decreaseTime = new_entry("Decrease Hour -1", decreaseTime);
+        new_entry_managed("Increase Hour +1", increaseTime, INCREASETIME, AUTO_DISABLE);
+        new_entry_managed("Decrease Hour -1", decreaseTime, DECREASETIME, AUTO_DISABLE);
         new_line();
     exit_spoiler();
 }
@@ -37,7 +34,7 @@ void    timeMenu(void) {
      timeOffset = timeOffset / 3600;
 
      if (timeOffset == 24) {
-        strcpy(timeType, "Sun");
+        xsprintf(timeType, "Sun");
         timeHours = 0;
      } else if (timeOffset < 12) {
         xsprintf(timeType, "Sun");
@@ -65,7 +62,6 @@ void    timeMenu(void) {
 
     WRITEU32(0x330D9238, timeOffset);
     updateTime();
-    disableCheat(i_increaseTime);
  }
 
 
@@ -83,5 +79,4 @@ void    timeMenu(void) {
 
     WRITEU32(0x330D9238, timeOffset);
     updateTime();
-    disableCheat(i_decreaseTime);
  }

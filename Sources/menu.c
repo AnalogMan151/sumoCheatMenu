@@ -7,9 +7,20 @@ void	while_plugin_is_alive(void)
 	execute_all();
 }
 
+void    protect_region(u32 addr);
+
+void    mem_rwx(void) {
+    protect_region(0x08000000);
+    protect_region(0x08103000);
+    protect_region(0x08133000);
+    protect_region(0x0821D000);
+    protect_region(0x0821E000);
+    protect_region(0x08225000);
+}
+
 void	my_menus(void) {
 	// set_hid_address(0x10002000);
-
+    // mem_rwx();
 	new_super_unselectable_entry("Entries w/ an orange background", while_plugin_is_alive);
     new_unselectable_entry("have notes. Press (Y) to view.");
 
