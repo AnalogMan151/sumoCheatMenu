@@ -3,6 +3,8 @@
 
 A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMenu](https://github.com/RyDog199/blankCheatMenu) base which in turn was based off [@Nanquitas](https://github.com/Nanquitas/) work.
 
+Activate by pressing SELECT in game. 
+
 ### Cheats include:
 
 - Pokémon Spawner (Spawn a wild Pokémon by ID)
