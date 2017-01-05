@@ -10,7 +10,7 @@ Activate by pressing SELECT in game.
 - Pokémon Spawner (Spawn a wild Pokémon by ID)
   1. Set ID
   2. Set Level
-  3. Choose Normal or Alola
+  3. Set Form
 
 - EXP Modifiers
   1. Dynamic EXP multiplier adjustable from 0x to 255x
