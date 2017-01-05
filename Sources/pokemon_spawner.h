@@ -2,7 +2,7 @@
 #define POKEMON_SPAWNER_H
 
 
-// Array of Pokémon IDs and names 
+// Array of Pokémon IDs and names
 typedef struct  arrayPokemon
 {
     int     id;
@@ -93,7 +93,7 @@ spawnPokemon     pokemonID[802] =
     {80, "Slowbro"},
     {81, "Magnemite"},
     {82, "Magneton"},
-    {83, "Farfetch&#39;d"},
+    {83, "Farfetch'd"},
     {84, "Doduo"},
     {85, "Dodrio"},
     {86, "Seel"},
@@ -484,7 +484,7 @@ spawnPokemon     pokemonID[802] =
     {471, "Glaceon"},
     {472, "Gliscor"},
     {473, "Mamoswine"},
-    {474, "Porygon-z"},
+    {474, "Porygon-Z"},
     {475, "Gallade"},
     {476, "Probopass"},
     {477, "Dusknoir"},
@@ -679,7 +679,7 @@ spawnPokemon     pokemonID[802] =
     {666, "Vivillon"},
     {667, "Litleo"},
     {668, "Pyroar"},
-    {669, "Flabébé"},
+    {669, "Flabebe"},
     {670, "Floette"},
     {671, "Florges"},
     {672, "Skiddo"},
@@ -775,7 +775,7 @@ spawnPokemon     pokemonID[802] =
     {762, "Steenee"},
     {763, "Tsareena"},
     {764, "Comfey"},
-    {765, "oranguru"},
+    {765, "Oranguru"},
     {766, "Passimian"},
     {767, "Wimpod"},
     {768, "Golisopod"},
@@ -814,4 +814,10 @@ spawnPokemon     pokemonID[802] =
     {801, "Magearna"},
     {802, "Marshadow"}
 };
+
+typedef struct  arrayForms {
+    char    *name;
+}               spawnForms;
+
+spawnForms formID[30] = {0};
 #endif

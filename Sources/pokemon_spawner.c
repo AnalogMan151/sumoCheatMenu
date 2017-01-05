@@ -12,15 +12,15 @@
 
 int spawnID = 1,
     spawnLVL = 5,
-    spawnForm = 0;
+    formIndex = 0;
 
 char currentSpawn[40],
-     currentLVL[40],
-     currentForm[7] = "Normal";
+     currentLVL[40];
 
 // Pokémon Spawner menu entry
 void    pokemonSpawnMenu(void) {
 
+    getForms(spawnID);
     updateSpawn();
     new_spoiler("Pokemon Spawner");
         new_unselectable_entry(currentSpawn);
@@ -34,9 +34,7 @@ void    pokemonSpawnMenu(void) {
         new_entry_managed("Increase Level 1's", increaseLVL1, INCREASELVL1, AUTO_DISABLE);
         new_entry_managed("Increase Level 10's", increaseLVL10, INCREASELVL10, AUTO_DISABLE);
         exit_spoiler();
-        new_spoiler("Change Form");
-        new_entry_managed("Change Form", changeForm, CHANGEFORM, AUTO_DISABLE);
-        exit_spoiler();
+        new_entry_managed("Change Form", setForm, SETFORM, AUTO_DISABLE);
         new_entry_arg("Activate", activateSpawn, 0, ACTIVATESPAWN, TOGGLE);
         new_line();
     exit_spoiler();
@@ -51,11 +49,12 @@ void    updateSpawn(void) {
         spawnLVL = 1;
     if (spawnLVL > 100)
         spawnLVL = 100;
-    xsprintf(currentForm, (spawnForm) ? "Alola" : "Normal");
     spawnPokemon *array;
     array = &pokemonID[spawnID - 1];
+    spawnForms *formArray;
+    formArray = &formID[formIndex];
     xsprintf(currentSpawn, "Pokemon: %3d %s", array->id, array->name);
-    xsprintf(currentLVL, "Level: %3d  Form: %s" , spawnLVL, currentForm);
+    xsprintf(currentLVL, "Level: %3d  Form: %s" , spawnLVL, formArray->name);
 }
 
 
@@ -78,7 +77,7 @@ void    activateSpawn(u32 state) {
         WRITEU32(0x08 + offset, 0xE5C40004);
         WRITEU32(0x0C + offset, 0xE59F0000);
         WRITEU32(0x10 + offset, 0xE12FFF1E);
-        WRITEU32(0x14 + offset, (spawnForm) ? spawnID + 0x800 : spawnID);
+        WRITEU32(0x14 + offset, spawnID + (0x800 * formIndex));
         WRITEU32(0x18 + offset, spawnLVL);
 
 
@@ -103,7 +102,8 @@ void	increaseID1(void) {
     else
         ones = 0;
     spawnID += ones;
-    spawnForm = 0;
+    getForms(spawnID);
+    formIndex = 0;
     updateSpawn();
     disable_entry(ACTIVATESPAWN);
 }
@@ -122,7 +122,8 @@ void	increaseID10(void) {
     else
         tens = 0;
     spawnID += (tens * 10);
-    spawnForm = 0;
+    getForms(spawnID);
+    formIndex = 0;
     updateSpawn();
     disable_entry(ACTIVATESPAWN);
 }
@@ -141,7 +142,8 @@ void	increaseID100(void) {
     else
         hundreds = 0;
     spawnID += (hundreds * 100);
-    spawnForm = 0;
+    getForms(spawnID);
+    formIndex = 0;
     updateSpawn();
     disable_entry(ACTIVATESPAWN);
 }
@@ -180,18 +182,18 @@ void	increaseLVL10(void) {
     disable_entry(ACTIVATESPAWN);
 }
 
-
-// Changes spawn Form
-void    changeForm(void) {
-    spawnForm = (alolaCheck(spawnID) && !spawnForm) ? 1 : 0;
-
+void    setForm(void) {
+    if (!formID[formIndex + 1].name)
+        formIndex = 0;
+    else
+        formIndex++;
     updateSpawn();
     disable_entry(ACTIVATESPAWN);
 }
 
 
-// Checks if ID is on Alola Form List
-bool    alolaCheck(u32 id) {
+void    getForms(u32 id) {
+    memset(formID, 0, sizeof(formID));
     switch(id) {
         case 19:  // Rattata
         case 20:  // Raticate
@@ -209,9 +211,193 @@ bool    alolaCheck(u32 id) {
         case 76:  // Golem
         case 88:  // Grimer
         case 89:  // Muk
-        case 105: // Marowak
-        case 103: // Exeggutor
-            return true;
-        }
-    return false;
+        case 103: // Marowak
+        case 105: // Exeggutor
+            formID[0].name = "Normal";
+            formID[1].name = "Alola";
+            break;
+        case 25:  // Pikachu
+            formID[0].name = "Normal";
+            formID[1].name = "Johto";
+            formID[2].name = "Hoenn";
+            formID[3].name = "Sinnoh";
+            formID[4].name = "Unova";
+            formID[5].name = "Kalos";
+            formID[6].name = "Alola";
+            break;
+        case 201: // Unown
+            formID[0].name = "A";
+            formID[1].name = "B";
+            formID[2].name = "C";
+            formID[3].name = "D";
+            formID[4].name = "E";
+            formID[5].name = "F";
+            formID[6].name = "G";
+            formID[7].name = "H";
+            formID[8].name = "I";
+            formID[9].name = "J";
+            formID[10].name = "K";
+            formID[11].name = "L";
+            formID[12].name = "M";
+            formID[13].name = "N";
+            formID[14].name = "O";
+            formID[15].name = "P";
+            formID[16].name = "Q";
+            formID[17].name = "R";
+            formID[18].name = "S";
+            formID[19].name = "T";
+            formID[20].name = "U";
+            formID[21].name = "V";
+            formID[22].name = "W";
+            formID[23].name = "X";
+            formID[24].name = "Y";
+            formID[25].name = "Z";
+            formID[26].name = "!";
+            formID[27].name = "?";
+            break;
+        case 386: //Deoxys
+            formID[0].name = "Normal";
+            formID[1].name = "Attack";
+            formID[2].name = "Defense";
+            formID[3].name = "Speed";
+            break;
+        case 412: // Burmy
+        case 413: // Wormadam
+        case 414: // Mothim
+            formID[0].name = "Plant";
+            formID[1].name = "Sandy";
+            formID[2].name = "Trash";
+            break;
+        case 423: //Gastrodon
+            formID[0].name = "East";
+            formID[1].name = "West";
+            break;
+        case 479: // Rotom
+            formID[0].name = "Normal";
+            formID[1].name = "Heat";
+            formID[2].name = "Wash";
+            formID[3].name = "Frost";
+            formID[4].name = "Fan";
+            formID[5].name = "Mow";
+            break;
+        case 487: // Giratina
+            formID[0].name = "Altered";
+            formID[1].name = "Origin";
+            break;
+        case 550: // Basculin
+            formID[0].name = "Red";
+            formID[1].name = "Blue";
+            break;
+        case 585: // Deerling
+        case 586: // Sawsbuck
+            formID[0].name = "Spring";
+            formID[1].name = "Summer";
+            formID[2].name = "Autumn";
+            formID[3].name = "Winter";
+            break;
+        case 641: // Tornadus
+        case 642: // Thundurus
+        case 645: // Landorus
+            formID[0].name = "Incarnate";
+            formID[1].name = "Therian";
+            break;
+        case 646: // Kyurem
+            formID[0].name = "Normal";
+            formID[1].name = "White";
+            formID[2].name = "Black";
+            break;
+        case 647: //Keldeo
+            formID[0].name = "Ordinary";
+            formID[1].name = "Resolute";
+            break;
+        case 658: //Greninja
+            formID[0].name = "Normal";
+            formID[1].name = "Ash";
+            break;
+        case 664: // Scatterbug
+        case 665: // Spewpa
+        case 666: // Vivillon
+            formID[0].name = "Icy Snow";
+            formID[1].name = "Polar";
+            formID[2].name = "Tundra";
+            formID[3].name = "Continental";
+            formID[4].name = "Garden";
+            formID[5].name = "Elegant";
+            formID[6].name = "Meadow";
+            formID[7].name = "Modern";
+            formID[8].name = "Marine";
+            formID[9].name = "Archipelago";
+            formID[10].name = "High-Plains";
+            formID[11].name = "Sandstorm";
+            formID[12].name = "River";
+            formID[13].name = "Monsoon";
+            formID[14].name = "Savannah";
+            formID[15].name = "Sun";
+            formID[16].name = "Ocean";
+            formID[17].name = "Jungle";
+            formID[18].name = "Fancy";
+            formID[19].name = "Poke Ball";
+            break;
+        case 669: // Flabébé
+        case 671: // Florges
+            formID[0].name = "Red";
+            formID[1].name = "Yellow";
+            formID[2].name = "Orange";
+            formID[3].name = "Blue";
+            formID[4].name = "White";
+            break;
+        case 670: // Floette
+            formID[0].name = "Red";
+            formID[1].name = "Yellow";
+            formID[2].name = "Orange";
+            formID[3].name = "Blue";
+            formID[4].name = "White";
+            formID[5].name = "Eternal";
+            break;
+        case 676: //Furfrou
+            formID[0].name = "Natural";
+            formID[1].name = "Heart";
+            formID[2].name = "Star";
+            formID[3].name = "Diamond";
+            formID[4].name = "Deputante";
+            formID[5].name = "Matron";
+            formID[6].name = "Dandy";
+            formID[7].name = "La Reine";
+            formID[8].name = "Kabuki";
+            formID[9].name = "Pharaoh";
+            break;
+        case 710: // Pumpkaboo
+        case 711: // Gourgeist
+            formID[0].name = "Average";
+            formID[1].name = "Small";
+            formID[2].name = "Large";
+            formID[3].name = "Super";
+            break;
+        case 741: // Oricorio
+            formID[0].name = "Red";
+            formID[1].name = "Yellow";
+            formID[2].name = "Pink";
+            formID[3].name = "Blue";
+            break;
+        case 745: // Lycanroc
+            formID[0].name = "Midday";
+            formID[1].name = "Midnight";
+            break;
+        case 774: //Minior
+            formID[0].name = "Red";
+            formID[1].name = "Orange";
+            formID[2].name = "Yellow";
+            formID[3].name = "Green";
+            formID[4].name = "Blue";
+            formID[5].name = "Indigo";
+            formID[6].name = "Violet";
+            break;
+        case 801: // Magearna
+            formID[0].name = "Normal";
+            formID[1].name = "Original";
+            break;
+        default:  // All Others
+            formID[0].name = "Normal";
+    }
+
 }

@@ -49,7 +49,7 @@ enum {
     INCREASELVL10,
     INCREASETIME,
     DECREASETIME,
-    CHANGEFORM
+    SETFORM
 } e_identifiers;
 
 // Helpers
@@ -78,8 +78,8 @@ void    increaseID100(void);
 void    increaseLVL1(void);
 void    increaseLVL10(void);
 void    activateSpawn(u32 state);
-void    changeForm(void);
-bool    alolaCheck(u32 id);
+void    getForms(u32 id);
+void    setForm(void);
 
 
 // EXP Multipliers
