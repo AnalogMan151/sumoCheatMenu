@@ -4,13 +4,10 @@
 #include "hid.h"
 
 /********************************
-*				*
-*	Pokemon Modifiers	*
-*				*
-********************************/
-
-int i_instantEgg;
-
+ *				                *
+ *	    Pokemon Modifiers	    *
+ *				                *
+ ********************************/
 
 // Pokémon menu entry
 void    pokemonMenu(void) {
@@ -29,7 +26,7 @@ void	renamePokemon(void) {
 }
 
 
-// Egg instantly ready when talking to Nursery NPC while holding START
+// Egg instantly ready when talking to Nursery NPC while holding L
 void	instantEgg(void) {
     WRITEU32(0x00444A6C, (is_pressed(BUTTON_L)) ? 0xE3A01001 : 0xE2800E1E);
     WRITEU32(0x00444A70, (is_pressed(BUTTON_L)) ? 0xE5C011E0 : 0xE1D000D0);

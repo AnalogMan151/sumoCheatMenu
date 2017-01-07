@@ -12,8 +12,8 @@
 // Battle menu entry
 void    battleMenu(void) {
 
+    // Creates spoiler and cheat entries
     new_spoiler("Battle");
-        //new_entry("Alola Rattata", alolaRat);
         new_entry("100% Capture Rate", catch100);
         new_entry_arg("Wild Pokemon Shiny", shinyPokemon, 0, SHINYPOKEMON, TOGGLE);
         new_entry_arg("Stat Stages +6", maxBattleStats, 0, MAXBATTLESTATS, TOGGLE);
@@ -22,21 +22,17 @@ void    battleMenu(void) {
     exit_spoiler();
 }
 
-// Alola Ratatta
-void    alolaRat(void) {
-    u32 offset = 0x341C87B8;
-    WRITEU16(0x0000 + offset, 0x0013);
-    WRITEU8(0x0004 + offset, 0x0005);
-    WRITEU8(0x0005 + offset, 0x0001);
-}
 
-
-//Sets all in-battle stats to +6 ranks
+// Sets all in-battle stats to +6 ranks
 void    maxBattleStats(u32 state) {
     u32    offset;
     u32    address;
     static u32  original;
+
+    // Checks if cheat is enabled from menu and executes if it is
     if (state) {
+
+        // Stores original value in memory
         original = READU32(0x0029A048);
 
         offset = 0x00595A00;
@@ -67,6 +63,8 @@ void    maxBattleStats(u32 state) {
 
         WRITEU32(0x0029A048, 0xEA0BEE6C);
     } else {
+
+        // Sets value back to original when cheat is disabled
         WRITEU32(0x0029A048, original);
     }
 }
@@ -86,7 +84,7 @@ void	catch100(void) {
 }
 
 
-// Make wild Pokemon shiny. Activate with START+L and deactivate with START+R
+// Make wild Pokemon shiny
 void	shinyPokemon(u32 state) {
     WRITEU32(0x003183EC, (state) ? 0xEA00001C : 0x0A00001C);
 }

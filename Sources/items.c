@@ -4,10 +4,10 @@
 #include "hid.h"
 
 /********************************
-*				*
-*	      Items		*
-*				*
-********************************/
+ *				                *
+ *	          Items		        *
+ *				                *
+ ********************************/
 
 
 char selectedQuantity[4];
@@ -43,21 +43,22 @@ void    updateQuantity(void) {
     replace_pattern("x***", buf, ALLITEMS);
     replace_pattern("x***", buf, ALLMEDICINE);
     replace_pattern("x***", buf, ALLBERRIES);
-    if (quantity > 255)
-        replace_pattern("x***", "x255", ALLBEANS);
-    else
-        replace_pattern("x***", buf, ALLBEANS);
+    replace_pattern("x***", (quantity > 255) ? "x255" : buf, ALLBEANS);
 }
 
 
 // Increases item quantity by 50
 void    increaseQuantity(void) {
-    if (quantity == 999)
-        quantity = 0;
-    if (quantity == 950)
-        quantity = 999;
-    if (quantity < 950)
-        quantity += 50;
+    switch(quantity) {
+        case 999:
+            quantity = 50;
+            break;
+        case 950:
+            quantity = 999;
+            break;
+        default:
+            quantity += 50;
+    }
     updateQuantity();
 }
 
@@ -68,6 +69,8 @@ void    allPokeBalls(void) {
     u32 value;
     int existingIndex = 0;
     bool skip;
+
+    // Values for all Poké Ball types
     static const u32 pokeballs[25] = {
       1,   2,   3,   4,   5,
       6,   7,   8,   9,  10,
@@ -76,35 +79,50 @@ void    allPokeBalls(void) {
     496, 497, 498, 576, 851
     };
 
-    u32 existingPokeBalls[25] = {
-    999, 999, 999, 999, 999,
-    999, 999, 999, 999, 999,
-    999, 999, 999, 999, 999,
-    999, 999, 999, 999, 999,
-    999, 999, 999, 999, 999
-    };
+    // Initialize array of already owned Poké Balls to an invalid value
+    u32 existingPokeBalls[25];
+    memset(existingPokeBalls, 999, sizeof(existingPokeBalls));
 
-    for (int itemCount = 0; (itemCount < 335); itemCount++) { // Iterates through inventory
-    	value = READU32(offset + itemCount*4) & 0x3FF; // Reads inventory slot
-    	if (value == 0x0) { // Checks if end of inventory was reached
-    		for (int i = 0; i < 25; i++) { // Iterates through Poké Balls to add
+    // Iterates through inventory
+    for (int itemCount = 0; (itemCount < 335); itemCount++) {
+
+        // Reads inventory slot and stores the item
+    	value = READU32(offset + itemCount*4) & 0x3FF;
+
+        // Checks if end of inventory was reached
+    	if (value == 0x0) {
+
+            // Iterates through Poké Balls to add
+    		for (int i = 0; i < 25; i++) {
     			skip = false;
-    			for (int haveCheck = 0; (haveCheck < 25) && !skip; haveCheck++) { // Iterates through Poké Balls that player already has and skips adding them if found
-    				if (pokeballs[i] == existingPokeBalls[haveCheck]) {
+
+                // Iterates through Poké Balls that player already has and skips adding them if found
+    			for (int haveCheck = 0; (haveCheck < 25) && !skip; haveCheck++) {
+    				if (pokeballs[i] == existingPokeBalls[haveCheck])
     					skip = true;
-    				}
     			}
-    			if (!skip) { // Writes Poké Ball to empty slot if not previously owned
+
+                // Writes Poké Ball to empty slot if not skipped
+    			if (!skip) {
     				WRITEU32(offset + itemCount*4, pokeballs[i] + (quantity << 10));
     				itemCount++;
     			}
     		}
+
+            // Stops checking inventory and exits function after writing the
+            // last remaining Poké Balls
     		break;
     	}
-    	for (int ballCheck = 0; ballCheck < 25; ballCheck++) { // Checks if inventory slot is already a Poké Ball and sets quantity
+
+        // Executed if inventory slot holds an item
+        // Checks if inventory slot is already a Poké Ball and sets quantity
+    	for (int ballCheck = 0; ballCheck < 25; ballCheck++) {
     		if (value == pokeballs[ballCheck]) {
     			WRITEU32(offset + itemCount*4, value + (quantity << 10));
-    			existingPokeBalls[existingIndex] = value; // Keeps track of which Poké Balls the player already has
+
+                // Adds Poké Ball to array so it will be skipped when end of
+                // inventory is reached
+    			existingPokeBalls[existingIndex] = value;
     			existingIndex++;
                 break;
     		}
@@ -113,9 +131,11 @@ void    allPokeBalls(void) {
 }
 
 
-// Gives all items and sets them to quantity 100
+// Gives all items
 void    allItems(void) {
-    u32    offset = 0x330D5934; // Start of Item Inventory
+
+    // Start of Item Inventory
+    u32    offset = 0x330D5934;
 
     // Array of legal items
     static const u16    allItems[335] =
@@ -164,16 +184,18 @@ void    allItems(void) {
     914, 915, 916, 917, 918, 919, 920
     };
 
-    // Writes the array to inventory
+    // Writes the array to inventory overwriting what's already there
     for (int i = 0; i < 335; i++) {
        WRITEU32(offset + i*4, allItems[i] + (quantity << 10));
     }
 }
 
 
-// Gives all medicine and sets them to quantity 100
+// Gives all medicine
 void    allMedicine(void) {
-    u32    offset = 0x330D647C; // Start of Medicine Inventory
+
+    // Start of Medicine Inventory
+    u32    offset = 0x330D647C;
 
     // Array of legal items
     static const u16    allMedicine[54] =
@@ -187,7 +209,7 @@ void    allMedicine(void) {
     570, 591, 645, 708, 709, 852
     };
 
-    // Writes the array to inventory
+    // Writes the array to inventory overwriting what's already there
     for (int i = 0; i < 54; i++) {
        WRITEU32(offset + i*4, allMedicine[i] + (quantity << 10));
     }
@@ -195,7 +217,9 @@ void    allMedicine(void) {
 
 // Gives all TMs
 void    allTMs(void) {
-    u32    offset = 0x330D62CC; // Start of TM Inventory
+
+    // Start of TM Inventory
+    u32    offset = 0x330D62CC;
 
     // Array of legal items
     static const u16    allTMs[100] =
@@ -215,16 +239,18 @@ void    allTMs(void) {
     691, 692, 693, 694
     };
 
-    // Writes the array to inventory
+    // Writes the array to inventory overwriting what's already there
     for (int i = 0; i < 100; i++) {
        WRITEU32(offset + i*4, allTMs[i] + (1 << 10));
     }
 }
 
 
-// Gives all Berries and sets quantity to 100
+// Gives all Berries
 void    allBerries(void) {
-    u32    offset = 0x330D657C; // Start of Berry Inventory
+
+    // Start of Berry Inventory
+    u32    offset = 0x330D657C;
 
     // Array of legal items
     static const u16    allBerries[67] =
@@ -240,20 +266,17 @@ void    allBerries(void) {
     686, 687, 688
     };
 
-    // Writes the array to inventory
+    // Writes the array to inventory  overwriting what's already there
     for (int i = 0; i < 67; i++) {
        WRITEU32(offset + i*4, allBerries[i] + (quantity << 10));
     }
 }
 
 
-// Gives all PokeBeans and sets them to quantity of 100
+// Gives all PokeBeans
 void    allBeans(void) {
     for (int i = 0; i < 15; i++) {
-        if (quantity > 255)
-            WRITEU8(0x33115490 + i, 0xFF);
-        else
-            WRITEU8(0x33115490 + i, quantity);
+        WRITEU8(0x33115490 + i, (quantity > 255) ? 0xFF : quantity);
     }
 }
 
@@ -261,7 +284,7 @@ void    allBeans(void) {
 // Function to add clothes to inventory
 u32		clothesFunction(u32 offset, u8 data, u16 loop_num) {
 	for (int i = 0; i < loop_num; i++) {
-		WRITEU8(0x00000000 + offset, data);
+		WRITEU8(offset, data);
 		offset += 0x01;
 	}
 	return(offset);
@@ -271,7 +294,8 @@ u32		clothesFunction(u32 offset, u8 data, u16 loop_num) {
 void	allClothes(void) {
 	u32 offset = 0x33116620;
 
-    if (READU8(0x330D67D5) == 0x00) { //Check if character is male
+    //Check if character is male
+    if (READU8(0x330D67D5) == 0x00) {
         offset = clothesFunction(offset, 0x01, 0x003A);
         offset = clothesFunction(offset, 0x00, 0x0087);
         offset = clothesFunction(offset, 0x01, 0x0014);
@@ -286,7 +310,9 @@ void	allClothes(void) {
         offset = clothesFunction(offset, 0x00, 0x0066);
         offset = clothesFunction(offset, 0x01, 0x006D);
         clothesFunction(offset, 0x00, 0x0044);
-    } else {                         // Else character is female
+
+    // Else character is female
+    } else {
         offset = clothesFunction(offset, 0x01, 0x005E);
         offset = clothesFunction(offset, 0x00, 0x0020);
         offset = clothesFunction(offset, 0x01, 0x0023);

@@ -5,10 +5,10 @@
 #include "pokemon_spawner.h"
 
 /********************************
-*				*
-*	Pokemon Spawner   	*
-*				*
-********************************/
+ *				                *
+ *	     Pokemon Spawner   	    *
+ *				                *
+ ********************************/
 
 int spawnID = 1,
     spawnLVL = 5,
@@ -63,6 +63,8 @@ void    activateSpawn(u32 state) {
     u32 offset = 0x003988DC;
     static u32 original[3];
     if (state) {
+
+        // Read original data when activating cheat
         original[0] = READU32(0x00 + offset);
         original[1] = READU32(0x10 + offset);
         original[2] = READU32(0x2C + offset);
@@ -82,6 +84,8 @@ void    activateSpawn(u32 state) {
 
 
     } else {
+
+        // Write original data when disabling cheat
         WRITEU32(0x00 + offset, original[0]);
         WRITEU32(0x10 + offset, original[1]);
         WRITEU32(0x2C + offset, original[2]);
@@ -91,16 +95,20 @@ void    activateSpawn(u32 state) {
 
 // Increases spawn ID by 1 each time it's called, updates menu and then deactivates
 void	increaseID1(void) {
-    // Prevent going above maximum ID (802)
+
+    // Extracts ones place
     int ones = spawnID % 10;
     spawnID -= ones;
 
+    // Prevent going above maximum ID (802)
     if (spawnID + ones + 1 > 802)
         ones = 0;
     else if (ones < 9)
         ones++;
     else
         ones = 0;
+
+    // Adds ones place back in
     spawnID += ones;
     getForms(spawnID);
     formIndex = 0;
@@ -111,16 +119,20 @@ void	increaseID1(void) {
 
 // Increases spawn ID by 10 each time it's called, updates menu and then deactivates
 void	increaseID10(void) {
-    // Prevent going above maximum ID (802)
+
+    // Extracts tens place
     int tens = (spawnID / 10) % 10;
     spawnID -= (tens * 10);
 
+    // Prevent going above maximum ID (802)
     if (spawnID + (tens * 10) + 10 > 802)
         tens = 0;
     else if (tens < 9)
         tens++;
     else
         tens = 0;
+
+    // Adds tens place back in
     spawnID += (tens * 10);
     getForms(spawnID);
     formIndex = 0;
@@ -131,16 +143,20 @@ void	increaseID10(void) {
 
 // Increases spawn ID by 100 each time it's called, updates menu and then deactivates
 void	increaseID100(void) {
-    // Prevent going above maximum ID (802)
+
+    // Extracts hundreds place
     int hundreds = (spawnID / 100);
     spawnID -= (hundreds * 100);
 
+    // Prevent going above maximum ID (802)
     if (spawnID + (hundreds * 100) + 100 > 802)
         hundreds = 0;
     else if (hundreds < 8)
         hundreds++;
     else
         hundreds = 0;
+
+    // Adds hundreds place back in
     spawnID += (hundreds * 100);
     getForms(spawnID);
     formIndex = 0;
@@ -151,16 +167,20 @@ void	increaseID100(void) {
 
 // Increases spawn level by 1 each time it's called, updates menu and then deactivates
 void	increaseLVL1(void) {
-    // Prevent going above maximum level (100)
+
+    // Extracts ones place
     int ones = spawnLVL % 10;
     spawnLVL -= ones;
 
+    // Prevent going above maximum level (100)
     if (spawnLVL == 100)
         spawnLVL = 1;
     else if (ones < 9)
         ones++;
     else
         ones = 0;
+
+    // Adds ones place back in
     spawnLVL += ones;
     updateSpawn();
     disable_entry(ACTIVATESPAWN);
@@ -169,19 +189,25 @@ void	increaseLVL1(void) {
 
 // Increases spawn level by 10 each time it's called, updates menu and then deactivates
 void	increaseLVL10(void) {
-    // Prevent going above maximum level (100)
+
+    // Extracts tens place
     int tens = (spawnLVL / 10);
     spawnLVL -= (tens * 10);
 
+    // Prevent going above maximum level (100)
     if (tens < 10)
         tens++;
     else
         tens = 0;
+
+    // Adds tens place back in
     spawnLVL += (tens * 10);
     updateSpawn();
     disable_entry(ACTIVATESPAWN);
 }
 
+
+// Cycles through the forms of the selected ID
 void    setForm(void) {
     if (!formID[formIndex + 1].name)
         formIndex = 0;
@@ -192,6 +218,7 @@ void    setForm(void) {
 }
 
 
+// Looks up ID from switch case and loads available forms into array
 void    getForms(u32 id) {
     memset(formID, 0, sizeof(formID));
     switch(id) {
@@ -399,5 +426,4 @@ void    getForms(u32 id) {
         default:  // All Others
             formID[0].name = "Normal";
     }
-
 }

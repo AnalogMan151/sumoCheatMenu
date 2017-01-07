@@ -9,10 +9,6 @@
  *                              *
  ********************************/
 
- int i_increaseEXP1,
-     i_increaseEXP10,
-     i_increaseEXP100;
-
 static char currentEXP[40] = "Undefined";
 u8 exp_rate = 0;
 
@@ -52,17 +48,21 @@ void	updateEXP(void) {
 
 // Increases EXP modifier by 1 each time it's called, updates menu and then deactivates
 void	increaseEXP1(void) {
-    // Prevent going above maximum exp_rate (255)
+
+    // Extracts ones place
     exp_rate = READU8(0x00595808);
     int ones = exp_rate % 10;
     exp_rate -= ones;
 
+    // Prevent going over 255
     if (exp_rate + ones + 1 > 255)
         ones = 0;
     else if (ones < 9)
         ones++;
     else
         ones = 0;
+
+    // Adds ones place back in
     exp_rate += ones;
 
     WRITEU8(0x00595808, exp_rate);
@@ -72,17 +72,21 @@ void	increaseEXP1(void) {
 
 // Increases EXP modifier by 10 each time it's called, updates menu and then deactivates
 void	increaseEXP10(void) {
-    // Prevent going above maximum exp_rate (255)
+
+    // Extracts tens place
     exp_rate = READU8(0x00595808);
     int tens = (exp_rate / 10) % 10;
     exp_rate -= (tens * 10);
 
+    // Prevents going over 255
     if (exp_rate + (tens * 10) + 10 > 255)
         tens = 0;
     else if (tens < 9)
         tens++;
     else
         tens = 0;
+
+    // Adds tens place back in
     exp_rate += (tens * 10);
 
     WRITEU8(0x00595808, exp_rate);
@@ -92,17 +96,21 @@ void	increaseEXP10(void) {
 
 // Increases EXP modifier by 100 each time it's called, updates menu and then deactivates
 void	increaseEXP100(void) {
-    // Prevent going above maximum exp_rate (255)
+
+    // Extracts hundreds place
     exp_rate = READU8(0x00595808);
     int hundreds = (exp_rate / 100);
     exp_rate -= (hundreds * 100);
 
+    // Prevents going over 255
     if (exp_rate + (hundreds * 100) + 100 > 255)
         hundreds = 0;
     else if (hundreds < 2)
         hundreds++;
     else
         hundreds = 0;
+
+    // Adds hundreds place back in
     exp_rate += (hundreds * 100);
 
     WRITEU8(0x00595808, exp_rate);

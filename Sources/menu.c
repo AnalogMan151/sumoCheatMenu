@@ -1,31 +1,13 @@
 #include "cheats.h"
 
-char	*builder_name = "AnalogMan";
-
-void	while_plugin_is_alive(void)
-{
-	execute_all();
-}
-
-void    protect_region(u32 addr);
-
-void    mem_rwx(void) {
-    protect_region(0x08000000);
-    protect_region(0x08103000);
-    protect_region(0x08133000);
-    protect_region(0x0821D000);
-    protect_region(0x0821E000);
-    protect_region(0x08225000);
-}
+char	*builder_name = "AnalogMan",
+        version[7] = "v0.2.1",
+        formattedVer[23];
 
 void	my_menus(void) {
-	// set_hid_address(0x10002000);
-    // mem_rwx();
-	new_super_unselectable_entry("Entries w/ an orange background", while_plugin_is_alive);
+	new_unselectable_entry("Entries w/ an orange background");
     new_unselectable_entry("have notes. Press (Y) to view.");
-
 	new_separator();
-
     pokemonSpawnMenu();
     expMenu();
     new_spoiler("Modifiers");
@@ -38,4 +20,11 @@ void	my_menus(void) {
     itemMenu();
     currencyMenu();
     miscMenu();
+
+    // Centers and writes version at bottom of menu
+    for (int i = 0; i < 6; i++) {
+        new_line();
+    }
+    xsprintf(formattedVer, "%22s", version);
+    new_super_unselectable_entry(formattedVer, execute_all);
 }

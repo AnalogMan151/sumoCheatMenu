@@ -4,13 +4,10 @@
 #include "hid.h"
 
 /********************************
-*				*
-*	Movement Modifiers	*
-*				*
-********************************/
-
-int i_walkThruWalls;
-
+ *				                *
+ *	    Movement Modifiers      *
+ *				                *
+ ********************************/
 
 // Movement menu entry
 void    movementMenu(void) {
