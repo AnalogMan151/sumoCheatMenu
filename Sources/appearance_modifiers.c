@@ -5,8 +5,8 @@
 
 /********************************
  *                              *
- *	  Appearance Modifiers      *
- *				                *
+ *    Appearance Modifiers      *
+ *                              *
  ********************************/
 
 // Define variables to be used

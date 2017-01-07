@@ -4,9 +4,9 @@
 #include "hid.h"
 
 /********************************
- *				                *
- *     Currency Modifiers	    *
- *				                *
+ *                              *
+ *     Currency Modifiers       *
+ *                              *
  ********************************/
 
 static u32 quantity = 500000;

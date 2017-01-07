@@ -5,9 +5,9 @@
 #include "pokemon_spawner.h"
 
 /********************************
- *				                *
- *	     Pokemon Spawner   	    *
- *				                *
+ *                              *
+ *       Pokémon Spawner        *
+ *                              *
  ********************************/
 
 int spawnID = 1,

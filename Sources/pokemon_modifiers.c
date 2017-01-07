@@ -4,9 +4,9 @@
 #include "hid.h"
 
 /********************************
- *				                *
- *	    Pokemon Modifiers	    *
- *				                *
+ *                              *
+ *       Pokémon Modifiers      *
+ *                              *
  ********************************/
 
 // Pokémon menu entry

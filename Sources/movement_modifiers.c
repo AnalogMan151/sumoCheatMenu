@@ -4,9 +4,9 @@
 #include "hid.h"
 
 /********************************
- *				                *
- *	    Movement Modifiers      *
- *				                *
+ *                              *
+ *      Movement Modifiers      *
+ *                              *
  ********************************/
 
 // Movement menu entry
