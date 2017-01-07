@@ -4,10 +4,10 @@
 #include "hid.h"
 
 /********************************
-*				*
-*     Currency Modifiers	*
-*				*
-********************************/
+ *                              *
+ *     Currency Modifiers       *
+ *                              *
+ ********************************/
 
 static u32 quantity = 500000;
 
@@ -28,16 +28,20 @@ void    currencyMenu(void) {
 
 // Increases currency quantity by 500,000
 void    increaseCurrencyQuantity(void) {
-    if (quantity == 9999999)
-        quantity = 0;
-    if (quantity == 9500000)
-        quantity = 9999999;
-    if (quantity < 9500000)
-        quantity += 500000;
+    switch(quantity) {
+        case 9999999:
+            quantity = 500000;
+            break;
+        case 9500000:
+            quantity = 9999999;
+            break;
+        default:
+            quantity += 500000;
+    }
     updateCurrencyQuantity();
 }
 
-// Updates currency quantity on menu
+// Updates currency quantity on menu and limits value for Max BP and Max FC
 void    updateCurrencyQuantity(void) {
     char buf[9];
 
@@ -45,18 +49,12 @@ void    updateCurrencyQuantity(void) {
     replace_pattern("x*******", buf, MAXMONEY);
     replace_pattern("x*******", buf, TOTALCOINS);
     replace_pattern("x*******", buf, TOTALTHUMBS);
-    if (quantity > 9999)
-        replace_pattern("x*******", "x9999   ", MAXBP);
-    else
-        replace_pattern("x*******", buf, MAXBP);
-    if (quantity > 999999)
-        replace_pattern("x*******", "x999999 ", MAXCOINS);
-    else
-        replace_pattern("x*******", buf, MAXCOINS);
+    replace_pattern("x*******", (quantity > 9999) ? "x9999   " : buf, MAXBP);
+    replace_pattern("x*******", (quantity > 999999) ? "x999999 " : buf, MAXCOINS);
 }
 
 
-// Set Poke Dollars to 9,999,999
+// Set Poké Dollars
 void	maxMoney(void) {
 	WRITEU32(0x330D8FC0, quantity);
 }
@@ -67,7 +65,7 @@ void	maxCoins(void) {
 }
 
 
-// Set total Festival Coins to 2,000,000
+// Set total Festival Coins and also updates spent amount to match
 void	totalCoins(void) {
     u32 current = READU32(0x33124D58);
     u32 total = quantity;
@@ -77,13 +75,13 @@ void	totalCoins(void) {
 }
 
 
-// Set total Thumbs Up for photos to 1,500,000
+// Set total Thumbs Up for photos
 void	totalThumbs(void) {
 	WRITEU32(0x33138B8C, quantity);
 }
 
 
-// Set Battle Points to 9,999
+// Set Battle Points
 void	maxBP(void) {
 	if (READU32(0x0067206C) != 0x00) {
 		u32 offset;
@@ -92,9 +90,6 @@ void	maxBP(void) {
         offset = READU32(0x0067206C);
         offset = READU32(0x00000024 + offset);
         offset = READU32(0x00000004 + offset);
-        if (quantity > 9999)
-            WRITEU16(0x000037B0 + offset, 0x0000270F);
-        else
-            WRITEU16(0x000037B0 + offset, quantity);
+        WRITEU16(0x000037B0 + offset, (quantity > 9999) ? 0x0000270F : quantity);
 	}
 }

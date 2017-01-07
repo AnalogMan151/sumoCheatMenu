@@ -815,6 +815,8 @@ spawnPokemon     pokemonID[802] =
     {802, "Marshadow"}
 };
 
+
+// Array of forms
 typedef struct  arrayForms {
     char    *name;
 }               spawnForms;

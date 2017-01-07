@@ -53,7 +53,6 @@ enum {
 } e_identifiers;
 
 // Helpers
-
 void    disable_entry(int identifier);
 void    update_status(int state, int identifier);
 void    new_entry_note(char *str, const char * const note, void (*function)(void));

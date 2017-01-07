@@ -5,7 +5,7 @@
 
 /********************************
  *                              *
- *       Time Modifiers         *
+ *        Time Modifiers        *
  *                              *
  ********************************/
 
@@ -43,7 +43,6 @@ void    timeMenu(void) {
         xsprintf(timeType, "Moon");
         timeHours = timeOffset - 12;
      }
-
      xsprintf(currentTime, "Current: %4s Time +%-2d hours", timeType, timeHours);
  }
 
@@ -58,9 +57,7 @@ void    timeMenu(void) {
     else
         timeOffset += 1;
 
-    timeOffset = timeOffset * 3600;
-
-    WRITEU32(0x330D9238, timeOffset);
+    WRITEU32(0x330D9238, timeOffset * 3600);
     updateTime();
  }
 
@@ -75,8 +72,6 @@ void    timeMenu(void) {
     else
         timeOffset -= 1;
 
-    timeOffset = timeOffset * 3600;
-
-    WRITEU32(0x330D9238, timeOffset);
+    WRITEU32(0x330D9238, timeOffset * 3600);
     updateTime();
  }
