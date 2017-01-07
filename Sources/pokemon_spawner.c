@@ -245,12 +245,12 @@ void    getForms(u32 id) {
             break;
         case 25:  // Pikachu
             formID[0].name = "Normal";
-            formID[1].name = "Johto";
-            formID[2].name = "Hoenn";
-            formID[3].name = "Sinnoh";
-            formID[4].name = "Unova";
-            formID[5].name = "Kalos";
-            formID[6].name = "Alola";
+            formID[1].name = "Original Cap";
+            formID[2].name = "Hoenn Cap";
+            formID[3].name = "Sinnoh Cap";
+            formID[4].name = "Unova Cap";
+            formID[5].name = "Kalos Cap";
+            formID[6].name = "Alola Cap";
             break;
         case 201: // Unown
             formID[0].name = "A";
