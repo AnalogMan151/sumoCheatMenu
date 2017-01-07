@@ -63,7 +63,7 @@ void    increaseQuantity(void) {
 }
 
 
-// Gives only Poké Balls and sets quantity to 100
+// Gives only Poké Balls
 void    allPokeBalls(void) {
     u32 offset = 0x330D5934;
     u32 value;
