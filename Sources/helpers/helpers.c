@@ -13,15 +13,12 @@ void    disable_entry(int identifier)
         disableCheat(index);
 }
 
-void    update_status(int state, int identifier)
-{
-    static const char * const enabled = " [On]";
-    static const char * const disabled = " [Off]";
-
-    if (state)
-        add_suffix((char *)enabled, identifier);
-    else
-        add_suffix((char *)disabled, identifier);
+bool    isinArray(int val, int *arr, int size) {
+    for (int i = 0; i < (size / 4); i++) {
+        if (arr[i] == val)
+            return true;
+    }
+    return false;
 }
 
 static  int add_new_entry(char *str, void (*function)(void), int identifier, int flags)
