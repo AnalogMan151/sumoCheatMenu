@@ -80,8 +80,13 @@ void    allPokeBalls(void) {
     };
 
     // Initialize array of already owned Poké Balls to an invalid value
-    u32 existingPokeBalls[25];
-    memset(existingPokeBalls, 999, sizeof(existingPokeBalls));
+    u32 existingPokeBalls[25] = {
+    999, 999, 999, 999, 999,
+    999, 999, 999, 999, 999,
+    999, 999, 999, 999, 999,
+    999, 999, 999, 999, 999,
+    999, 999, 999, 999, 999
+    };
 
     // Iterates through inventory
     for (int itemCount = 0; (itemCount < 335); itemCount++) {
