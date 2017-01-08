@@ -48,6 +48,7 @@ void    switchLooks(void) {
     // gender and resets clothes and hair to prevent crashing. Writes just skin
     // tone if gender was not changed, preserving appearance
     if (currentGender == 0x00 && currentGender != READU8(0x330D67D5)) {
+        fixMakeupBag();
         WRITEU8(0x00000001 + offset, currentGender);
         WRITEU32(0x00000050 + offset, 0x00800000 + (matchingHair * 0x0100) + currentSkintone);
         WRITEU32(0x00000054 + offset, 0x00040000);
@@ -55,6 +56,7 @@ void    switchLooks(void) {
         WRITEU16(0x0000005C + offset, 0x1C01);
         WRITEU8(0x000005E + offset, 0x30);
     } else if (currentGender == 0x01 && currentGender != READU8(0x330D67D5)) {
+        fixMakeupBag();
         WRITEU8(0x00000001 + offset, currentGender);
         WRITEU32(0x00000050 + offset, 0x00800000 + (matchingHair * 0x0100) + currentSkintone);
         WRITEU32(0x00000054 + offset, 0x00040000);
@@ -131,6 +133,39 @@ void    updateSkintone(void) {
         case 0x1C:
             matchingHair = 0x08;
             replace_pattern(": *", ": D", SETSKINTONE);
+            break;
+    }
+}
+
+
+// Adds or removes Makeup bag based on gender
+void    fixMakeupBag(void) {
+    bool moveUp = false;
+    u32 offset = 0x330D5FEC;
+    u32 value = READU16(offset);
+    int i = 0;
+    switch(currentGender) {
+        case 0:
+            while(value) {
+                if (value != 0x06C2 && !moveUp) {
+                    i += 4;
+                    value = READU16(offset + i);
+                } else {
+                    moveUp = true;
+                    value = READU16(offset + i + 4);
+                    WRITEU32(offset + i, value);
+                    i += 4;
+                }
+            }
+            break;
+        case 1:
+            while(value) {
+                if (value == 0x06C2)
+                    break;
+                i += 4;
+                value = READU16(offset + i);
+            }
+            WRITEU32(offset + i, 0x06C2);
             break;
     }
 }
