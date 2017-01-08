@@ -220,7 +220,7 @@ void    setForm(void) {
 
 // Looks up ID from switch case and loads available forms into array
 void    getForms(u32 id) {
-    memset(formID, 0, sizeof(formID));
+    memset32(formID, 0, sizeof(formID));
     switch(id) {
         case 19:  // Rattata
         case 20:  // Raticate

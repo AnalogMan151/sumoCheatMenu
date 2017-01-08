@@ -13,6 +13,16 @@ void    disable_entry(int identifier)
         disableCheat(index);
 }
 
+void    memset32(void *dst, unsigned int value, unsigned int size)
+{
+    unsigned int    *p = (unsigned int *)dst;
+    unsigned int    s = size / 4;
+
+    while (s-- > 0)
+        *p++ = value;
+}
+
+
 bool    isinArray(int val, int *arr, int size) {
     for (int i = 0; i < (size / 4); i++) {
         if (arr[i] == val)

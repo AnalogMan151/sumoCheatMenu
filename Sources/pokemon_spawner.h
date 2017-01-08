@@ -822,4 +822,6 @@ typedef struct  arrayForms {
 }               spawnForms;
 
 spawnForms formID[30] = {0};
+
+
 #endif

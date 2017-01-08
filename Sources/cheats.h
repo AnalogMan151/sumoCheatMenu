@@ -66,7 +66,8 @@ void    replace_pattern(char *pattern, char *replace_str, int identifier);
 void    add_prefix(char *prefix, int identifier);
 void    add_suffix(char *suffix, int identifier);
 void    xsprintf(char *dst, char *fmt, ...);
-bool    isinArray(int val, int *arr, int size); 
+bool    isinArray(int val, int *arr, int size);
+void    memset32(void *dst, unsigned int value, unsigned int size);
 
 
 // Pokémon Spawner
