@@ -106,6 +106,7 @@ void    setGender(void);
 void    updateGender(void);
 void    setSkintone(void);
 void    updateSkintone(void);
+void    fixMakeupBag(void);
 
 
 // Battle Modifiers
