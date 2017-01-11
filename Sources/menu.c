@@ -1,15 +1,16 @@
 #include "cheats.h"
 
 char	*builder_name = "AnalogMan",
-        version[7] = "v0.2.2",
+        version[7] = "v0.2.3",
         formattedVer[23];
 
 void	my_menus(void) {
+    getVersion();
 	new_unselectable_entry("Entries w/ an orange background");
     new_unselectable_entry("have notes. Press (Y) to view.");
 	new_separator();
-    pokemonSpawnMenu();
-    expMenu();
+    (gameVer == 10) ? pokemonSpawnMenu() : NULL;
+    (gameVer == 10) ? expMenu() : NULL;
     new_spoiler("Modifiers");
        timeMenu();
        appearanceMenu();

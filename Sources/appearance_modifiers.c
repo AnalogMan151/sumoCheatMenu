@@ -17,8 +17,8 @@ u8 matchingHair,
 // Appearance menu entry
 void    appearanceMenu(void) {
     // Reads currently set Gender and Skin tone from memory to initialize menu with
-    currentGender = READU8(0x330D67D5);
-    currentSkintone = READU8(0x330D6824);
+    currentGender = READU8(o_gender);
+    currentSkintone = READU8(o_skintone);
 
     // Creates spoiler and cheat entries
     new_spoiler("Appearance");
@@ -41,32 +41,29 @@ void    appearanceMenu(void) {
 // Changes current gender and skin tone. Sets clothes and hair to default with gender change.
 void    switchLooks(void) {
 
-    // Sets offset that appearance data starts at
-    u32 offset = 0x330D67D4;
-
     // Runs a check to see if your selected gender is different than current
     // gender and resets clothes and hair to prevent crashing. Writes just skin
     // tone if gender was not changed, preserving appearance
-    if (currentGender == 0x00 && currentGender != READU8(0x330D67D5)) {
+    if (currentGender == 0x00 && currentGender != READU8(o_gender)) {
         fixMakeupBag();
-        WRITEU8(0x00000001 + offset, currentGender);
-        WRITEU32(0x00000050 + offset, 0x00800000 + (matchingHair * 0x0100) + currentSkintone);
-        WRITEU32(0x00000054 + offset, 0x00040000);
-        WRITEU32(0x00000058 + offset, 0x0010040C);
-        WRITEU16(0x0000005C + offset, 0x1C01);
-        WRITEU8(0x000005E + offset, 0x30);
-    } else if (currentGender == 0x01 && currentGender != READU8(0x330D67D5)) {
+        WRITEU8(o_appearance + 0x01, currentGender);
+        WRITEU32(o_appearance + 0x50, 0x00800000 + (matchingHair * 0x0100) + currentSkintone);
+        WRITEU32(o_appearance + 0x54, 0x00040000);
+        WRITEU32(o_appearance + 0x58, 0x0010040C);
+        WRITEU16(o_appearance + 0x5C, 0x1C01);
+        WRITEU8(o_appearance + 0x5E, 0x30);
+    } else if (currentGender == 0x01 && currentGender != READU8(o_gender)) {
         fixMakeupBag();
-        WRITEU8(0x00000001 + offset, currentGender);
-        WRITEU32(0x00000050 + offset, 0x00800000 + (matchingHair * 0x0100) + currentSkintone);
-        WRITEU32(0x00000054 + offset, 0x00040000);
-        WRITEU32(0x00000058 + offset, 0x00100405);
-        WRITEU16(0x0000005C + offset, 0x3001);
-        WRITEU8(0x000005E + offset, 0x30);
+        WRITEU8(o_appearance + 0x01, currentGender);
+        WRITEU32(o_appearance + 0x50, 0x00800000 + (matchingHair * 0x0100) + currentSkintone);
+        WRITEU32(o_appearance + 0x54, 0x00040000);
+        WRITEU32(o_appearance + 0x58, 0x00100405);
+        WRITEU16(o_appearance + 0x5C, 0x3001);
+        WRITEU8(o_appearance + 0x5E, 0x30);
     } else {
-        WRITEU8(0x00000050 + offset, currentSkintone);
+        WRITEU8(o_appearance + 0x50, currentSkintone);
     }
-    WRITEU32(0x00000064 + offset, 0x00000000);
+    WRITEU32(o_appearance + 0x64, 0x00000000);
 }
 
 
@@ -141,7 +138,7 @@ void    updateSkintone(void) {
 // Adds or removes Makeup bag based on gender
 void    fixMakeupBag(void) {
     bool moveUp = false;
-    u32 offset = 0x330D5FEC;
+    u32 offset = o_keyitems;
     u32 value = READU16(offset);
     int i = 0;
     switch(currentGender) {

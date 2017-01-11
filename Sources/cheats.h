@@ -2,6 +2,27 @@
 #define CHEATS_H
 #include "plugin.h"
 
+int gameVer;
+
+u32 o_gender,
+    o_skintone,
+    o_appearance,
+    o_keyitems,
+
+    o_battlestats1,
+    o_battlestats2,
+    o_shiny,
+    o_instanttext,
+    o_outlines,
+    o_nfc,
+    o_runfaster,
+    o_nevertrip,
+    o_walkthruwalls,
+    o_renamepokemon,
+    o_islandwait,
+    o_qr100,
+    o_pcanywhere;
+
 typedef enum
 {
     EXECUTE_ONCE = BIT(0),
@@ -68,7 +89,10 @@ void    add_suffix(char *suffix, int identifier);
 void    xsprintf(char *dst, char *fmt, ...);
 bool    isinArray(int val, int *arr, int size);
 void    memset32(void *dst, unsigned int value, unsigned int size);
+void    protect_region(u32 addr);
 
+// Offsets
+void    getVersion(void);
 
 // Pokémon Spawner
 void    pokemonSpawnMenu(void);

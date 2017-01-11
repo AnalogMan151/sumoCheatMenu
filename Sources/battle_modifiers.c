@@ -14,10 +14,10 @@ void    battleMenu(void) {
 
     // Creates spoiler and cheat entries
     new_spoiler("Battle");
-        new_entry("100% Capture Rate", catch100);
+        (gameVer == 10) ? new_entry("100% Capture Rate", catch100) : 0;
         new_entry_arg("Wild Pokemon Shiny", shinyPokemon, 0, SHINYPOKEMON, TOGGLE);
-        new_entry_arg("Stat Stages +6", maxBattleStats, 0, MAXBATTLESTATS, TOGGLE);
-        new_entry_arg("Use Z-Moves w/o Z-Crystal", zMoves, 0, ZMOVES, TOGGLE);
+        (gameVer == 10) ? new_entry_arg("Stat Stages +6", maxBattleStats, 0, MAXBATTLESTATS, TOGGLE) : NULL;
+        (gameVer == 10) ? new_entry_arg("Use Z-Moves w/o Z-Crystal", zMoves, 0, ZMOVES, TOGGLE) : NULL;
         new_line();
     exit_spoiler();
 }
@@ -25,17 +25,14 @@ void    battleMenu(void) {
 
 // Sets all in-battle stats to +6 ranks
 void    maxBattleStats(u32 state) {
-    u32    offset;
-    u32    address;
     static u32  original;
 
     // Checks if cheat is enabled from menu and executes if it is
     if (state) {
 
         // Stores original value in memory
-        original = READU32(0x0029A048);
+        original = READU32(o_battlestats1);
 
-        offset = 0x00595A00;
         static const u8    buffer[] =
         {
             0x80, 0x20, 0x9F, 0xE5, 0x0E, 0x00, 0x52, 0xE1,
@@ -54,18 +51,35 @@ void    maxBattleStats(u32 state) {
             0xEA, 0x21, 0xC1, 0x15, 0xEB, 0x21, 0xC1, 0x15,
             0xEC, 0x21, 0x81, 0x15, 0xF0, 0x21, 0xC1, 0x15,
             0x04, 0x00, 0x53, 0xE1, 0xF7, 0xFF, 0xFF, 0x1A,
-            0x1F, 0x00, 0xBD, 0xE8, 0x70, 0x11, 0xF4, 0xEA,
+            0x1F, 0x00, 0xBD, 0xE8, 0x00, 0x00, 0x00, 0x00,
             0xA4, 0x77, 0x6E, 0x00, 0x0C, 0x0C, 0x0C, 0x0C
         };
+        static const u8    buffer10[] =
+        {
+            0x70, 0x11, 0xF4, 0xEA
+        };
+        static const u8    buffer11[] =
+        {
+            0x02, 0x0A, 0xF4, 0xEA
+        };
 
-        address = 0x00;
-        memcpy((void *)(address + offset), buffer, 0x90);
-
-        WRITEU32(0x0029A048, 0xEA0BEE6C);
+        memcpy((void *)(o_battlestats2), buffer, 0x90);
+        switch(gameVer) {
+            case 10:
+                memcpy((void *)(o_battlestats2 + 0x84), buffer10, 0x04);
+                WRITEU32(o_battlestats1, 0xEA0BEE6C);
+                break;
+            case 11:
+                memcpy((void *)(o_battlestats2 + 0x84), buffer11, 0x04);
+                WRITEU32(o_battlestats1, 0xEA0BF5DA);
+                break;
+            default:
+                WRITEU32(o_battlestats1, original);
+        }
     } else {
 
         // Sets value back to original when cheat is disabled
-        WRITEU32(0x0029A048, original);
+        WRITEU32(o_battlestats1, original);
     }
 }
 
@@ -86,7 +100,7 @@ void	catch100(void) {
 
 // Make wild Pokemon shiny
 void	shinyPokemon(u32 state) {
-    WRITEU32(0x003183EC, (state) ? 0xEA00001C : 0x0A00001C);
+    WRITEU32(o_shiny, (state) ? 0xEA00001C : 0x0A00001C);
 }
 
 

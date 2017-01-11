@@ -22,18 +22,31 @@ void    movementMenu(void) {
 
 // Increases run speed to 1.375x
 void	runFaster(void) {
-    WRITEU32(0x0039AF74, (is_pressed(BUTTON_B)) ? 0x3FB00000 : 0x3F800000);
+    WRITEU32(o_runfaster, (is_pressed(BUTTON_B)) ? 0x3FB00000 : 0x3F800000);
 }
 
 
 // Disables occational tripping animation
 void	neverTrip(void) {
-	WRITEU8(0x3419833E, 0x00);
+	WRITEU8(o_nevertrip, 0x00);
 }
 
 
 // Walk through wall while R is held down
 void	walkThruWalls(void) {
-    WRITEU32(0x0039D140, (is_pressed(BUTTON_R)) ? 0xE1A00000 : 0xEB01E7E7);
-    WRITEU32(0x0039D274, (is_pressed(BUTTON_R)) ? 0xE1A00000 : 0xEB01E79A);
+    u32 original[] = {0, 0};
+
+    switch(gameVer) {
+        case 10: ;
+            original[0] = 0xEB01E7E7;
+            original[1] = 0xEB01E79A;
+            break;
+        case 11: ;
+            original[0] = 0xEB01E8DC;
+            original[1] = 0xEB01E88F;
+            break;
+    }
+
+    WRITEU32(o_walkthruwalls, (is_pressed(BUTTON_R)) ? 0xE1A00000 : original[0]);
+    WRITEU32(o_walkthruwalls + 0x134, (is_pressed(BUTTON_R)) ? 0xE1A00000 : original[1]);
 }
