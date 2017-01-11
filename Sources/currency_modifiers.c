@@ -17,7 +17,7 @@ void    currencyMenu(void) {
         new_entry_managed("Increase Quantity +500,000", increaseCurrencyQuantity, INCREASECURRENCYQUANTITY, AUTO_DISABLE);
         new_separator();
         new_entry_managed("Poke Dollars          xCCCCCCC", maxMoney, MAXMONEY, EXECUTE_ONCE);
-        new_entry_managed("Battle Points         xCCCCCCC", maxBP, MAXBP, EXECUTE_ONCE);
+        (gameVer == 10) ? new_entry_managed("Battle Points         xCCCCCCC", maxBP, MAXBP, EXECUTE_ONCE) : NULL;
         new_entry_managed("Festival Coins        xCCCCCCC", maxCoins, MAXCOINS, EXECUTE_ONCE);
         new_entry_managed("Total Festival Coins  xCCCCCCC", totalCoins, TOTALCOINS, EXECUTE_ONCE);
         new_entry_managed("Thumbs Up             xCCCCCCC", totalThumbs, TOTALTHUMBS, EXECUTE_ONCE);

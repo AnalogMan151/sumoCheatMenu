@@ -13,8 +13,8 @@
 void    pokemonMenu(void) {
     new_spoiler("Pokemon");
         new_entry("Rename any Pokemon", renamePokemon);
-        new_entry_managed_note("Instant Egg from Nursery", "Hold L & talk to Nursery NPC", instantEgg, INSTANTEGG, 0);
-        new_entry("Instant Egg Hatching", instantHatch);
+        (gameVer == 10) ? new_entry_managed_note("Instant Egg from Nursery", "Hold L & talk to Nursery NPC", instantEgg, INSTANTEGG, 0) : NULL;
+        (gameVer == 10) ? new_entry("Instant Egg Hatching", instantHatch) : 0;
         new_line();
     exit_spoiler();
 }
@@ -22,7 +22,7 @@ void    pokemonMenu(void) {
 
 // Rename any Pokemon at the Name Rater
 void	renamePokemon(void) {
-	WRITEU32(0x004A84F8, 0xE3A00001);
+	WRITEU32(o_renamepokemon, 0xE3A00001);
 }
 
 
