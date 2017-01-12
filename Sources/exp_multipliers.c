@@ -10,11 +10,10 @@
  ********************************/
 
 static char currentEXP[40] = "Undefined";
-u8 exp_rate = 0;
+u8 exp_rate = 1;
 
 // EXP menu entry
 void    expMenu(void) {
-    exp_x();
     updateEXP();
 
     new_spoiler("EXP Multiplier");
@@ -27,21 +26,19 @@ void    expMenu(void) {
     exit_spoiler();
 }
 
-
-// Sets the stage for Experience Modifier code by setting EXP rate to 1x
-void	exp_x(void) {
-    WRITEU32(0x00595800, 0xE1D002B2);
-    WRITEU32(0x00595804, 0xE92D4002);
-    WRITEU32(0x00595808, 0xE3A01001);
-    WRITEU32(0x0059580C, 0xE0000190);
-    WRITEU32(0x00595810, 0xE8BD8002);
-    WRITEU32(0x0048F1EC, 0xEB041983);
-}
-
-
 // Reads current EXP modifier and prints it to the menu
 void	updateEXP(void) {
-    exp_rate = READU8(0x00595808);
+    static const u8 buffer[] =
+    {
+        0xB2, 0x02, 0xD0, 0xE1,
+        0x02, 0x40, 0x2D, 0xE9,
+        0x01, 0x10, 0xA0, 0xE3,
+        0x90, 0x01, 0x00, 0xE0,
+        0x02, 0x80, 0xBD, 0xE8
+    };
+    memcpy((void *)(o_exp1), buffer, 0x14);
+    WRITEU8(o_exp1 + 0x08, exp_rate);
+    WRITEU32(o_exp2, 0xEB041983);
     xsprintf(currentEXP, "Current EXP rate: %3dx", exp_rate);
 }
 
@@ -50,7 +47,6 @@ void	updateEXP(void) {
 void	increaseEXP1(void) {
 
     // Extracts ones place
-    exp_rate = READU8(0x00595808);
     int ones = exp_rate % 10;
     exp_rate -= ones;
 
@@ -64,8 +60,6 @@ void	increaseEXP1(void) {
 
     // Adds ones place back in
     exp_rate += ones;
-
-    WRITEU8(0x00595808, exp_rate);
     updateEXP();
 }
 
@@ -74,7 +68,6 @@ void	increaseEXP1(void) {
 void	increaseEXP10(void) {
 
     // Extracts tens place
-    exp_rate = READU8(0x00595808);
     int tens = (exp_rate / 10) % 10;
     exp_rate -= (tens * 10);
 
@@ -88,8 +81,6 @@ void	increaseEXP10(void) {
 
     // Adds tens place back in
     exp_rate += (tens * 10);
-
-    WRITEU8(0x00595808, exp_rate);
     updateEXP();
 }
 
@@ -98,7 +89,6 @@ void	increaseEXP10(void) {
 void	increaseEXP100(void) {
 
     // Extracts hundreds place
-    exp_rate = READU8(0x00595808);
     int hundreds = (exp_rate / 100);
     exp_rate -= (hundreds * 100);
 
@@ -112,7 +102,5 @@ void	increaseEXP100(void) {
 
     // Adds hundreds place back in
     exp_rate += (hundreds * 100);
-
-    WRITEU8(0x00595808, exp_rate);
     updateEXP();
 }

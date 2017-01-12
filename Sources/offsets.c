@@ -34,6 +34,9 @@ void getVersion(void) {
             o_renamepokemon = O_RENAMEPOKEMON;
             o_islandwait = O_ISLANDWAIT;
             o_pcanywhere = O_PCANYWHERE;
+            o_exp1 = O_EXP1;
+            o_exp2 = O_EXP2;
+            o_instantegg = O_INSTANTEGG;
             break;
         case 11: ;
             o_battlestats1 = O_BATTLESTATS1 + 0x120;
@@ -47,6 +50,9 @@ void getVersion(void) {
             o_renamepokemon = O_RENAMEPOKEMON + 0x1DA0;
             o_islandwait = O_ISLANDWAIT + 0x1C0D;
             o_pcanywhere = O_PCANYWHERE + 0x1ED8;
+            o_exp1 = O_EXP1 + 0x18D8;
+            o_exp2 = O_EXP2 + 0x1C60;
+            o_instantegg = O_INSTANTEGG + 0x1C18;
             break;
     }
 }

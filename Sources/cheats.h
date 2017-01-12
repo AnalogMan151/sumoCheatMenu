@@ -4,11 +4,16 @@
 
 int gameVer;
 
-u32 o_gender,
+u32 o_exp1,
+    o_exp2,
+    o_gender,
     o_skintone,
     o_appearance,
     o_keyitems,
 
+    o_instantegg,
+    o_renamepokemon,
+    
     o_battlestats1,
     o_battlestats2,
     o_shiny,
@@ -18,7 +23,6 @@ u32 o_gender,
     o_runfaster,
     o_nevertrip,
     o_walkthruwalls,
-    o_renamepokemon,
     o_islandwait,
     o_qr100,
     o_pcanywhere;
@@ -109,7 +113,6 @@ void    setForm(void);
 
 // EXP Multipliers
 void    expMenu(void);
-void	exp_x(void);
 void	updateEXP(void);
 void	increaseEXP1(void);
 void	increaseEXP10(void);
