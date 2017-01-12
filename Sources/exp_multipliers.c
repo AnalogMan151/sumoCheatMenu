@@ -38,7 +38,14 @@ void	updateEXP(void) {
     };
     memcpy((void *)(o_exp1), buffer, 0x14);
     WRITEU8(o_exp1 + 0x08, exp_rate);
-    WRITEU32(o_exp2, 0xEB041983);
+    switch(gameVer) {
+        case 10:
+            WRITEU32(o_exp2, 0xEB041983);
+            break;
+        case 11:
+            WRITEU32(o_exp2, 0xEB0418A1);
+            break;
+    }
     xsprintf(currentEXP, "Current EXP rate: %3dx", exp_rate);
 }
 

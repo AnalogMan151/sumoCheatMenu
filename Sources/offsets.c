@@ -37,6 +37,8 @@ void getVersion(void) {
             o_exp1 = O_EXP1;
             o_exp2 = O_EXP2;
             o_instantegg = O_INSTANTEGG;
+            o_catch1001 = O_CATCH1001;
+            o_catch1002 = O_CATCH1002;
             break;
         case 11: ;
             o_battlestats1 = O_BATTLESTATS1 + 0x120;
@@ -53,6 +55,8 @@ void getVersion(void) {
             o_exp1 = O_EXP1 + 0x18D8;
             o_exp2 = O_EXP2 + 0x1C60;
             o_instantegg = O_INSTANTEGG + 0x1C18;
+            o_catch1001 = O_CATCH1001 + 0x18D8;
+            o_catch1002 = O_CATCH1002 + 0x1C60;
             break;
     }
 }
