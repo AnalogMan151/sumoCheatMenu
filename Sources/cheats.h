@@ -13,10 +13,12 @@ u32 o_exp1,
 
     o_instantegg,
     o_renamepokemon,
-    
+
     o_battlestats1,
     o_battlestats2,
     o_shiny,
+    o_catch1001,
+    o_catch1002,
     o_instanttext,
     o_outlines,
     o_nfc,

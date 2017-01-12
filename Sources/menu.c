@@ -1,7 +1,7 @@
 #include "cheats.h"
 
 char	*builder_name = "AnalogMan",
-        version[7] = "v0.2.4",
+        version[7] = "v0.2.5",
         formattedVer[23];
 
 void	my_menus(void) {
@@ -10,7 +10,7 @@ void	my_menus(void) {
     new_unselectable_entry("have notes. Press (Y) to view.");
 	new_separator();
     (gameVer == 10) ? pokemonSpawnMenu() : NULL;
-    (gameVer == 10) ? expMenu() : NULL;
+    expMenu();
     new_spoiler("Modifiers");
        timeMenu();
        appearanceMenu();
