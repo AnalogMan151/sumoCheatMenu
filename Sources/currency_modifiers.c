@@ -17,7 +17,7 @@ void    currencyMenu(void) {
         new_entry_managed("Increase Quantity +500,000", increaseCurrencyQuantity, INCREASECURRENCYQUANTITY, AUTO_DISABLE);
         new_separator();
         new_entry_managed("Poke Dollars          xCCCCCCC", maxMoney, MAXMONEY, EXECUTE_ONCE);
-        (gameVer == 10) ? new_entry_managed("Battle Points         xCCCCCCC", maxBP, MAXBP, EXECUTE_ONCE) : NULL;
+        new_entry_managed("Battle Points         xCCCCCCC", maxBP, MAXBP, EXECUTE_ONCE);
         new_entry_managed("Festival Coins        xCCCCCCC", maxCoins, MAXCOINS, EXECUTE_ONCE);
         new_entry_managed("Total Festival Coins  xCCCCCCC", totalCoins, TOTALCOINS, EXECUTE_ONCE);
         new_entry_managed("Thumbs Up             xCCCCCCC", totalThumbs, TOTALTHUMBS, EXECUTE_ONCE);
@@ -83,13 +83,5 @@ void	totalThumbs(void) {
 
 // Set Battle Points
 void	maxBP(void) {
-	if (READU32(0x0067206C) != 0x00) {
-		u32 offset;
-
-		// offset = READU32(0x4 + READU32(0x24 + READU32(0x0067206C)));
-        offset = READU32(0x0067206C);
-        offset = READU32(0x00000024 + offset);
-        offset = READU32(0x00000004 + offset);
-        WRITEU16(0x000037B0 + offset, (quantity > 9999) ? 0x0000270F : quantity);
-	}
+        WRITEU16(0x330D90D8, (quantity > 9999) ? 0x0000270F : quantity);
 }
