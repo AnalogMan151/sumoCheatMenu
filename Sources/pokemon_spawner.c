@@ -60,35 +60,49 @@ void    updateSpawn(void) {
 
 // Redirects stack calls to custom location with selected data
 void    activateSpawn(u32 state) {
-    u32 offset = 0x003988DC;
     static u32 original[3];
+
+    static const u8 buffer[] =
+    {
+        0xB0, 0x00, 0xD5, 0xE1,
+        0x0C, 0x00, 0x9F, 0xE5,
+        0x04, 0x00, 0xC4, 0xE5,
+        0x00, 0x00, 0x9F, 0xE5,
+        0x1E, 0xFF, 0x2F, 0xE1
+    };
+
+    memcpy((void *)(o_pokespawn2), buffer, 0x14);
+
     if (state) {
-
         // Read original data when activating cheat
-        original[0] = READU32(0x00 + offset);
-        original[1] = READU32(0x10 + offset);
-        original[2] = READU32(0x2C + offset);
+        original[0] = READU32(o_pokespawn1 + 0x00);
+        original[1] = READU32(o_pokespawn1 + 0x10);
+        original[2] = READU32(o_pokespawn1 + 0x2C);
 
-        WRITEU32(0x00 + offset, 0xEB07F3BF);
-        WRITEU32(0x10 + offset, 0xEB07F3BB);
-        WRITEU32(0x2C + offset, 0xEB07F3B4);
+        // Hook original functions
+        switch(gameVer) {
+            case 10:
+                WRITEU32(o_pokespawn1 + 0x00, 0xEB07F3BF);
+                WRITEU32(o_pokespawn1 + 0x10, 0xEB07F3BB);
+                WRITEU32(o_pokespawn1 + 0x2C, 0xEB07F3B4);
+                break;
+            case 11:
+                WRITEU32(o_pokespawn1 + 0x00, 0xEB07F5E1);
+                WRITEU32(o_pokespawn1 + 0x10, 0xEB07F5DD);
+                WRITEU32(o_pokespawn1 + 0x2C, 0xEB07F5D6);
+                break;
+        }
 
-        offset = 0x005957E0;
-        WRITEU32(0x00 + offset, 0xE1D500B0);
-        WRITEU32(0x04 + offset, 0xE59F000C);
-        WRITEU32(0x08 + offset, 0xE5C40004);
-        WRITEU32(0x0C + offset, 0xE59F0000);
-        WRITEU32(0x10 + offset, 0xE12FFF1E);
-        WRITEU32(0x14 + offset, spawnID + (0x800 * formIndex));
-        WRITEU32(0x18 + offset, spawnLVL);
-
+        // Set ID, form, and level
+        WRITEU32(o_pokespawn2 + 0x14, spawnID + (0x800 * formIndex));
+        WRITEU32(o_pokespawn2 + 0x18, spawnLVL);
 
     } else {
 
         // Write original data when disabling cheat
-        WRITEU32(0x00 + offset, original[0]);
-        WRITEU32(0x10 + offset, original[1]);
-        WRITEU32(0x2C + offset, original[2]);
+        WRITEU32(o_pokespawn1 + 0x2C, original[0]);
+        WRITEU32(o_pokespawn1 + 0x2C, original[1]);
+        WRITEU32(o_pokespawn1 + 0x2C, original[2]);
     }
 }
 
