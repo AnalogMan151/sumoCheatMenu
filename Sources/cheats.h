@@ -29,7 +29,8 @@ u32 o_pokespawn1,
     o_walkthruwalls,
     o_islandwait,
     o_qr100,
-    o_pcanywhere;
+    o_pcanywhere,
+    o_rematch;
 
 typedef enum
 {
