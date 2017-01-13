@@ -15,7 +15,7 @@ void    miscMenu(void) {
         qrMenu();
         new_entry("Instant Text Speed", instantText);
         (gameVer == 10) ? new_entry_arg_note("Access PC Anywhere", "Open Options submenu", pcAnywhere, 0, PCANYWHERE, TOGGLE) : NULL;
-        (gameVer == 10) ? new_entry_managed_note("Rematch Trainers", "Hold L & talk to Trainer", rematchTrainers, REMATCHTRAINERS, 0) : NULL;
+        new_entry_managed_note("Rematch Trainers", "Hold L & talk to Trainer", rematchTrainers, REMATCHTRAINERS, 0);
         new_entry_arg_note("Remove Character Outlines", "Open a menu to see change", toggleOutlines, 0, TOGGLEOUTLINES, TOGGLE);
         new_entry_arg_note("NTR Debug Connection", "Disables NFC in order to\nallow stable NTR connection", toggleNFC, 0, TOGGLENFC, TOGGLE);
         new_line();
@@ -63,10 +63,10 @@ void    pcAnywhere(u32 state) {
                 WRITEU32(0x0037D560, 0xEB086104);
                 break;
             case 11:
-                WRITEU32(o_pcanywhere + 0x30, 0x1AF77962);
-                WRITEU32(o_pcanywhere + 0x70, 0xEBF7DEAE);
-                WRITEU32(0x00373C48 + 0xF74, 0xEB088AF9);
-                WRITEU32(0x0037D560 + 0xF74, 0xEB0864A8);
+                WRITEU32(o_pcanywhere + 0x30, 0x0);
+                WRITEU32(o_pcanywhere + 0x70, 0x0);
+                WRITEU32(0x00373C48 + 0x0, 0x0);
+                WRITEU32(0x0037D560 + 0x0, 0x0);
                 break;
         }
     } else {
@@ -84,12 +84,8 @@ void    pcAnywhere(u32 state) {
 
 // Re-battle trainer that have already been fought. Active by holding L and talking to them
 void	rematchTrainers(void) {
-    WRITEU32(0x0049D200, 0xE5911004);
-    WRITEU32(0x0049D204, 0xE5900044);
-	if (is_pressed(BUTTON_L)) {
-		WRITEU32(0x0049D200, 0xE3A00000);
-		WRITEU32(0x0049D204, 0xE12FFF1E);
-	}
+    WRITEU32(o_rematch, (is_pressed(BUTTON_L)) ? 0xE3A00000 :  0xE5911004);
+    WRITEU32(o_rematch + 0x04, (is_pressed(BUTTON_L)) ? 0xE12FFF1E :  0xE5900044);
 }
 
 

@@ -41,6 +41,7 @@ void getVersion(void) {
             o_instantegg = O_INSTANTEGG;
             o_catch1001 = O_CATCH1001;
             o_catch1002 = O_CATCH1002;
+            o_rematch = O_REMATCH;
             break;
         case 11: ;
             o_pokespawn1 = O_POKESPAWN1 + 0x13D8;
@@ -61,6 +62,7 @@ void getVersion(void) {
             o_instantegg = O_INSTANTEGG + 0x1C18;
             o_catch1001 = O_CATCH1001 + 0x18D8;
             o_catch1002 = O_CATCH1002 + 0x1C60;
+            o_rematch = O_REMATCH + 0x1DA0;
             break;
     }
 }
