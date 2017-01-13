@@ -4,7 +4,9 @@
 
 int gameVer;
 
-u32 o_exp1,
+u32 o_pokespawn1,
+    o_pokespawn2,
+    o_exp1,
     o_exp2,
     o_gender,
     o_skintone,

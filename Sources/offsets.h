@@ -2,9 +2,10 @@
 #define OFFSETS_H
 
 
-#define V11_DIFF 0x1884
-
 // Defines offsets for version 1.0
+#define O_POKESPAWN1 0x003988DC
+#define O_POKESPAWN2 0x005957E0
+
 #define O_EXP1 0x00595800
 #define O_EXP2 0x0048F1EC
 

@@ -23,6 +23,8 @@ void getVersion(void) {
     }
     switch(gameVer){
         case 10: ;
+            o_pokespawn1 = O_POKESPAWN1;
+            o_pokespawn2 = O_POKESPAWN2;
             o_battlestats1 = O_BATTLESTATS1;
             o_battlestats2 = O_BATTLESTATS2;
             o_shiny = O_SHINY;
@@ -41,6 +43,8 @@ void getVersion(void) {
             o_catch1002 = O_CATCH1002;
             break;
         case 11: ;
+            o_pokespawn1 = O_POKESPAWN1 + 0x13D8;
+            o_pokespawn2 = O_POKESPAWN2 + 0x1C60;
             o_battlestats1 = O_BATTLESTATS1 + 0x120;
             o_battlestats2 = O_BATTLESTATS2 + 0x1ED8;
             o_shiny = O_SHINY + 0x704;
