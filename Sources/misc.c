@@ -61,12 +61,13 @@ void    pcAnywhere(u32 state) {
                 WRITEU32(o_pcanywhere + 0x70, 0xEBF7D9CE);
                 WRITEU32(0x00373C48, 0xEB088755);
                 WRITEU32(0x0037D560, 0xEB086104);
+                break;
             case 11:
                 WRITEU32(o_pcanywhere + 0x30, 0x1AF77962);
                 WRITEU32(o_pcanywhere + 0x70, 0xEBF7DEAE);
                 WRITEU32(0x00373C48 + 0xF74, 0xEB088AF9);
                 WRITEU32(0x0037D560 + 0xF74, 0xEB0864A8);
-
+                break;
         }
     } else {
         switch(gameVer) {
