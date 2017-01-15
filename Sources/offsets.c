@@ -54,7 +54,7 @@ void getVersion(void) {
             o_shiny = O_SHINY + 0x704;
             o_zmoves1 = O_ZMOVES1 + 0x1F00;
             o_zmoves2 = O_ZMOVES2 + 0x540;
-            o_instanttext = O_INSTANTTEXT + 0x5C8;
+            o_instanttext = O_INSTANTTEXT + 0x122C;
             o_outlines = O_OUTLINES + 0x1884;
             o_nfc = O_NFC + 0x14F0;
             o_runfaster = O_RUNFASTER + 0x1420;
