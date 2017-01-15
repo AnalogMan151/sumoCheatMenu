@@ -15,12 +15,17 @@ u32 o_pokespawn1,
 
     o_instantegg,
     o_renamepokemon,
+    o_instanthatch1,
+    o_instanthatch2,
 
     o_battlestats1,
     o_battlestats2,
     o_shiny,
     o_catch1001,
     o_catch1002,
+    o_zmoves1,
+    o_zmoves2,
+
     o_instanttext,
     o_outlines,
     o_nfc,
@@ -29,7 +34,8 @@ u32 o_pokespawn1,
     o_walkthruwalls,
     o_islandwait,
     o_qr100,
-    o_pcanywhere,
+    o_pcanywhere1,
+    o_pcanywhere2,
     o_rematch;
 
 typedef enum
@@ -71,6 +77,7 @@ enum {
     INCREASEEXP100,
     WALKTHROUGHWALLS,
     INSTANTEGG,
+    INSTANTHATCH,
     ACTIVATESPAWN,
     INCREASEID1,
     INCREASEID10,
@@ -143,7 +150,6 @@ void    fixMakeupBag(void);
 
 // Battle Modifiers
 void    battleMenu(void);
-void    alolaRat(void);
 void    maxBattleStats(u32 state);
 void	catch100(void);
 void	shinyPokemon(u32 state);
@@ -161,7 +167,7 @@ void	walkThruWalls(void);
 void    pokemonMenu(void);
 void	renamePokemon(void);
 void	instantEgg(void);
-void	instantHatch(void);
+void	instantHatch(u32 state);
 
 
 // Currency Modifiers
