@@ -3,7 +3,7 @@
 
 A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMenu](https://github.com/RyDog199/blankCheatMenu) base which in turn was based off [@Nanquitas](https://github.com/Nanquitas/) work.
 
-Activate by pressing SELECT in game. 
+Activate by pressing SELECT in game. This plugin supports both version 1.0 and v1.1 of the games. 
 
 ### Cheats include:
 
