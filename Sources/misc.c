@@ -14,7 +14,7 @@ void    miscMenu(void) {
     new_spoiler("Misc");
         qrMenu();
         new_entry("Instant Text Speed", instantText);
-        (gameVer == 10) ? new_entry_arg_note("Access PC Anywhere", "Open Options submenu", pcAnywhere, 0, PCANYWHERE, TOGGLE) : NULL;
+        new_entry_arg_note("Access PC Anywhere", "Open Options submenu", pcAnywhere, 0, PCANYWHERE, TOGGLE);
         new_entry_managed_note("Rematch Trainers", "Hold L & talk to Trainer", rematchTrainers, REMATCHTRAINERS, 0);
         new_entry_arg_note("Remove Character Outlines", "Open a menu to see change", toggleOutlines, 0, TOGGLEOUTLINES, TOGGLE);
         new_entry_arg_note("NTR Debug Connection", "Disables NFC in order to\nallow stable NTR connection", toggleNFC, 0, TOGGLENFC, TOGGLE);
@@ -50,32 +50,35 @@ void    pcAnywhere(u32 state) {
             0x18, 0x00, 0x9F, 0xE5, 0x00, 0x10, 0x80, 0xE5,
             0x14, 0x00, 0x9F, 0xE5, 0x00, 0x00, 0x90, 0xE5,
             0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0xA0, 0xE3,
-            0x10, 0xD0, 0x8D, 0xE2, 0x0F, 0x80, 0xBD, 0xE8,
-            0x00, 0x60, 0x63, 0x00, 0x6C, 0x20, 0x67, 0x00
+            0x10, 0xD0, 0x8D, 0xE2, 0x0F, 0x80, 0xBD, 0xE8
         };
 
-        memcpy((void *)(o_pcanywhere), buffer, 0x88);
+        memcpy((void *)(o_pcanywhere1), buffer, 0x80);
         switch(gameVer) {
             case 10:
-                WRITEU32(o_pcanywhere + 0x30, 0x1AF77D09);
-                WRITEU32(o_pcanywhere + 0x70, 0xEBF7D9CE);
-                WRITEU32(0x00373C48, 0xEB088755);
-                WRITEU32(0x0037D560, 0xEB086104);
+                WRITEU32(o_pcanywhere1 + 0x30, 0x1AF77D09);
+                WRITEU32(o_pcanywhere1 + 0x70, 0xEBF7D9CE);
+                WRITEU32(o_pcanywhere1 + 0x80, 0x00636000);
+                WRITEU32(o_pcanywhere1 + 0x84, 0x0067206C);
+                WRITEU32(o_pcanywhere2, 0xEB088755);
+                WRITEU32(o_pcanywhere2 + 0x9918, 0xEB086104);
                 break;
             case 11:
-                WRITEU32(o_pcanywhere + 0x30, 0x0);
-                WRITEU32(o_pcanywhere + 0x70, 0x0);
-                WRITEU32(0x00373C48 + 0x0, 0x0);
-                WRITEU32(0x0037D560 + 0x0, 0x0);
+                WRITEU32(o_pcanywhere1 + 0x30, 0x1AF77958);
+                WRITEU32(o_pcanywhere1 + 0x70, 0xEBF7D6DC);
+                WRITEU32(o_pcanywhere1 + 0x80, 0x00638000);
+                WRITEU32(o_pcanywhere1 + 0x84, 0x006740B4);
+                WRITEU32(o_pcanywhere2, 0xEB088B18);
+                WRITEU32(o_pcanywhere2 + 0x99A8, 0xEB0864A3);
                 break;
         }
     } else {
         switch(gameVer) {
             case 10:
-                WRITEU32(o_pcanywhere + 0x30, 0xEAF77D09);
+                WRITEU32(o_pcanywhere1 + 0x30, 0xEAF77D09);
                 break;
             case 11:
-                WRITEU32(o_pcanywhere + 0x30, 0xEAF77962);
+                WRITEU32(o_pcanywhere1 + 0x30, 0xEAF77958);
                 break;
         }
     }

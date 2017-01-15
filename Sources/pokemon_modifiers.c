@@ -14,7 +14,7 @@ void    pokemonMenu(void) {
     new_spoiler("Pokemon");
         new_entry("Rename any Pokemon", renamePokemon);
         new_entry_managed_note("Instant Egg from Nursery", "Hold L & talk to Nursery NPC", instantEgg, INSTANTEGG, 0);
-        (gameVer == 10) ? new_entry("Instant Egg Hatching", instantHatch) : 0;
+        new_entry_arg("Instant Egg Hatching", instantHatch, 0, INSTANTHATCH, TOGGLE);
         new_line();
     exit_spoiler();
 }
@@ -35,13 +35,31 @@ void	instantEgg(void) {
 
 
 // Instant egg hatching in one step
-void	instantHatch(void) {
-	WRITEU32(0x005958C0, 0xE59D000C);
-	WRITEU32(0x005958C4, 0xE59F500C);
-	WRITEU32(0x005958C8, 0xE1500005);
-	WRITEU32(0x005958CC, 0x03A00000);
-	WRITEU32(0x005958D0, 0x11A00004);
-	WRITEU32(0x005958D4, 0xE12FFF1E);
-	WRITEU32(0x005958D8, 0x006CE724);
-	WRITEU32(0x004919E0, 0xEB040FB6);
+void	instantHatch(u32 state) {
+    if (state) {
+        static const u8 buffer[] =
+        {
+            0x0C, 0x00, 0x9D, 0xE5,
+            0x0C, 0x50, 0x9F, 0xE5,
+            0x05, 0x00, 0x50, 0xE1,
+            0x00, 0x00, 0xA0, 0x03,
+            0x04, 0x00, 0xA0, 0x11,
+            0x1E, 0xFF, 0x2F, 0xE1
+        };
+        memcpy((void *)(o_instanthatch1), buffer, 0x18);
+
+        switch(gameVer) {
+            case 10:
+                WRITEU32(o_instanthatch1 + 0x18, 0x006CE724);
+                WRITEU32(o_instanthatch2, 0xEB040FB6);
+                break;
+            case 11:
+                WRITEU32(o_instanthatch1 + 0x18, 0x006D08C0);
+                WRITEU32(o_instanthatch2, 0xEB04105E);
+                break;
+        }
+    } else {
+        WRITEU32(o_instanthatch2, 0xE1A00004);
+    }
+
 }

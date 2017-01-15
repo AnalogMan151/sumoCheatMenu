@@ -87,9 +87,9 @@ void    activateSpawn(u32 state) {
                 WRITEU32(o_pokespawn1 + 0x2C, 0xEB07F3B4);
                 break;
             case 11:
-                WRITEU32(o_pokespawn1 + 0x00, 0xEB07F5E1);
-                WRITEU32(o_pokespawn1 + 0x10, 0xEB07F5DD);
-                WRITEU32(o_pokespawn1 + 0x2C, 0xEB07F5D6);
+                WRITEU32(o_pokespawn1 + 0x00, 0xEB07F689);
+                WRITEU32(o_pokespawn1 + 0x10, 0xEB07F685);
+                WRITEU32(o_pokespawn1 + 0x2C, 0xEB07F67E);
                 break;
         }
 

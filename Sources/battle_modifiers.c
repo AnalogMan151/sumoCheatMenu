@@ -14,10 +14,10 @@ void    battleMenu(void) {
 
     // Creates spoiler and cheat entries
     new_spoiler("Battle");
-        (gameVer == 10) ? new_entry("100% Capture Rate", catch100) : 0;
+        new_entry("100% Capture Rate", catch100);
         new_entry_arg("Wild Pokemon Shiny", shinyPokemon, 0, SHINYPOKEMON, TOGGLE);
-        (gameVer == 10) ? new_entry_arg("Stat Stages +6", maxBattleStats, 0, MAXBATTLESTATS, TOGGLE) : NULL;
-        (gameVer == 10) ? new_entry_arg("Use Z-Moves w/o Z-Crystal", zMoves, 0, ZMOVES, TOGGLE) : NULL;
+        new_entry_arg("Stat Stages +6", maxBattleStats, 0, MAXBATTLESTATS, TOGGLE);
+        new_entry_arg("Use Z-Moves w/o Z-Crystal", zMoves, 0, ZMOVES, TOGGLE);
         new_line();
     exit_spoiler();
 }
@@ -52,29 +52,27 @@ void    maxBattleStats(u32 state) {
             0xEC, 0x21, 0x81, 0x15, 0xF0, 0x21, 0xC1, 0x15,
             0x04, 0x00, 0x53, 0xE1, 0xF7, 0xFF, 0xFF, 0x1A,
             0x1F, 0x00, 0xBD, 0xE8, 0x00, 0x00, 0x00, 0x00,
-            0xA4, 0x77, 0x6E, 0x00, 0x0C, 0x0C, 0x0C, 0x0C
+            0x00, 0x00, 0x6E, 0x00, 0x0C, 0x0C, 0x0C, 0x0C
         };
         static const u8    buffer10[] =
         {
-            0x70, 0x11, 0xF4, 0xEA
+            0x70, 0x11, 0xF4, 0xEA, 0xA4, 0x77
         };
         static const u8    buffer11[] =
         {
-            0x02, 0x0A, 0xF4, 0xEA
+            0xF8, 0x09, 0xF4, 0xEA, 0x80, 0x96
         };
 
         memcpy((void *)(o_battlestats2), buffer, 0x90);
         switch(gameVer) {
             case 10:
-                memcpy((void *)(o_battlestats2 + 0x84), buffer10, 0x04);
+                memcpy((void *)(o_battlestats2 + 0x84), buffer10, 0x06);
                 WRITEU32(o_battlestats1, 0xEA0BEE6C);
                 break;
             case 11:
-                memcpy((void *)(o_battlestats2 + 0x84), buffer11, 0x04);
-                WRITEU32(o_battlestats1, 0xEA0BF5DA);
+                memcpy((void *)(o_battlestats2 + 0x84), buffer11, 0x06);
+                WRITEU32(o_battlestats1, 0xEA0BF5E4);
                 break;
-            default:
-                WRITEU32(o_battlestats1, original);
         }
     } else {
 
@@ -94,16 +92,17 @@ void	catch100(void) {
         0x00, 0x00, 0x51, 0xE1,
         0xF8, 0x00, 0x40, 0x02,
         0x10, 0x00, 0x8D, 0x05,
-        0x03, 0x80, 0xBD, 0xE8,
-        0x9C, 0x83, 0x6D, 0x00
+        0x03, 0x80, 0xBD, 0xE8
     };
-    memcpy((void *)(o_catch1001), buffer, 0x24);
+    memcpy((void *)(o_catch1001), buffer, 0x20);
     switch(gameVer) {
         case 10:
+            WRITEU32(o_catch1001 + 0x20, 0x006D839C);
             WRITEU32(o_catch1002, 0xEB04199D);
             break;
         case 11:
-            WRITEU32(o_catch1002, 0xEB0418BB);
+            WRITEU32(o_catch1001 + 0x20, 0x006DA1CC);
+            WRITEU32(o_catch1002, 0xEB041A45);
             break;
     }
 }
@@ -117,8 +116,6 @@ void	shinyPokemon(u32 state) {
 
 // Use Z-Moves without the need of a Z-Crystal
 void    zMoves(u32 state) {
-    u32 offset = 0x00595900;
-    u32 address = 0x00;
     if (state) {
         static const u8    buffer[] =
         {
@@ -126,18 +123,36 @@ void    zMoves(u32 state) {
             0x00, 0x00, 0x00, 0xEA, 0x05, 0x40, 0x2D, 0xE9,
             0x50, 0x20, 0x9D, 0xE5, 0x0C, 0x10, 0x9F, 0xE5,
             0x02, 0x00, 0x51, 0xE1, 0xB4, 0x10, 0xD5, 0x01,
-            0x00, 0x10, 0xA0, 0x11, 0x05, 0x80, 0xBD, 0xE8,
-            0x28, 0xBA, 0x78, 0x00
+            0x00, 0x10, 0xA0, 0x11, 0x05, 0x80, 0xBD, 0xE8
         };
 
-        memcpy((void *)(address + offset), buffer, 0x2C);
+        memcpy((void *)(o_zmoves1), buffer, 0x28);
 
-        WRITEU32(0x00313DC0, 0xEB0A06CE);
-        WRITEU32(0x00313E30, 0xEB0A06B5);
-        WRITEU32(0x0036D0EC, 0xE3A00001);
+        switch(gameVer) {
+            case 10:
+                WRITEU32(o_zmoves1 + 0x28, 0x0078BA28);
+                WRITEU32(o_zmoves2 + 0x00, 0xEB0A06CE);
+                WRITEU32(o_zmoves2 + 0x70, 0xEB0A06B5);
+                WRITEU32(o_zmoves2 + 0x5932C, 0xE3A00001);
+                break;
+            case 11:
+                WRITEU32(o_zmoves1 + 0x28, 0x0078BF60);
+                WRITEU32(o_zmoves2 + 0x00, 0xEB0A0D3E);
+                WRITEU32(o_zmoves2 + 0x70, 0xEB0A0D25);
+                WRITEU32(o_zmoves2 + 0x59CF4, 0xE3A00001);
+                break;
+        }
+
     } else {
-        WRITEU32(0x00313DC0, 0xE1D510B4);
-        WRITEU32(0x00313E30, 0xE1D510B4);
-        WRITEU32(0x0036D0EC, 0xE3A00000);
+        WRITEU32(o_zmoves2 + 0x00, 0xE1D510B4);
+        WRITEU32(o_zmoves2 + 0x70, 0xE1D510B4);
+        switch(gameVer) {
+            case 10:
+                WRITEU32(o_zmoves2 + 0x5932C, 0xE3A00000);
+                break;
+            case 11:
+                WRITEU32(o_zmoves2 + 0x59CF4, 0xE3A00000);
+                break;
+        }
     }
 }

@@ -43,7 +43,7 @@ void	updateEXP(void) {
             WRITEU32(o_exp2, 0xEB041983);
             break;
         case 11:
-            WRITEU32(o_exp2, 0xEB0418A1);
+            WRITEU32(o_exp2, 0xEB041A2B);
             break;
     }
     xsprintf(currentEXP, "Current EXP rate: %3dx", exp_rate);
