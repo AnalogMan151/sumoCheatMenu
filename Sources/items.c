@@ -128,14 +128,14 @@ void    allItems(void) {
        WRITEU32(offset + i*4, arr_allPokeBalls[i] + (quantity << 10));
     }
     offset += i*4;
-    
+
     for (i = 0; i < TOTALITEMS; i++) {
        WRITEU32(offset + i*4, arr_allItems[i] + (quantity << 10));
     }
     offset += i*4;
 
-    // Writes 10 empty slots at end of inventory to erase duplicates from previous versions of this code
-    for (i = 0; i < 10; i++) {
+    // Writes 82 empty slots at end of inventory to erase duplicates from previous versions of this code
+    for (i = 0; i < 82; i++) {
         WRITEU32(offset + i*4, 0x0);
     }
 }
