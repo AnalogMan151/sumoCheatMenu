@@ -1,7 +1,7 @@
 #include "cheats.h"
 
 char	*builder_name = "AnalogMan",
-        version[7] = "v0.2.8",
+        version[7] = "v0.2.9",
         formattedVer[23];
 
 void	my_menus(void) {

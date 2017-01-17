@@ -60,7 +60,7 @@ void    updateSpawn(void) {
 
 // Redirects stack calls to custom location with selected data
 void    activateSpawn(u32 state) {
-    static u32 original[3];
+    static u32 original[3] = {0};
 
     static const u8 buffer[] =
     {
@@ -74,10 +74,12 @@ void    activateSpawn(u32 state) {
     memcpy((void *)(o_pokespawn2), buffer, 0x14);
 
     if (state) {
+        while (!original[0]) {
         // Read original data when activating cheat
         original[0] = READU32(o_pokespawn1 + 0x00);
         original[1] = READU32(o_pokespawn1 + 0x10);
         original[2] = READU32(o_pokespawn1 + 0x2C);
+        }
 
         // Hook original functions
         switch(gameVer) {
@@ -100,8 +102,8 @@ void    activateSpawn(u32 state) {
     } else {
 
         // Write original data when disabling cheat
-        WRITEU32(o_pokespawn1 + 0x2C, original[0]);
-        WRITEU32(o_pokespawn1 + 0x2C, original[1]);
+        WRITEU32(o_pokespawn1 + 0x00, original[0]);
+        WRITEU32(o_pokespawn1 + 0x10, original[1]);
         WRITEU32(o_pokespawn1 + 0x2C, original[2]);
     }
 }
