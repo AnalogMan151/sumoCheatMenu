@@ -2,6 +2,7 @@
 
 #include "cheats.h"
 #include "hid.h"
+#include "hook.h"
 
 /********************************
  *                              *
@@ -9,12 +10,34 @@
  *                              *
  ********************************/
 
+u32 o_battlestats1 =        0x0029A048,
+    o_battlestats2 =        0x00595A00,
+    o_shiny =               0x003183EC,
+    o_catch100 =            0x0048F1E0,
+    o_zmoves1 =             0x00595900,
+    o_zmoves2 =             0x00313DC0;
+
+u32 catch100_jump = 0;
+
 // Battle menu entry
 void    battleMenu(void) {
 
+    switch(gameVer) {
+        case 10:
+            break;
+        case 11: ;
+            o_battlestats1 +=        0x0120;
+            o_battlestats2 +=        0x1F00;
+            o_shiny +=               0x0704;
+            o_catch100 +=            0x1C60;
+            o_zmoves1 +=             0x1F00;
+            o_zmoves2 +=             0x0540;
+            break;
+    }
+
     // Creates spoiler and cheat entries
     new_spoiler("Battle");
-        new_entry("100% Capture Rate", catch100);
+        new_entry_arg("100% Capture Rate", catch100, 0, CATCH100, TOGGLE);
         new_entry_arg("Wild Pokemon Shiny", shinyPokemon, 0, SHINYPOKEMON, TOGGLE);
         new_entry_arg("Stat Stages +6", maxBattleStats, 0, MAXBATTLESTATS, TOGGLE);
         new_entry_arg("Use Z-Moves w/o Z-Crystal", zMoves, 0, ZMOVES, TOGGLE);
@@ -81,29 +104,26 @@ void    maxBattleStats(u32 state) {
     }
 }
 
+
 // 100% Catch rate for Pokemon
-void	catch100(void) {
-    static const u8 buffer[] =
-    {
-        0x08, 0x00, 0xD0, 0xE5,
-        0x03, 0x40, 0x2D, 0xE9,
-        0x10, 0x00, 0x9D, 0xE5,
-        0x0C, 0x10, 0x9F, 0xE5,
-        0x00, 0x00, 0x51, 0xE1,
-        0xF8, 0x00, 0x40, 0x02,
-        0x10, 0x00, 0x8D, 0x05,
-        0x03, 0x80, 0xBD, 0xE8
-    };
-    memcpy((void *)(o_catch1001), buffer, 0x20);
+void    hooked_catch100(void);
+void    catch100(u32 state) {
+    static t_hook   hook = {0};
+
     switch(gameVer) {
         case 10:
-            WRITEU32(o_catch1001 + 0x20, 0x006D839C);
-            WRITEU32(o_catch1002, 0xEB04199D);
+            catch100_jump = 0x006D839C;
             break;
         case 11:
-            WRITEU32(o_catch1001 + 0x20, 0x006DA1CC);
-            WRITEU32(o_catch1002, 0xEB041A45);
+            catch100_jump = 0x006DA1CC;
             break;
+    }
+    if (state) {
+        if (!hook.is_initialized)
+            init_hook(&hook, o_catch100, (u32)hooked_catch100);
+        enable_hook(&hook);
+    } else {
+        disable_hook(&hook);
     }
 }
 

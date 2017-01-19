@@ -9,8 +9,26 @@
  *                              *
  ********************************/
 
+
+u32 o_renamepokemon =           0x004A84F8,
+    o_instantegg =              0x00444A6C,
+    o_instanthatch1 =           0x005958C0,
+    o_instanthatch2 =           0x004919E0;
+
 // Pokémon menu entry
 void    pokemonMenu(void) {
+
+    switch(gameVer) {
+        case 10:
+            break;
+        case 11: ;
+            o_renamepokemon +=  0x1DA0;
+            o_instantegg +=     0x1C18;
+            o_instanthatch1 +=  0x1F00;
+            o_instanthatch2 +=  0x1C60;
+            break;
+    }
+
     new_spoiler("Pokemon");
         new_entry("Rename any Pokemon", renamePokemon);
         new_entry_managed_note("Instant Egg from Nursery", "Hold L & talk to Nursery NPC", instantEgg, INSTANTEGG, 0);
@@ -28,7 +46,7 @@ void	renamePokemon(void) {
 
 // Egg instantly ready when talking to Nursery NPC while holding L
 void	instantEgg(void) {
-    WRITEU32(o_instantegg, (is_pressed(BUTTON_L)) ? 0xE3A01001 : 0xE2800E1E);
+    WRITEU32(o_instantegg + 0x00, (is_pressed(BUTTON_L)) ? 0xE3A01001 : 0xE2800E1E);
     WRITEU32(o_instantegg + 0x04, (is_pressed(BUTTON_L)) ? 0xE5C011E0 : 0xE1D000D0);
     WRITEU32(o_instantegg + 0x08, (is_pressed(BUTTON_L)) ? 0xEA00684B : 0xE12FFF1E);
 }

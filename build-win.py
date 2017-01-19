@@ -39,7 +39,7 @@ CFLAGS		= ' -Os -c ' + ARCH
 ASFLAGS		= ' -Os -c -s ' + ARCH
 LIBFLAGS 	= " -lntr -lShark2NTR_dev -lctr -lg -lsysbase -lc -lgcc "
 LDFLAGS		= ' -pie --gc-sections -T 3ds.ld -Map=' + NAME +'.map '
-INCLUDES 	= " -I Includes -I Sources -I Includes/libntrplg "
+INCLUDES 	= " -I Includes -I Sources -I Includes/libntrplg -I Sources/helpers "
 CFILES		= allFolderFile(".\\Sources\\", ".c")
 ASFILES		= allFolderFile(".\\Sources\\", ".s")
 OFILES      = allFolderFile(".\\ofiles\\", ".o")

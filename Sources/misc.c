@@ -9,8 +9,30 @@
  *                              *
  ********************************/
 
+u32 o_instanttext =            0x003BE9C8,
+    o_pcanywhere1 =            0x00595978,
+    o_pcanywhere2 =            0x00373C48,
+    o_rematch =                0x0049D200,
+    o_outlines =               0x0041B748,
+    o_nfc =                    0x003DFFD0;
+
+
 // Misc menu entry
 void    miscMenu(void) {
+
+    switch(gameVer) {
+        case 10:
+            break;
+        case 11: ;
+            o_instanttext +=     0x122C;
+            o_pcanywhere1 +=     0x1F00;
+            o_pcanywhere2 +=     0x0FF4;
+            o_rematch +=         0x1DA0;
+            o_outlines +=        0x1884;
+            o_nfc +=             0x14F0;
+            break;
+    }
+
     new_spoiler("Misc");
         qrMenu();
         new_entry("Instant Text Speed", instantText);
