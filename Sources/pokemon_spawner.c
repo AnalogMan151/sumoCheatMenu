@@ -10,6 +10,9 @@
  *                              *
  ********************************/
 
+u32 o_pokespawn1 =          0x003988DC,
+    o_pokespawn2 =          0x005957E0;
+
 int spawnID = 1,
     spawnLVL = 5,
     formIndex = 0;
@@ -19,6 +22,15 @@ char currentSpawn[40],
 
 // Pokémon Spawner menu entry
 void    pokemonSpawnMenu(void) {
+
+    switch(gameVer) {
+        case 10:
+            break;
+        case 11: ;
+            o_pokespawn1 +=     0x13D8;
+            o_pokespawn2 +=     0x1F00;
+            break;
+    }
 
     getForms(spawnID);
     updateSpawn();

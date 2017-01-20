@@ -83,5 +83,5 @@ void	totalThumbs(void) {
 
 // Set Battle Points
 void	maxBP(void) {
-        WRITEU16(0x330D90D8, (quantity > 9999) ? 0x0000270F : quantity);
+        WRITEU16(0x330D90D8, (quantity > 9999) ? 0x270F : quantity);
 }

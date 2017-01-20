@@ -6,6 +6,7 @@
 #include "result.h"
 #include "common.h"
 #include "hid.h"
+#include "svc.h"
 #include <string.h>
 
 #define MAX(x, y) (x > y ? x : y)

@@ -12,8 +12,21 @@
 static char currentEXP[40] = "Undefined";
 u8 exp_rate = 1;
 
+u32 o_exp1 =            0x00595800,
+    o_exp2 =            0x0048F1EC;
+
 // EXP menu entry
 void    expMenu(void) {
+
+    switch(gameVer) {
+        case 10:
+            break;
+        case 11:
+            o_exp1 +=       0x1F00;
+            o_exp2 +=       0x1C60;
+            break;
+    }
+
     updateEXP();
 
     new_spoiler("EXP Multiplier");

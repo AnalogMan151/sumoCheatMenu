@@ -9,12 +9,29 @@
  *                              *
  ********************************/
 
+
+
+u32 o_runfaster =              0x0039AF74,
+    o_nevertrip =              0x3419833E,
+    o_walkthruwalls =          0x0039D140;
+
+
 // Movement menu entry
 void    movementMenu(void) {
+
+    switch(gameVer) {
+        case 10:
+            break;
+        case 11: ;
+            o_runfaster +=       0x1420;
+            o_walkthruwalls +=   0x1420;
+            break;
+    }
+
     new_spoiler("Movement");
         new_entry("Run Faster", runFaster);
         new_entry("Never Trip", neverTrip);
-        new_entry_managed_note("Walk Through Walls", "Activate = Hold R", walkThruWalls, WALKTHROUGHWALLS, 0);
+        new_entry_managed_note("Walk Through Walls", "Hold R = Enable", walkThruWalls, WALKTHROUGHWALLS, 0);
         new_line();
     exit_spoiler();
 }
