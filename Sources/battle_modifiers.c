@@ -10,7 +10,10 @@
  *                              *
  ********************************/
 
-u32 o_battlestats1 =        0x0029A048,
+u32 o_noencounters =        0x0807A28C,
+    o_alwayscritical[2] =   {0x0595AD0, 0x08085D1C},
+    o_showopponentinfo =    0x080AE178,
+    o_battlestats1 =        0x0029A048,
     o_battlestats2 =        0x00595A00,
     o_shiny =               0x003183EC,
     o_catch100 =            0x0048F1E0,
@@ -25,7 +28,11 @@ void    battleMenu(void) {
     switch(gameVer) {
         case 10:
             break;
-        case 11: ;
+        case 11:
+            o_noencounters +=        0x035C;
+            o_alwayscritical[0] +=   0x1F00;
+            o_alwayscritical[1] +=   0x03BC;
+            o_showopponentinfo +=    0x0480;
             o_battlestats1 +=        0x0120;
             o_battlestats2 +=        0x1F00;
             o_shiny +=               0x0704;
@@ -37,13 +44,72 @@ void    battleMenu(void) {
 
     // Creates spoiler and cheat entries
     new_spoiler("Battle");
+        new_entry_managed_note("No Encounters", "Hold START to temporarily enable encounters", noEncounters, NOENCOUNTERS, 0);
         new_entry_arg("100% Capture Rate", catch100, 0, CATCH100, TOGGLE);
         new_entry_arg("Wild Pokemon Shiny", shinyPokemon, 0, SHINYPOKEMON, TOGGLE);
+        new_entry_managed_note("View Opponent's Info", "Tap Opponent's icon on battle screen to see HP, Ability & Held Item", showOpponentInfo, SHOWOPPONENTINFO, 0);
+        // new_entry("Always Critical Hit", alwaysCritical);
         new_entry_arg("Stat Stages +6", maxBattleStats, 0, MAXBATTLESTATS, TOGGLE);
         new_entry_arg("Use Z-Moves w/o Z-Crystal", zMoves, 0, ZMOVES, TOGGLE);
+        new_entry("Infinite Z-moves", infZMoves);
         new_line();
     exit_spoiler();
 }
+
+// No wild encounters unless START is held
+void    noEncounters(void) {
+    if (!checkAddress(o_noencounters))
+        return;
+    else {
+        if (READU32(o_noencounters) == 0xE3A00064 || READU32(o_noencounters) == 0xE3A09000) {
+            if (is_pressed(BUTTON_ST))
+                WRITEU32(o_noencounters, 0xE3A00064);
+            else
+                WRITEU32(o_noencounters, 0xE3A09000);
+        }
+    }
+}
+
+
+// Always Critical Hit
+void    alwaysCritical(void) {
+
+    u32 jump_code;
+
+    switch(gameVer) {
+        case 10:
+            jump_code = 0xEBF9B36B;
+            break;
+        case 11:
+            jump_code = 0xEBF9B23C;
+            break;
+    }
+
+    static const u8    buffer[] =
+    {
+        0x00, 0x00, 0x9D, 0xE5, 0x1E, 0x40, 0x2D, 0xE9,
+        0x08, 0x10, 0x9A, 0xE5, 0x04, 0x30, 0x81, 0xE2,
+        0x1C, 0x40, 0x81, 0xE2, 0x04, 0x20, 0x93, 0xE4,
+        0x02, 0x00, 0x50, 0xE1, 0x01, 0x10, 0xA0, 0x03,
+        0x18, 0x10, 0x8D, 0x05, 0x04, 0x00, 0x53, 0xE1,
+        0xF9, 0xFF, 0xFF, 0x1A, 0x1E, 0x80, 0xBD, 0xE8
+    };
+    memcpy((void *)(o_alwayscritical[0]), buffer, 0x30);
+    if (!checkAddress(o_alwayscritical[1]))
+        return;
+    if (READU32(o_alwayscritical[1]) == 0xE59D0000);
+        WRITEU32(o_alwayscritical[1], jump_code);
+}
+
+
+// Shows opponent Pokémon's info during battle on bottom screen when icon is tapped
+void    showOpponentInfo(void) {
+    if (!checkAddress(o_showopponentinfo))
+        return;
+    if (READU32(o_showopponentinfo) == 0xE92D40F8)
+        WRITEU32(o_showopponentinfo, 0xEAFFFEE7);
+}
+
 
 
 // Sets all in-battle stats to +6 ranks
@@ -173,6 +239,22 @@ void    zMoves(u32 state) {
             case 11:
                 WRITEU32(o_zmoves2 + 0x59CF4, 0xE3A00000);
                 break;
+        }
+    }
+}
+
+
+// Inifinite Z-Moves
+void    infZMoves(void) {
+    static u32 data = 0;
+
+    if (!checkAddress(0x080311DC))
+        return;
+    else {
+        if (READU32(0x80311DC) == 0xE320F000) {
+            WRITEU32(0x080311D4, 0xE3A00000);
+            WRITEU32(0x080311D8, 0xE5C30005);
+            WRITEU32(0x080311DC, 0xE1500000);
         }
     }
 }

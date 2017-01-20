@@ -56,7 +56,14 @@ enum {
     INCREASELVL10,
     INCREASETIME,
     DECREASETIME,
-    SETFORM
+    SETFORM,
+    CATCHTRAINERS,
+    LEARNANYTM,
+    RELEARNANYMOVE,
+    CAMERAZOOM,
+    NOENCOUNTERS,
+    VIEWIVEV,
+    SHOWOPPONENTINFO
 } e_identifiers;
 
 // Helpers
@@ -76,6 +83,7 @@ void    xsprintf(char *dst, char *fmt, ...);
 bool    isinArray(int val, int *arr, int size);
 void    memset32(void *dst, unsigned int value, unsigned int size);
 void    protect_region(u32 addr);
+bool    checkAddress(u32 address);
 
 // Offsets
 void    getVersion(void);
@@ -120,10 +128,14 @@ void    fixMakeupBag(void);
 
 // Battle Modifiers
 void    battleMenu(void);
+void    noEncounters(void);
+void    alwaysCritical(void);
+void    showOpponentInfo(void);
 void    maxBattleStats(u32 state);
 void	catch100(u32 state);
 void	shinyPokemon(u32 state);
 void    zMoves(u32 state);
+void    infZMoves(void);
 
 
 // Movement Modifiers
@@ -173,11 +185,20 @@ void	qrScan100(void);
 
 // Misc
 void    miscMenu(void);
+void    viewIVEV(void);
+void    cameraZoom(void);
 void	instantText(void);
 void    pcAnywhere(u32 state);
 void	rematchTrainers(void);
 void	toggleOutlines(u32 state);
 void    toggleNFC(u32 state);
 
+
+// Illegal Cheats
+void    illegalMenu(void);
+void    catchTrial(void);
+void    catchTrainers(void);
+void    learnAnyTM(u32 state);
+void    relearnAnyMove(u32 state);
 
 #endif

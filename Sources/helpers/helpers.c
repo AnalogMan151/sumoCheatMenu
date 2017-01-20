@@ -22,6 +22,28 @@ void    memset32(void *dst, unsigned int value, unsigned int size)
         *p++ = value;
 }
 
+Handle        getCurrentProcessHandle(void);
+
+bool    checkAddress(u32 address) {
+    Result         res;
+    PageInfo    pInfo = {0};
+    MemInfo        mInfo = {0};
+
+    res = svcQueryMemory(&mInfo, &pInfo, address);
+    if (R_SUCCEEDED(res) && mInfo.base_addr <= address && mInfo.base_addr + mInfo.size > address) {
+        if (!(mInfo.perm & MEMPERM_WRITE)) {
+            res = svcControlProcessMemory(getCurrentProcessHandle(), mInfo.base_addr, mInfo.base_addr, mInfo.size, 6, 7);
+            if (R_SUCCEEDED(res))
+                return true;
+            else
+                return false;
+        }
+        return true;
+    }
+    return false;
+}
+
+
 
 bool    isinArray(int val, int *arr, int size) {
     for (int i = 0; i < (size / 4); i++) {

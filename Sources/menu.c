@@ -1,7 +1,7 @@
 #include "cheats.h"
 
 char	*builder_name = "AnalogMan",
-        version[7] = "v0.2.9",
+        version[7] = "v0.3.0",
         formattedVer[23];
 
 int gameVer = 0;
@@ -43,5 +43,5 @@ void	my_menus(void) {
     new_unselectable_entry("cannot be battled or traded");
     new_separator();
     pokemonSpawnMenu();
-
+    illegalMenu();
 }
