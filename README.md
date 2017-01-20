@@ -3,7 +3,7 @@
 
 A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMenu](https://github.com/RyDog199/blankCheatMenu) base which in turn was based off [@Nanquitas](https://github.com/Nanquitas/) work.
 
-Activate by pressing SELECT in game. This plugin supports both version 1.0 and v1.1 of the games. 
+Activate by pressing SELECT in game. This plugin supports both version 1.0 and v1.1 of the games.
 
 ### Cheats include:
 
@@ -23,10 +23,13 @@ Activate by pressing SELECT in game. This plugin supports both version 1.0 and v
   2. Change Skin Tone (Ride a Pokémon or save and reload)
 
 - Battle Modifiers
-  1. 100% Capture Rate
-  2. Wild Pokémon are Shiny (Does not work on Shiny-locked Pokémon)
-  3. Stat Stages +6 (Raises all in-battle stat stages to max)
-  4. Use Z-Moves without Z-Crystal
+  1. No Wild Encounters (Hold START to temporarily allow encounters)
+  2. 100% Capture Rate
+  3. Wild Pokémon are Shiny (Does not work on Shiny-locked Pokémon)
+  4. View Opponent's Info (Tap opponent Pokémon's icon on bottom screen to see HP, Ability & held item)
+  5. Stat Stages +6 (Raises all in-battle stat stages to max)
+  6. Use Z-Moves without Z-Crystal
+  7. Infinite Z-Moves
 
 - Movement Modifiers
   1. Run Faster
@@ -64,7 +67,15 @@ Activate by pressing SELECT in game. This plugin supports both version 1.0 and v
   3. Re-match trainers (Hold L and speak to Trainer)
   4. Black outline toggle ON/OFF for player and Pokémon. (Open a menu to see change)
   5. NTR Debugger toggle to allow access from NTR Debugger outside of Festival Plaza (Disables in-game NFC while active)
+  6. Change Camera Zoom (START+L / START+R to enable or disable)
+  7. View IV/EV on Status Screen (Press START or X respectively while on Pokémon Status screen. Switch Pokémon to see change)
 
-In this release I have chosen to remove any codes that could make illegitimate Pokémon such as Catch Trainer's Pokémon and Learn any TM, but have added Spawn Pokémon. Legal Pokémon can be spawned if attention is taken to the level, location and form.
+- Illegal Cheats
+  1. Catch Trial Pokémon
+  2. Catch Trainer's Pokémon
+  3. Pokémon can learn any TM
+  4. Learn any move from Move Reminder
+
+Previously I had removed any codes that could make illegal Pokémon that could not be traded or battled online. I have decided to add these codes in but with a large disclaimer. The Spawner code can make legal Pokémon if attention is taken to location, level, and form of spawned Pokémon.
 
 This is a work in progress and a learning exercise. The GateShark cheats these codes were derived from can be found in the resources folder.

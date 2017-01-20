@@ -44,14 +44,14 @@ void    battleMenu(void) {
 
     // Creates spoiler and cheat entries
     new_spoiler("Battle");
-        new_entry_managed_note("No Encounters", "Hold START to temporarily enable encounters", noEncounters, NOENCOUNTERS, 0);
+        new_entry_managed_note("No Wild Encounters", "Hold START to temporarily enable encounters", noEncounters, NOENCOUNTERS, 0);
         new_entry_arg("100% Capture Rate", catch100, 0, CATCH100, TOGGLE);
         new_entry_arg("Wild Pokemon Shiny", shinyPokemon, 0, SHINYPOKEMON, TOGGLE);
         new_entry_managed_note("View Opponent's Info", "Tap Opponent's icon on battle screen to see HP, Ability & Held Item", showOpponentInfo, SHOWOPPONENTINFO, 0);
         // new_entry("Always Critical Hit", alwaysCritical);
         new_entry_arg("Stat Stages +6", maxBattleStats, 0, MAXBATTLESTATS, TOGGLE);
         new_entry_arg("Use Z-Moves w/o Z-Crystal", zMoves, 0, ZMOVES, TOGGLE);
-        new_entry("Infinite Z-moves", infZMoves);
+        new_entry("Infinite Z-Moves", infZMoves);
         new_line();
     exit_spoiler();
 }
