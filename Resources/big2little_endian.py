@@ -22,8 +22,10 @@ big_end = 8;
 
 output ="";
 
+loop = 0;
+
 # Loop through the string 8 characters at a time and convert to little endian
-for i in range(0,(len(code) / 8)):
+for loop in range(0,(len(code) / 8)):
 	
 	bytes = code[big_start:big_end:1];
 	decoded_bytes = bytes.decode('hex');
@@ -41,8 +43,12 @@ for i in range(0,(len(code) / 8)):
 		output += "0x{}, ".format(encoded_swap[little_start:little_end:1]);
 		little_start += 2;
 		little_end += 2;
+	if (loop%2 != 0):
+		output += "\n";
 
 # Print result minus last comma
 print("\n\n");
+print("static const u8    buffer[] = {");
 print(output[:-2]);
+print("};");
 print("\n\n");
