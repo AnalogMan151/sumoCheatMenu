@@ -20,6 +20,10 @@ int spawnID = 1,
 char currentSpawn[40],
      currentLVL[40];
 
+bool spawnIsOn,
+     randomIsOn,
+     levelpass;
+
 // Pokémon Spawner menu entry
 void    pokemonSpawnMenu(void) {
 
@@ -41,10 +45,12 @@ void    pokemonSpawnMenu(void) {
         new_entry_managed("Increase Spawn ID 1's", increaseID1, INCREASEID1, AUTO_DISABLE);
         new_entry_managed("Increase Spawn ID 10's", increaseID10, INCREASEID10, AUTO_DISABLE);
         new_entry_managed("Increase Spawn ID 100's", increaseID100, INCREASEID100, AUTO_DISABLE);
+        new_entry_arg("Random Spawn ID", randomID, 0, RANDOMID, TOGGLE);
         exit_spoiler();
         new_spoiler("Change LVL");
         new_entry_managed("Increase Level 1's", increaseLVL1, INCREASELVL1, AUTO_DISABLE);
         new_entry_managed("Increase Level 10's", increaseLVL10, INCREASELVL10, AUTO_DISABLE);
+        new_entry_arg("Passthrough Wild Level", passthruLevel, 0, PASSTHRULEVEL, TOGGLE);
         exit_spoiler();
         new_entry_managed("Change Form", setForm, SETFORM, AUTO_DISABLE);
         new_entry_arg("Activate", activateSpawn, 0, ACTIVATESPAWN, TOGGLE);
@@ -65,65 +71,69 @@ void    updateSpawn(void) {
     array = &pokemonID[spawnID - 1];
     spawnForms *formArray;
     formArray = &formID[formIndex];
-    xsprintf(currentSpawn, "Pokemon: %3d %s", array->id, array->name);
-    xsprintf(currentLVL, "Level: %3d  Form: %s" , spawnLVL, formArray->name);
+    if (randomIsOn) {
+        xsprintf(currentSpawn, "Pokemon: Random");
+        if (levelpass)
+            xsprintf(currentLVL, "Level: ---  Form: Random");
+        else
+            xsprintf(currentLVL, "Level: %3d  Form: Random" , spawnLVL);
+    } else {
+        xsprintf(currentSpawn, "Pokemon: %3d %s", array->id, array->name);
+        if (levelpass)
+            xsprintf(currentLVL, "Level: ---  Form: %s", formArray->name);
+        else
+            xsprintf(currentLVL, "Level: %3d  Form: %s", spawnLVL, formArray->name);
+    }
 }
 
 
 // Redirects stack calls to custom location with selected data
-void    activateSpawn(u32 state) {
-    static u32 original[3] = {0};
+void    generateSpawn(void) {
 
-    static const u8 buffer[] =
-    {
-        0xB0, 0x00, 0xD5, 0xE1,
-        0x0C, 0x00, 0x9F, 0xE5,
-        0x04, 0x00, 0xC4, 0xE5,
-        0x00, 0x00, 0x9F, 0xE5,
-        0x1E, 0xFF, 0x2F, 0xE1
-    };
-
-    memcpy((void *)(o_pokespawn2), buffer, 0x14);
-
-    if (state) {
-        while (!original[0]) {
-        // Read original data when activating cheat
-        original[0] = READU32(o_pokespawn1 + 0x00);
-        original[1] = READU32(o_pokespawn1 + 0x10);
-        original[2] = READU32(o_pokespawn1 + 0x2C);
-        }
-
-        // Hook original functions
-        switch(gameVer) {
-            case 10:
-                WRITEU32(o_pokespawn1 + 0x00, 0xEB07F3BF);
-                WRITEU32(o_pokespawn1 + 0x10, 0xEB07F3BB);
-                WRITEU32(o_pokespawn1 + 0x2C, 0xEB07F3B4);
-                break;
-            case 11:
-                WRITEU32(o_pokespawn1 + 0x00, 0xEB07F689);
-                WRITEU32(o_pokespawn1 + 0x10, 0xEB07F685);
-                WRITEU32(o_pokespawn1 + 0x2C, 0xEB07F67E);
-                break;
-        }
-
-        // Set ID, form, and level
-        WRITEU32(o_pokespawn2 + 0x14, spawnID + (0x800 * formIndex));
-        WRITEU32(o_pokespawn2 + 0x18, spawnLVL);
-
-    } else {
-
-        // Write original data when disabling cheat
-        WRITEU32(o_pokespawn1 + 0x00, original[0]);
-        WRITEU32(o_pokespawn1 + 0x10, original[1]);
-        WRITEU32(o_pokespawn1 + 0x2C, original[2]);
+    u32 hook_value[3];
+    switch(gameVer) {
+        case 10:
+            hook_value[0] = 0xEB07F3BF;
+            hook_value[1] = 0xEB07F3BB;
+            hook_value[2] = 0xEB07F3B4;
+            break;
+        case 11:
+            hook_value[0] = 0xEB07F689;
+            hook_value[1] = 0xEB07F685;
+            hook_value[2] = 0xEB07F67E;
     }
+
+    if (spawnIsOn)
+        WRITEU32(o_pokespawn2 + 0x04, 0xE59F000C);
+    else
+        WRITEU32(o_pokespawn2 + 0x04, 0xE12FFF1E);
+
+    WRITEU32(o_pokespawn2 + 0x00, 0xE1D500B0);
+    if (levelpass)
+        WRITEU32(o_pokespawn2 + 0x08, 0xE1A00000);
+    else
+        WRITEU32(o_pokespawn2 + 0x08, 0xE5C40004);
+    WRITEU32(o_pokespawn2 + 0x0C, 0xE59F0000);
+    WRITEU32(o_pokespawn2 + 0x10, 0xE12FFF1E);
+    WRITEU32(o_pokespawn2 + 0x14, spawnID + (0x800 * formIndex));
+    WRITEU32(o_pokespawn2 + 0x18, spawnLVL);
+    WRITEU32(o_pokespawn1 + 0x00, hook_value[0]);
+    WRITEU32(o_pokespawn1 + 0x10, hook_value[1]);
+    WRITEU32(o_pokespawn1 + 0x2C, hook_value[2]);
+}
+
+//
+void    activateSpawn(u32 state) {
+    spawnIsOn = state ? true : false;
 }
 
 
 // Increases spawn ID by 1 each time it's called, updates menu and then deactivates
 void	increaseID1(void) {
-
+    if (strcmp(currentSpawn, "Pokemon: Random") == 0) {
+        disable_entry(RANDOMID);
+        spawnID = 0;
+    }
     // Extracts ones place
     int ones = spawnID % 10;
     spawnID -= ones;
@@ -141,13 +151,15 @@ void	increaseID1(void) {
     getForms(spawnID);
     formIndex = 0;
     updateSpawn();
-    disable_entry(ACTIVATESPAWN);
 }
 
 
 // Increases spawn ID by 10 each time it's called, updates menu and then deactivates
 void	increaseID10(void) {
-
+    if (strcmp(currentSpawn, "Pokemon: Random") == 0) {
+        disable_entry(RANDOMID);
+        spawnID = 0;
+    }
     // Extracts tens place
     int tens = (spawnID / 10) % 10;
     spawnID -= (tens * 10);
@@ -165,13 +177,15 @@ void	increaseID10(void) {
     getForms(spawnID);
     formIndex = 0;
     updateSpawn();
-    disable_entry(ACTIVATESPAWN);
 }
 
 
 // Increases spawn ID by 100 each time it's called, updates menu and then deactivates
 void	increaseID100(void) {
-
+    if (strcmp(currentSpawn, "Pokemon: Random") == 0) {
+        disable_entry(RANDOMID);
+        spawnID = 0;
+    }
     // Extracts hundreds place
     int hundreds = (spawnID / 100);
     spawnID -= (hundreds * 100);
@@ -189,13 +203,41 @@ void	increaseID100(void) {
     getForms(spawnID);
     formIndex = 0;
     updateSpawn();
-    disable_entry(ACTIVATESPAWN);
+}
+
+//
+void    randomID(u32 state) {
+    if (state)
+        randomIsOn = true;
+    else {
+        randomIsOn = false;
+        spawnID = 1;
+        formIndex = 0;
+    }
+    updateSpawn();
+}
+
+
+void    setRandomID(void) {
+    if (randomIsOn) {
+        if (!checkAddress(0x080AE178))
+            return;
+        spawnID = randomNum(1, 802);
+        getForms(spawnID);
+        formIndex = 28;
+        while (!formID[formIndex].name) {
+            formIndex = randomNum(0, 27);
+        }
+    }
 }
 
 
 // Increases spawn level by 1 each time it's called, updates menu and then deactivates
 void	increaseLVL1(void) {
-
+    if (levelpass) {
+        spawnLVL = 4;
+        disable_entry(PASSTHRULEVEL);
+    }
     // Extracts ones place
     int ones = spawnLVL % 10;
     spawnLVL -= ones;
@@ -211,13 +253,16 @@ void	increaseLVL1(void) {
     // Adds ones place back in
     spawnLVL += ones;
     updateSpawn();
-    disable_entry(ACTIVATESPAWN);
+
 }
 
 
 // Increases spawn level by 10 each time it's called, updates menu and then deactivates
 void	increaseLVL10(void) {
-
+    if (levelpass) {
+        spawnLVL = 5;
+        disable_entry(PASSTHRULEVEL);
+    }
     // Extracts tens place
     int tens = (spawnLVL / 10);
     spawnLVL -= (tens * 10);
@@ -231,18 +276,30 @@ void	increaseLVL10(void) {
     // Adds tens place back in
     spawnLVL += (tens * 10);
     updateSpawn();
-    disable_entry(ACTIVATESPAWN);
+
 }
+
+
+void    passthruLevel(u32 state) {
+    if (state)
+        levelpass = true;
+    else
+        levelpass = false;
+    updateSpawn();
+}
+
 
 
 // Cycles through the forms of the selected ID
 void    setForm(void) {
+    if (strcmp(currentSpawn, "Pokemon: Random") == 0)
+        return;
     if (!formID[formIndex + 1].name)
         formIndex = 0;
     else
         formIndex++;
     updateSpawn();
-    disable_entry(ACTIVATESPAWN);
+
 }
 
 

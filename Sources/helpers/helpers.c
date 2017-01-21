@@ -1,5 +1,6 @@
 #include "cheats.h"
 #include "manager.h"
+#include <stdlib.h>
 
 t_entry_data    g_entry_data[MAX_STORAGE] = {0};
 int             g_current_data_count = 0;
@@ -43,7 +44,14 @@ bool    checkAddress(u32 address) {
     return false;
 }
 
-
+int    randomNum(int start, int end) {
+    srand(svcGetSystemTick());
+    int r[20];
+    for (int i = 0; i < 20; i++) {
+        r[i] = rand()%(end - start + 1) + start;
+    }
+    return r[rand()%20];
+}
 
 bool    isinArray(int val, int *arr, int size) {
     for (int i = 0; i < (size / 4); i++) {
