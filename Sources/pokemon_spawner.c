@@ -495,13 +495,7 @@ void    getForms(u32 id) {
             formID[1].name = "Midnight";
             break;
         case 774: //Minior
-            formID[0].name = "Red";
-            formID[1].name = "Orange";
-            formID[2].name = "Yellow";
-            formID[3].name = "Green";
-            formID[4].name = "Blue";
-            formID[5].name = "Indigo";
-            formID[6].name = "Violet";
+            formID[0].name = "Random";
             break;
         case 801: // Magearna
             formID[0].name = "Normal";
