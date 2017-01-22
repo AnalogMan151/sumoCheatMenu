@@ -151,6 +151,10 @@ void    allMedicine(void) {
     for (int i = 0; i < TOTALMEDICINE; i++) {
        WRITEU32(offset + i*4, arr_allMedicine[i] + (quantity << 10));
     }
+    // Writes 3 empty slots at end of inventory to erase duplicates from previous versions of this code
+    for (i = 0; i < 3; i++) {
+        WRITEU32(offset + i*4, 0x0);
+    }
 }
 
 // Gives all TMs
@@ -175,6 +179,11 @@ void    allBerries(void) {
     // Writes the array to inventory  overwriting what's already there
     for (int i = 0; i < TOTALBERRIES; i++) {
        WRITEU32(offset + i*4, arr_allBerries[i] + (quantity << 10));
+    }
+
+    // Writes 17 empty slots at end of inventory to erase duplicates from previous versions of this code
+    for (i = 0; i < 17; i++) {
+        WRITEU32(offset + i*4, 0x0);
     }
 }
 
