@@ -19,6 +19,7 @@ u32 o_noencounters =        0x0807A28C,
     o_infzmoves =           0x08031100;
 
 u32 catch100_jump = 0;
+int shinyChanceValue = 4096;
 
 // Battle menu entry
 void    battleMenu(void) {
@@ -41,10 +42,11 @@ void    battleMenu(void) {
     }
 
     // Creates spoiler and cheat entries
+
     new_spoiler("Battle");
         new_entry_managed_note("No Wild Encounters", "Hold START to temporarily enable encounters", noEncounters, NOENCOUNTERS, 0);
         new_entry("100% Capture Rate", catch100);
-        new_entry_arg("Wild Pokemon Shiny", shinyPokemon, 0, SHINYPOKEMON, TOGGLE);
+        new_entry_managed("Shiny Chance: XXXXXX", decreaseShinyChance, DECREASESHINYCHANCE, AUTO_DISABLE);
         new_entry_managed_note("View Opponent's Info", "Tap Opponent's icon on battle screen to see HP, Ability & Held Item", showOpponentInfo, SHOWOPPONENTINFO, 0);
         // new_entry("Always Critical Hit", alwaysCritical);
         new_entry_arg("Stat Stages +6", maxBattleStats, 0, MAXBATTLESTATS, TOGGLE);
@@ -52,6 +54,7 @@ void    battleMenu(void) {
         new_entry("Infinite Z-Moves", infZMoves);
         new_line();
     exit_spoiler();
+    updateShiny();
 }
 
 // No wild encounters unless START is held
@@ -177,10 +180,36 @@ void    catch100(void) {
         WRITEU32(o_catch100, 0xEA000004);
 }
 
+//
+void    updateShiny(void) {
+    char buf[7];
+    xsprintf(buf, ": 1/%-4d", shinyChanceValue);
+    replace_pattern(": ******", (shinyChanceValue == 4096) ? ": Normal" : buf, DECREASESHINYCHANCE);
+}
+
+
+//
+void    decreaseShinyChance(void) {
+    if (shinyChanceValue == 4096)
+        shinyChanceValue = 1;
+    else
+        shinyChanceValue *= 2;
+    updateShiny();
+}
+
 
 // Make wild Pokemon shiny
-void	shinyPokemon(u32 state) {
-    WRITEU32(o_shiny, (state) ? 0xEA00001C : 0x0A00001C);
+void	shinyPokemon(void) {
+    if (shinyChanceValue == 4096) {
+        WRITEU32(o_shiny, 0x0A00001C);
+        return;
+    } else {
+        int r = randomNum(1, shinyChanceValue);
+        if (r == 1)
+            WRITEU32(o_shiny, 0xEA00001C);
+        else
+            WRITEU32(o_shiny, 0x0A00001C);
+    }
 }
 
 

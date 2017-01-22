@@ -22,6 +22,7 @@ void    always_run(void) {
     execute_all();
     generateSpawn();
     setRandomID();
+    shinyPokemon();
 }
 
 

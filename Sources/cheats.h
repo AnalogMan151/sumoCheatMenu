@@ -65,7 +65,8 @@ enum {
     CAMERAZOOM,
     NOENCOUNTERS,
     VIEWIVEV,
-    SHOWOPPONENTINFO
+    SHOWOPPONENTINFO,
+    DECREASESHINYCHANCE
 } e_identifiers;
 
 // Helpers
@@ -140,7 +141,9 @@ void    alwaysCritical(void);
 void    showOpponentInfo(void);
 void    maxBattleStats(u32 state);
 void	catch100(void);
-void	shinyPokemon(u32 state);
+void    updateShiny(void);
+void    decreaseShinyChance(void);
+void	shinyPokemon(void);
 void    zMoves(u32 state);
 void    infZMoves(void);
 
