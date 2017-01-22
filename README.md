@@ -8,8 +8,8 @@ Activate by pressing SELECT in game. This plugin supports both version 1.0 and v
 ### Cheats include:
 
 - Pokémon Spawner (Spawn a wild Pokémon by ID)
-  1. Set ID
-  2. Set Level
+  1. Set ID or Random
+  2. Set Level or Wild Level
   3. Set Form
 
 - EXP Modifiers
@@ -25,7 +25,7 @@ Activate by pressing SELECT in game. This plugin supports both version 1.0 and v
 - Battle Modifiers
   1. No Wild Encounters (Hold START to temporarily allow encounters)
   2. 100% Capture Rate
-  3. Wild Pokémon are Shiny (Does not work on Shiny-locked Pokémon)
+  3. Shiny Chance Modifier (Does not work on Shiny-locked Pokémon)
   4. View Opponent's Info (Tap opponent Pokémon's icon on bottom screen to see HP, Ability & held item)
   5. Stat Stages +6 (Raises all in-battle stat stages to max)
   6. Use Z-Moves without Z-Crystal
