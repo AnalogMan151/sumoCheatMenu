@@ -2,7 +2,6 @@
 
 #include "cheats.h"
 #include "hid.h"
-#include "hook.h"
 
 /********************************
  *                              *

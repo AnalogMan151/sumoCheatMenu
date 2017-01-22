@@ -2,7 +2,6 @@
 
 #include "cheats.h"
 #include "hid.h"
-#include "hook.h"
 
 /********************************
  *                              *
@@ -13,14 +12,14 @@
 u32 o_noencounters =        0x0807A28C,
     o_alwayscritical[2] =   {0x0595AD0, 0x08085D1C},
     o_showopponentinfo =    0x080AE178,
-    o_battlestats1 =        0x0029A048,
-    o_battlestats2 =        0x00595A00,
+    o_battlestats[2] =      {0x00595A00, 0x0029A048},
     o_shiny =               0x003183EC,
-    o_catch100 =            0x0048F1E0,
-    o_zmoves1 =             0x00595900,
-    o_zmoves2 =             0x00313DC0;
+    o_catch100 =            0x0803528C,
+    o_zmoves[2] =           {0x00595900, 0x00313DC0},
+    o_infzmoves =           0x08031100;
 
 u32 catch100_jump = 0;
+int shinyChanceValue = 4096;
 
 // Battle menu entry
 void    battleMenu(void) {
@@ -33,20 +32,21 @@ void    battleMenu(void) {
             o_alwayscritical[0] +=   0x1F00;
             o_alwayscritical[1] +=   0x03BC;
             o_showopponentinfo +=    0x0480;
-            o_battlestats1 +=        0x0120;
-            o_battlestats2 +=        0x1F00;
+            o_battlestats[0] +=      0x1F00;
+            o_battlestats[1] +=      0x0120;
             o_shiny +=               0x0704;
-            o_catch100 +=            0x1C60;
-            o_zmoves1 +=             0x1F00;
-            o_zmoves2 +=             0x0540;
+            o_catch100 -=            0x01D0;
+            o_zmoves[0] +=           0x1F00;
+            o_zmoves[1] +=           0x0540;
             break;
     }
 
     // Creates spoiler and cheat entries
+
     new_spoiler("Battle");
         new_entry_managed_note("No Wild Encounters", "Hold START to temporarily enable encounters", noEncounters, NOENCOUNTERS, 0);
-        new_entry_arg("100% Capture Rate", catch100, 0, CATCH100, TOGGLE);
-        new_entry_arg("Wild Pokemon Shiny", shinyPokemon, 0, SHINYPOKEMON, TOGGLE);
+        new_entry("100% Capture Rate", catch100);
+        new_entry_managed("Shiny Chance: XXXXXX", decreaseShinyChance, DECREASESHINYCHANCE, AUTO_DISABLE);
         new_entry_managed_note("View Opponent's Info", "Tap Opponent's icon on battle screen to see HP, Ability & Held Item", showOpponentInfo, SHOWOPPONENTINFO, 0);
         // new_entry("Always Critical Hit", alwaysCritical);
         new_entry_arg("Stat Stages +6", maxBattleStats, 0, MAXBATTLESTATS, TOGGLE);
@@ -54,6 +54,7 @@ void    battleMenu(void) {
         new_entry("Infinite Z-Moves", infZMoves);
         new_line();
     exit_spoiler();
+    updateShiny();
 }
 
 // No wild encounters unless START is held
@@ -120,7 +121,7 @@ void    maxBattleStats(u32 state) {
     if (state) {
 
         // Stores original value in memory
-        original = READU32(o_battlestats1);
+        original = READU32(o_battlestats[1]);
 
         static const u8    buffer[] =
         {
@@ -152,51 +153,63 @@ void    maxBattleStats(u32 state) {
             0xF8, 0x09, 0xF4, 0xEA, 0x80, 0x96
         };
 
-        memcpy((void *)(o_battlestats2), buffer, 0x90);
+        memcpy((void *)(o_battlestats[0]), buffer, 0x90);
         switch(gameVer) {
             case 10:
-                memcpy((void *)(o_battlestats2 + 0x84), buffer10, 0x06);
-                WRITEU32(o_battlestats1, 0xEA0BEE6C);
+                memcpy((void *)(o_battlestats[0] + 0x84), buffer10, 0x06);
+                WRITEU32(o_battlestats[1], 0xEA0BEE6C);
                 break;
             case 11:
-                memcpy((void *)(o_battlestats2 + 0x84), buffer11, 0x06);
-                WRITEU32(o_battlestats1, 0xEA0BF5E4);
+                memcpy((void *)(o_battlestats[0] + 0x84), buffer11, 0x06);
+                WRITEU32(o_battlestats[1], 0xEA0BF5E4);
                 break;
         }
     } else {
 
         // Sets value back to original when cheat is disabled
-        WRITEU32(o_battlestats1, original);
+        WRITEU32(o_battlestats[1], original);
     }
 }
 
 
 // 100% Catch rate for Pokemon
-void    hooked_catch100(void);
-void    catch100(u32 state) {
-    static t_hook   hook = {0};
+void    catch100(void) {
+    if (!checkAddress(o_catch100))
+        return;
+    if (READU32(o_catch100) == 0x0A000004)
+        WRITEU32(o_catch100, 0xEA000004);
+}
 
-    switch(gameVer) {
-        case 10:
-            catch100_jump = 0x006D839C;
-            break;
-        case 11:
-            catch100_jump = 0x006DA1CC;
-            break;
-    }
-    if (state) {
-        if (!hook.is_initialized)
-            init_hook(&hook, o_catch100, (u32)hooked_catch100);
-        enable_hook(&hook);
-    } else {
-        disable_hook(&hook);
-    }
+//
+void    updateShiny(void) {
+    char buf[7];
+    xsprintf(buf, ": 1/%-4d", shinyChanceValue);
+    replace_pattern(": ******", (shinyChanceValue == 4096) ? ": Normal" : buf, DECREASESHINYCHANCE);
+}
+
+
+//
+void    decreaseShinyChance(void) {
+    if (shinyChanceValue == 4096)
+        shinyChanceValue = 1;
+    else
+        shinyChanceValue *= 2;
+    updateShiny();
 }
 
 
 // Make wild Pokemon shiny
-void	shinyPokemon(u32 state) {
-    WRITEU32(o_shiny, (state) ? 0xEA00001C : 0x0A00001C);
+void	shinyPokemon(void) {
+    if (shinyChanceValue == 4096) {
+        WRITEU32(o_shiny, 0x0A00001C);
+        return;
+    } else {
+        int r = randomNum(1, shinyChanceValue);
+        if (r == 1)
+            WRITEU32(o_shiny, 0xEA00001C);
+        else
+            WRITEU32(o_shiny, 0x0A00001C);
+    }
 }
 
 
@@ -212,32 +225,32 @@ void    zMoves(u32 state) {
             0x00, 0x10, 0xA0, 0x11, 0x05, 0x80, 0xBD, 0xE8
         };
 
-        memcpy((void *)(o_zmoves1), buffer, 0x28);
+        memcpy((void *)(o_zmoves[0]), buffer, 0x28);
 
         switch(gameVer) {
             case 10:
-                WRITEU32(o_zmoves1 + 0x28, 0x0078BA28);
-                WRITEU32(o_zmoves2 + 0x00, 0xEB0A06CE);
-                WRITEU32(o_zmoves2 + 0x70, 0xEB0A06B5);
-                WRITEU32(o_zmoves2 + 0x5932C, 0xE3A00001);
+                WRITEU32(o_zmoves[0] + 0x28, 0x0078BA28);
+                WRITEU32(o_zmoves[1] + 0x00, 0xEB0A06CE);
+                WRITEU32(o_zmoves[1] + 0x70, 0xEB0A06B5);
+                WRITEU32(o_zmoves[1] + 0x5932C, 0xE3A00001);
                 break;
             case 11:
-                WRITEU32(o_zmoves1 + 0x28, 0x0078BF60);
-                WRITEU32(o_zmoves2 + 0x00, 0xEB0A0D3E);
-                WRITEU32(o_zmoves2 + 0x70, 0xEB0A0D25);
-                WRITEU32(o_zmoves2 + 0x59CF4, 0xE3A00001);
+                WRITEU32(o_zmoves[0] + 0x28, 0x0078BF60);
+                WRITEU32(o_zmoves[1] + 0x00, 0xEB0A0D3E);
+                WRITEU32(o_zmoves[1] + 0x70, 0xEB0A0D25);
+                WRITEU32(o_zmoves[1] + 0x59CF4, 0xE3A00001);
                 break;
         }
 
     } else {
-        WRITEU32(o_zmoves2 + 0x00, 0xE1D510B4);
-        WRITEU32(o_zmoves2 + 0x70, 0xE1D510B4);
+        WRITEU32(o_zmoves[1] + 0x00, 0xE1D510B4);
+        WRITEU32(o_zmoves[1] + 0x70, 0xE1D510B4);
         switch(gameVer) {
             case 10:
-                WRITEU32(o_zmoves2 + 0x5932C, 0xE3A00000);
+                WRITEU32(o_zmoves[1] + 0x5932C, 0xE3A00000);
                 break;
             case 11:
-                WRITEU32(o_zmoves2 + 0x59CF4, 0xE3A00000);
+                WRITEU32(o_zmoves[1] + 0x59CF4, 0xE3A00000);
                 break;
         }
     }
@@ -246,15 +259,13 @@ void    zMoves(u32 state) {
 
 // Inifinite Z-Moves
 void    infZMoves(void) {
-    static u32 data = 0;
-
-    if (!checkAddress(0x080311DC))
+    if (!checkAddress(o_infzmoves + 0xDC))
         return;
     else {
-        if (READU32(0x80311DC) == 0xE320F000) {
-            WRITEU32(0x080311D4, 0xE3A00000);
-            WRITEU32(0x080311D8, 0xE5C30005);
-            WRITEU32(0x080311DC, 0xE1500000);
+        if (READU32(o_infzmoves + 0xDC) == 0xE320F000) {
+            WRITEU32(o_infzmoves + 0xD4, 0xE3A00000);
+            WRITEU32(o_infzmoves + 0xD8, 0xE5C30005);
+            WRITEU32(o_infzmoves + 0xDC, 0xE1500000);
         }
     }
 }

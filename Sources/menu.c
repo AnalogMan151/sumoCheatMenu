@@ -1,7 +1,7 @@
 #include "cheats.h"
 
 char	*builder_name = "AnalogMan",
-        version[7] = "v0.3.0",
+        version[7] = "v0.4.0",
         formattedVer[23];
 
 int gameVer = 0;
@@ -17,12 +17,21 @@ void getVersion(void) {
         new_unselectable_entry("Version not supported");
 }
 
+
+void    always_run(void) {
+    execute_all();
+    generateSpawn();
+    setRandomID();
+    shinyPokemon();
+}
+
+
 void	my_menus(void) {
     getVersion();
     xsprintf(formattedVer, "%22s", version);
     new_unselectable_entry("Entries w/ an orange background");
     new_unselectable_entry("have notes. Press (Y) to view.");
-    new_super_unselectable_entry(formattedVer, execute_all);
+    new_super_unselectable_entry(formattedVer, always_run);
 	new_separator();
     expMenu();
     new_spoiler("Modifiers");

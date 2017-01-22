@@ -143,13 +143,18 @@ void    allItems(void) {
 
 // Gives all medicine
 void    allMedicine(void) {
-
+    int i = 0;
     // Start of Medicine Inventory
     u32    offset = 0x330D647C;
 
     // Writes the array to inventory overwriting what's already there
-    for (int i = 0; i < TOTALMEDICINE; i++) {
+    for (i = 0; i < TOTALMEDICINE; i++) {
        WRITEU32(offset + i*4, arr_allMedicine[i] + (quantity << 10));
+    }
+    offset += i*4;
+    // Writes 3 empty slots at end of inventory to erase duplicates from previous versions of this code
+    for (i = 0; i < 3; i++) {
+        WRITEU32(offset + i*4, 0x0);
     }
 }
 
@@ -168,13 +173,18 @@ void    allTMs(void) {
 
 // Gives all Berries
 void    allBerries(void) {
-
+    int i = 0;
     // Start of Berry Inventory
     u32    offset = 0x330D657C;
 
     // Writes the array to inventory  overwriting what's already there
-    for (int i = 0; i < TOTALBERRIES; i++) {
+    for (i = 0; i < TOTALBERRIES; i++) {
        WRITEU32(offset + i*4, arr_allBerries[i] + (quantity << 10));
+    }
+    offset += i*4;
+    // Writes 17 empty slots at end of inventory to erase duplicates from previous versions of this code
+    for (i = 0; i < 17; i++) {
+        WRITEU32(offset + i*4, 0x0);
     }
 }
 

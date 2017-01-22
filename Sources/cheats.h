@@ -52,8 +52,10 @@ enum {
     INCREASEID1,
     INCREASEID10,
     INCREASEID100,
+    RANDOMID,
     INCREASELVL1,
     INCREASELVL10,
+    PASSTHRULEVEL,
     INCREASETIME,
     DECREASETIME,
     SETFORM,
@@ -63,7 +65,8 @@ enum {
     CAMERAZOOM,
     NOENCOUNTERS,
     VIEWIVEV,
-    SHOWOPPONENTINFO
+    SHOWOPPONENTINFO,
+    DECREASESHINYCHANCE
 } e_identifiers;
 
 // Helpers
@@ -84,6 +87,7 @@ bool    isinArray(int val, int *arr, int size);
 void    memset32(void *dst, unsigned int value, unsigned int size);
 void    protect_region(u32 addr);
 bool    checkAddress(u32 address);
+int     randomNum(int start, int end);
 
 // Offsets
 void    getVersion(void);
@@ -94,9 +98,13 @@ void    updateSpawn(void);
 void    increaseID1(void);
 void    increaseID10(void);
 void    increaseID100(void);
+void    randomID(u32 state);
+void    setRandomID(void);
 void    increaseLVL1(void);
 void    increaseLVL10(void);
+void    passthruLevel(u32 state);
 void    activateSpawn(u32 state);
+void    generateSpawn(void);
 void    getForms(u32 id);
 void    setForm(void);
 
@@ -132,8 +140,10 @@ void    noEncounters(void);
 void    alwaysCritical(void);
 void    showOpponentInfo(void);
 void    maxBattleStats(u32 state);
-void	catch100(u32 state);
-void	shinyPokemon(u32 state);
+void	catch100(void);
+void    updateShiny(void);
+void    decreaseShinyChance(void);
+void	shinyPokemon(void);
 void    zMoves(u32 state);
 void    infZMoves(void);
 
