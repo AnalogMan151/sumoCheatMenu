@@ -12,8 +12,7 @@
 static char currentEXP[40] = "Undefined";
 u8 exp_rate = 1;
 
-u32 o_exp1 =            0x00595800,
-    o_exp2 =            0x0048F1EC;
+u32 o_exp[2] =            {0x00595800, 0x0048F1EC};
 
 // EXP menu entry
 void    expMenu(void) {
@@ -22,8 +21,8 @@ void    expMenu(void) {
         case 10:
             break;
         case 11:
-            o_exp1 +=       0x1F00;
-            o_exp2 +=       0x1C60;
+            o_exp[0] +=       0x1F00;
+            o_exp[1] +=       0x1C60;
             break;
     }
 
@@ -49,14 +48,14 @@ void	updateEXP(void) {
         0x90, 0x01, 0x00, 0xE0,
         0x02, 0x80, 0xBD, 0xE8
     };
-    memcpy((void *)(o_exp1), buffer, 0x14);
-    WRITEU8(o_exp1 + 0x08, exp_rate);
+    memcpy((void *)(o_exp[0]), buffer, 0x14);
+    WRITEU8(o_exp[0] + 0x08, exp_rate);
     switch(gameVer) {
         case 10:
-            WRITEU32(o_exp2, 0xEB041983);
+            WRITEU32(o_exp[1], 0xEB041983);
             break;
         case 11:
-            WRITEU32(o_exp2, 0xEB041A2B);
+            WRITEU32(o_exp[1], 0xEB041A2B);
             break;
     }
     xsprintf(currentEXP, "Current EXP rate: %3dx", exp_rate);

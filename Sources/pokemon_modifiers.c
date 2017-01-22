@@ -12,8 +12,7 @@
 
 u32 o_renamepokemon =           0x004A84F8,
     o_instantegg =              0x00444A6C,
-    o_instanthatch1 =           0x005958C0,
-    o_instanthatch2 =           0x004919E0;
+    o_instanthatch[2] =         {0x005958C0, 0x004919E0};
 
 // Pokémon menu entry
 void    pokemonMenu(void) {
@@ -22,10 +21,10 @@ void    pokemonMenu(void) {
         case 10:
             break;
         case 11: ;
-            o_renamepokemon +=  0x1DA0;
-            o_instantegg +=     0x1C18;
-            o_instanthatch1 +=  0x1F00;
-            o_instanthatch2 +=  0x1C60;
+            o_renamepokemon +=    0x1DA0;
+            o_instantegg +=       0x1C18;
+            o_instanthatch[0] +=  0x1F00;
+            o_instanthatch[1] +=  0x1C60;
             break;
     }
 
@@ -64,20 +63,20 @@ void	instantHatch(u32 state) {
             0x04, 0x00, 0xA0, 0x11,
             0x1E, 0xFF, 0x2F, 0xE1
         };
-        memcpy((void *)(o_instanthatch1), buffer, 0x18);
+        memcpy((void *)(o_instanthatch[0]), buffer, 0x18);
 
         switch(gameVer) {
             case 10:
-                WRITEU32(o_instanthatch1 + 0x18, 0x006CE724);
-                WRITEU32(o_instanthatch2, 0xEB040FB6);
+                WRITEU32(o_instanthatch[0] + 0x18, 0x006CE724);
+                WRITEU32(o_instanthatch[1], 0xEB040FB6);
                 break;
             case 11:
-                WRITEU32(o_instanthatch1 + 0x18, 0x006D08C0);
-                WRITEU32(o_instanthatch2, 0xEB04105E);
+                WRITEU32(o_instanthatch[0] + 0x18, 0x006D08C0);
+                WRITEU32(o_instanthatch[1], 0xEB04105E);
                 break;
         }
     } else {
-        WRITEU32(o_instanthatch2, 0xE1A00004);
+        WRITEU32(o_instanthatch[1], 0xE1A00004);
     }
 
 }

@@ -10,8 +10,7 @@
  *                              *
  ********************************/
 
-u32 o_pokespawn1 =          0x003988DC,
-    o_pokespawn2 =          0x005957E0;
+u32 o_pokespawn[2] = {0x005957E0, 0x003988DC};
 
 int spawnID = 1,
     spawnLVL = 5,
@@ -31,8 +30,8 @@ void    pokemonSpawnMenu(void) {
         case 10:
             break;
         case 11: ;
-            o_pokespawn1 +=     0x13D8;
-            o_pokespawn2 +=     0x1F00;
+            o_pokespawn[0] +=     0x1F00;
+            o_pokespawn[1] +=     0x13D8;
             break;
     }
 
@@ -104,22 +103,22 @@ void    generateSpawn(void) {
     }
 
     if (spawnIsOn)
-        WRITEU32(o_pokespawn2 + 0x04, 0xE59F000C);
+        WRITEU32(o_pokespawn[0] + 0x04, 0xE59F000C);
     else
-        WRITEU32(o_pokespawn2 + 0x04, 0xE12FFF1E);
+        WRITEU32(o_pokespawn[0] + 0x04, 0xE12FFF1E);
 
-    WRITEU32(o_pokespawn2 + 0x00, 0xE1D500B0);
+    WRITEU32(o_pokespawn[0] + 0x00, 0xE1D500B0);
     if (levelpass)
-        WRITEU32(o_pokespawn2 + 0x08, 0xE1A00000);
+        WRITEU32(o_pokespawn[0] + 0x08, 0xE1A00000);
     else
-        WRITEU32(o_pokespawn2 + 0x08, 0xE5C40004);
-    WRITEU32(o_pokespawn2 + 0x0C, 0xE59F0000);
-    WRITEU32(o_pokespawn2 + 0x10, 0xE12FFF1E);
-    WRITEU32(o_pokespawn2 + 0x14, spawnID + (0x800 * formIndex));
-    WRITEU32(o_pokespawn2 + 0x18, spawnLVL);
-    WRITEU32(o_pokespawn1 + 0x00, hook_value[0]);
-    WRITEU32(o_pokespawn1 + 0x10, hook_value[1]);
-    WRITEU32(o_pokespawn1 + 0x2C, hook_value[2]);
+        WRITEU32(o_pokespawn[0] + 0x08, 0xE5C40004);
+    WRITEU32(o_pokespawn[0] + 0x0C, 0xE59F0000);
+    WRITEU32(o_pokespawn[0] + 0x10, 0xE12FFF1E);
+    WRITEU32(o_pokespawn[0] + 0x14, spawnID + (0x800 * formIndex));
+    WRITEU32(o_pokespawn[0] + 0x18, spawnLVL);
+    WRITEU32(o_pokespawn[1] + 0x00, hook_value[0]);
+    WRITEU32(o_pokespawn[1] + 0x10, hook_value[1]);
+    WRITEU32(o_pokespawn[1] + 0x2C, hook_value[2]);
 }
 
 //

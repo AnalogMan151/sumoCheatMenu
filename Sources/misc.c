@@ -9,11 +9,9 @@
  *                              *
  ********************************/
 
-u32 o_camerazoom1 =            0x00595824,
-    o_camerazoom2 =            0x0803797C,
+u32 o_camerazoom[2] =          {0x00595824, 0x0803797C},
     o_instanttext =            0x003BE9C8,
-    o_pcanywhere1 =            0x00595978,
-    o_pcanywhere2 =            0x00373C48,
+    o_pcanywhere[2] =          {0x00595978, 0x00373C48},
     o_rematch =                0x0049D200,
     o_outlines =               0x0041B748,
     o_nfc =                    0x003DFFD0,
@@ -27,11 +25,11 @@ void    miscMenu(void) {
         case 10:
             break;
         case 11: ;
-            o_camerazoom1 +=     0x1F00;
-            o_camerazoom2 +=     0x019C;
+            o_camerazoom[0] +=   0x1F00;
+            o_camerazoom[1] +=   0x019C;
             o_instanttext +=     0x122C;
-            o_pcanywhere1 +=     0x1F00;
-            o_pcanywhere2 +=     0x0FF4;
+            o_pcanywhere[0] +=   0x1F00;
+            o_pcanywhere[1] +=   0x0FF4;
             o_rematch +=         0x1DA0;
             o_outlines +=        0x1884;
             o_nfc +=             0x14F0;
@@ -127,17 +125,17 @@ void    cameraZoom(void) {
         0x04, 0x00, 0x84, 0xE2,
         0x1E, 0xFF, 0x2F, 0xE1
     };
-    memcpy((void *)(o_camerazoom1), buffer, 0x18);
+    memcpy((void *)(o_camerazoom[0]), buffer, 0x18);
 
-    if (!checkAddress(o_camerazoom2))
+    if (!checkAddress(o_camerazoom[1]))
         return;
     else {
-        if (READU32(o_camerazoom2) == 0xE2840004)
-            WRITEU32(o_camerazoom2, camera_value);
+        if (READU32(o_camerazoom[1]) == 0xE2840004)
+            WRITEU32(o_camerazoom[1], camera_value);
         if (is_pressed(BUTTON_L + BUTTON_ST))
-            WRITEU32(o_camerazoom1 + 0x18, 0xC4BB8000);
+            WRITEU32(o_camerazoom[0] + 0x18, 0xC4BB8000);
         if (is_pressed(BUTTON_R + BUTTON_ST))
-            WRITEU32(o_camerazoom1 + 0x18, 0x00000000);
+            WRITEU32(o_camerazoom[0] + 0x18, 0x00000000);
     }
 }
 
@@ -172,32 +170,32 @@ void    pcAnywhere(u32 state) {
             0x10, 0xD0, 0x8D, 0xE2, 0x0F, 0x80, 0xBD, 0xE8
         };
 
-        memcpy((void *)(o_pcanywhere1), buffer, 0x80);
+        memcpy((void *)(o_pcanywhere[0]), buffer, 0x80);
         switch(gameVer) {
             case 10:
-                WRITEU32(o_pcanywhere1 + 0x30, 0x1AF77D09);
-                WRITEU32(o_pcanywhere1 + 0x70, 0xEBF7D9CE);
-                WRITEU32(o_pcanywhere1 + 0x80, 0x00636000);
-                WRITEU32(o_pcanywhere1 + 0x84, 0x0067206C);
-                WRITEU32(o_pcanywhere2, 0xEB088755);
-                WRITEU32(o_pcanywhere2 + 0x9918, 0xEB086104);
+                WRITEU32(o_pcanywhere[0] + 0x30, 0x1AF77D09);
+                WRITEU32(o_pcanywhere[0] + 0x70, 0xEBF7D9CE);
+                WRITEU32(o_pcanywhere[0] + 0x80, 0x00636000);
+                WRITEU32(o_pcanywhere[0] + 0x84, 0x0067206C);
+                WRITEU32(o_pcanywhere[1], 0xEB088755);
+                WRITEU32(o_pcanywhere[1] + 0x9918, 0xEB086104);
                 break;
             case 11:
-                WRITEU32(o_pcanywhere1 + 0x30, 0x1AF77958);
-                WRITEU32(o_pcanywhere1 + 0x70, 0xEBF7D6DC);
-                WRITEU32(o_pcanywhere1 + 0x80, 0x00638000);
-                WRITEU32(o_pcanywhere1 + 0x84, 0x006740B4);
-                WRITEU32(o_pcanywhere2 + 0x0000, 0xEB088B18);
-                WRITEU32(o_pcanywhere2 + 0x99A8, 0xEB0864A3);
+                WRITEU32(o_pcanywhere[0] + 0x30, 0x1AF77958);
+                WRITEU32(o_pcanywhere[0] + 0x70, 0xEBF7D6DC);
+                WRITEU32(o_pcanywhere[0] + 0x80, 0x00638000);
+                WRITEU32(o_pcanywhere[0] + 0x84, 0x006740B4);
+                WRITEU32(o_pcanywhere[1] + 0x0000, 0xEB088B18);
+                WRITEU32(o_pcanywhere[1] + 0x99A8, 0xEB0864A3);
                 break;
         }
     } else {
         switch(gameVer) {
             case 10:
-                WRITEU32(o_pcanywhere1 + 0x30, 0xEAF77D09);
+                WRITEU32(o_pcanywhere[0] + 0x30, 0xEAF77D09);
                 break;
             case 11:
-                WRITEU32(o_pcanywhere1 + 0x30, 0xEAF77958);
+                WRITEU32(o_pcanywhere[0] + 0x30, 0xEAF77958);
                 break;
         }
     }

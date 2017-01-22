@@ -139,7 +139,7 @@ void    noEncounters(void);
 void    alwaysCritical(void);
 void    showOpponentInfo(void);
 void    maxBattleStats(u32 state);
-void	catch100(u32 state);
+void	catch100(void);
 void	shinyPokemon(u32 state);
 void    zMoves(u32 state);
 void    infZMoves(void);
