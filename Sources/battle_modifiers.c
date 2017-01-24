@@ -51,7 +51,7 @@ void    battleMenu(void) {
         // new_entry("Always Critical Hit", alwaysCritical);
         new_entry_arg("Stat Stages +6", maxBattleStats, 0, MAXBATTLESTATS, TOGGLE);
         new_entry_arg("Use Z-Moves w/o Z-Crystal", zMoves, 0, ZMOVES, TOGGLE);
-        new_entry("Infinite Z-Moves", infZMoves);
+        new_entry_managed("Infinite Z-Moves", infZMoves, INFZMOVES, 0);
         new_line();
     exit_spoiler();
     updateShiny();

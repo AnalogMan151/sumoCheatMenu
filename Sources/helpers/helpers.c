@@ -1,5 +1,6 @@
 #include "cheats.h"
 #include "manager.h"
+#include "ctrulib.h"
 #include <stdlib.h>
 
 t_entry_data    g_entry_data[MAX_STORAGE] = {0};
@@ -60,6 +61,37 @@ bool    isinArray(int val, int *arr, int size) {
     }
     return false;
 }
+
+
+bool getWifiStatus()
+{
+    Result r = 0;
+    u32 wifiStatus = 0;
+    static bool wifiInit = false;
+
+    if (!wifiInit) {
+        r = srvInit();
+    	if (R_FAILED(r)) return false;
+
+        r = acInit();
+    	if (R_FAILED(r)) return false;
+
+        wifiInit = true;
+    }
+
+    if (wifiInit) {
+    	r = ACU_GetWifiStatus(&wifiStatus);
+    	if (R_FAILED(r)) return false;
+
+        if (wifiStatus == 1 || wifiStatus == 2)
+    	    return true;
+        else
+            return false;
+    }
+    return false;
+}
+
+
 
 static  int add_new_entry(char *str, void (*function)(void), int identifier, int flags)
 {

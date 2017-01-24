@@ -66,7 +66,8 @@ enum {
     NOENCOUNTERS,
     VIEWIVEV,
     SHOWOPPONENTINFO,
-    DECREASESHINYCHANCE
+    DECREASESHINYCHANCE,
+    INFZMOVES
 } e_identifiers;
 
 // Helpers
@@ -88,6 +89,7 @@ void    memset32(void *dst, unsigned int value, unsigned int size);
 void    protect_region(u32 addr);
 bool    checkAddress(u32 address);
 int     randomNum(int start, int end);
+bool    getWifiStatus(void);
 
 // Offsets
 void    getVersion(void);
