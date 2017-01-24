@@ -17,12 +17,22 @@ void getVersion(void) {
         new_unselectable_entry("Version not supported");
 }
 
+void    disableOnlineCheats(void) {
+    if(getWifiStatus()) {
+        disable_entry(MAXBATTLESTATS);
+        disable_entry(ZMOVES);
+        disable_entry(INFZMOVES);
+        disable_entry(SHOWOPPONENTINFO);
+    }
+}
+
 
 void    always_run(void) {
     execute_all();
     generateSpawn();
     setRandomID();
     shinyPokemon();
+    disableOnlineCheats();
 }
 
 
