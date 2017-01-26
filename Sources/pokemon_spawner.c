@@ -19,9 +19,9 @@ int spawnID = 1,
 char currentSpawn[40],
      currentLVL[40];
 
-bool spawnIsOn,
-     randomIsOn,
-     levelpass;
+bool spawnIsOn = false,
+     randomIsOn = false,
+     levelpass = false;
 
 // Pokémon Spawner menu entry
 void    pokemonSpawnMenu(void) {
