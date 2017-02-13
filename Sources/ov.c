@@ -19,7 +19,7 @@ void    OvSettings(u32 addr, u32 addrB, u32 stride, u32 format, int isTop)
     g_format = format & 0xF;
     g_isTop = isTop;
     g_maxWidth = isTop ? 400 : 320;
-    g_is3DEnabled = *(float *)(0x1FF81080) > 0.f && isTop && addr != addrB;
+    g_is3DEnabled = *(float *)(0x1FF81080) > 0.f && isTop && addr != addrB && addrB;
 }
 
 void    OvDrawTranspartBlackRect(int posX, int posY, int width, int height, u8 level)
