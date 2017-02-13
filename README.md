@@ -28,7 +28,7 @@ To run you'll need a new 3DS (o3DS/2DS not supported), Custom Firmware and BootN
   1. No Wild Encounters (Hold START to temporarily allow encounters)
   2. 100% Capture Rate
   3. Shiny Chance Modifier (Does not work on Shiny-locked Pokémon)
-  4. View Opponent's Info (Tap opponent Pokémon's icon on bottom screen to see HP, Ability & held item)
+  4. View Opponent's Info (Hold X during battle. Press R to cycle enemies)
   5. Stat Stages +6 (Raises all in-battle stat stages to max)
   6. Use Z-Moves without Z-Crystal
   7. Infinite Z-Moves

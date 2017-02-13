@@ -3,6 +3,7 @@
 #include "plugin.h"
 
 int gameVer;
+bool battleInfo;
 
 u32 o_islandwait,
     o_qr100;
@@ -140,7 +141,7 @@ void    fixMakeupBag(void);
 void    battleMenu(void);
 void    noEncounters(void);
 void    alwaysCritical(void);
-void    showOpponentInfo(void);
+void    showOpponentInfo(u32 state);
 void    maxBattleStats(u32 state);
 void	catch100(void);
 void    updateShiny(void);
@@ -213,4 +214,6 @@ void    catchTrainers(void);
 void    learnAnyTM(u32 state);
 void    relearnAnyMove(u32 state);
 
+
+void    overlayInit(void);
 #endif
