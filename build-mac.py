@@ -118,6 +118,10 @@ if (os.path.isfile(NAME + ".map")):
 printf("Copying the plugin in each folder...");
 shutil.copy2(COPYTOPATH, "./" + FTP_FOLDER + SUN_TID + "/Sun.plg");
 shutil.copy2(COPYTOPATH, "./" + FTP_FOLDER + MOON_TID + "/Moon.plg");
+if (os.path.isfile("./" + FTP_FOLDER + SUN_TID + "/.DS_Store")):
+	run("rm ./" + FTP_FOLDER + SUN_TID + "/.DS_Store")
+if (os.path.isfile("./" + FTP_FOLDER + MOON_TID + "/.DS_Store")):
+	run("rm ./" + FTP_FOLDER + MOON_TID + "/.DS_Store")
 printf("Creating the zip folder...");
 shutil.make_archive(NAME, 'zip', "./plugin");
 printf("Should I send the plugin on your console? (y/N)");

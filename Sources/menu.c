@@ -1,10 +1,11 @@
 #include "cheats.h"
 
 char	*builder_name = "AnalogMan",
-        version[7] = "v0.4.1",
+        version[7] = "v0.5.0",
         formattedVer[23];
 
 int gameVer = 0;
+bool battleInfo = false;
 
 void getVersion(void) {
     protect_region(0x00100000);
@@ -37,6 +38,7 @@ void    always_run(void) {
 
 
 void	my_menus(void) {
+    overlayInit();
     getVersion();
     xsprintf(formattedVer, "%22s", version);
     new_unselectable_entry("Entries w/ an orange background");

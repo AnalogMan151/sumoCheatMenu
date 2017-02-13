@@ -11,7 +11,6 @@
 
 u32 o_noencounters =        0x0807A28C,
     o_alwayscritical[2] =   {0x0595AD0, 0x08085D1C},
-    o_showopponentinfo =    0x080AE178,
     o_battlestats[2] =      {0x00595A00, 0x0029A048},
     o_shiny =               0x003183EC,
     o_catch100 =            0x0803528C,
@@ -31,7 +30,6 @@ void    battleMenu(void) {
             o_noencounters +=        0x035C;
             o_alwayscritical[0] +=   0x1F00;
             o_alwayscritical[1] +=   0x03BC;
-            o_showopponentinfo +=    0x0480;
             o_battlestats[0] +=      0x1F00;
             o_battlestats[1] +=      0x0120;
             o_shiny +=               0x0704;
@@ -47,8 +45,7 @@ void    battleMenu(void) {
         new_entry_managed_note("No Wild Encounters", "Hold START to temporarily enable encounters", noEncounters, NOENCOUNTERS, 0);
         new_entry("100% Capture Rate", catch100);
         new_entry_managed("Shiny Chance: XXXXXX", decreaseShinyChance, DECREASESHINYCHANCE, AUTO_DISABLE);
-        new_entry_managed_note("View Opponent's Info", "Tap Opponent's icon on battle screen to see HP, Ability & Held Item", showOpponentInfo, SHOWOPPONENTINFO, 0);
-        // new_entry("Always Critical Hit", alwaysCritical);
+        new_entry_arg_note("View Opponent's Info", "Hold X during battle\nPress R to cycle enemies", showOpponentInfo, 0, SHOWOPPONENTINFO, TOGGLE);
         new_entry_arg("Stat Stages +6", maxBattleStats, 0, MAXBATTLESTATS, TOGGLE);
         new_entry_arg("Use Z-Moves w/o Z-Crystal", zMoves, 0, ZMOVES, TOGGLE);
         new_entry_managed("Infinite Z-Moves", infZMoves, INFZMOVES, 0);
@@ -72,43 +69,12 @@ void    noEncounters(void) {
 }
 
 
-// Always Critical Hit
-void    alwaysCritical(void) {
-
-    u32 jump_code;
-
-    switch(gameVer) {
-        case 10:
-            jump_code = 0xEBF9B36B;
-            break;
-        case 11:
-            jump_code = 0xEBF9B23C;
-            break;
-    }
-
-    static const u8    buffer[] =
-    {
-        0x00, 0x00, 0x9D, 0xE5, 0x1E, 0x40, 0x2D, 0xE9,
-        0x08, 0x10, 0x9A, 0xE5, 0x04, 0x30, 0x81, 0xE2,
-        0x1C, 0x40, 0x81, 0xE2, 0x04, 0x20, 0x93, 0xE4,
-        0x02, 0x00, 0x50, 0xE1, 0x01, 0x10, 0xA0, 0x03,
-        0x18, 0x10, 0x8D, 0x05, 0x04, 0x00, 0x53, 0xE1,
-        0xF9, 0xFF, 0xFF, 0x1A, 0x1E, 0x80, 0xBD, 0xE8
-    };
-    memcpy((void *)(o_alwayscritical[0]), buffer, 0x30);
-    if (!checkAddress(o_alwayscritical[1]))
-        return;
-    if (READU32(o_alwayscritical[1]) == 0xE59D0000);
-        WRITEU32(o_alwayscritical[1], jump_code);
-}
-
-
 // Shows opponent Pokémon's info during battle on bottom screen when icon is tapped
-void    showOpponentInfo(void) {
-    if (!checkAddress(o_showopponentinfo))
-        return;
-    if (READU32(o_showopponentinfo) == 0xE92D40F8)
-        WRITEU32(o_showopponentinfo, 0xEAFFFEE7);
+void    showOpponentInfo(u32 state) {
+    if (state)
+        battleInfo = true;
+    else
+        battleInfo = false;
 }
 
 
