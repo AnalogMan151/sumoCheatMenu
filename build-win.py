@@ -20,31 +20,31 @@ def allFolderFile(pattern, ext):
             s+= os.path.join(dirpath, filename) + ' '
     return s;
 
-SUN_TID 	= "0004000000164800"
-MOON_TID 	= "0004000000175E00"
-NAME 		= "SUMO"
-FTP_FOLDER	= "/plugin/"
-HOST		= "192.168.1.133"
-PORT		= "5000"
-COPYTOPATH	= NAME + ".plg"
-CC 			= "arm-none-eabi-gcc"
-CP 			= "arm-none-eabi-g++"
-OC			= "arm-none-eabi-objcopy"
-LD 			= "arm-none-eabi-ld"
-CTRULIB 	= '../libctru'
-DEVKITARM 	= 'c:/devkitPro/devkitARM'
-LIBPATH 	= '-L ./lib '
-ARCH 		= ' -march=armv6k -mlittle-endian -mtune=mpcore -mfloat-abi=hard '
-CFLAGS		= ' -Os -c ' + ARCH
-ASFLAGS		= ' -Os -c -s ' + ARCH
-LIBFLAGS 	= " -lntr -lShark2NTR_dev -lctr -lg -lsysbase -lc -lgcc "
-LDFLAGS		= ' -pie --gc-sections -T 3ds.ld -Map=' + NAME +'.map '
-INCLUDES 	= " -I Includes -I Sources -I Includes/libntrplg -I Sources/helpers "
-CFILES		= allFolderFile(".\\Sources\\", ".c")
-ASFILES		= allFolderFile(".\\Sources\\", ".s")
+SUN_TID     = "0004000000164800"
+MOON_TID     = "0004000000175E00"
+NAME         = "SUMO"
+FTP_FOLDER    = "/plugin/"
+HOST        = "192.168.1.133"
+PORT        = "5000"
+COPYTOPATH    = NAME + ".plg"
+CC             = "arm-none-eabi-gcc"
+CP             = "arm-none-eabi-g++"
+OC            = "arm-none-eabi-objcopy"
+LD             = "arm-none-eabi-ld"
+CTRULIB     = '../libctru'
+DEVKITARM     = 'c:/devkitPro/devkitARM'
+LIBPATH     = '-L ./lib '
+ARCH         = ' -march=armv6k -mlittle-endian -mtune=mpcore -mfloat-abi=hard '
+CFLAGS        = ' -Os -c ' + ARCH
+ASFLAGS        = ' -Os -c -s ' + ARCH
+LIBFLAGS     = " -lntr -lShark2NTR_dev -lctr -lg -lsysbase -lc -lgcc "
+LDFLAGS        = ' -pie --gc-sections -T 3ds.ld -Map=' + NAME +'.map '
+INCLUDES     = " -I Includes -I Sources -I Includes/libntrplg -I Sources/helpers "
+CFILES        = allFolderFile(".\\Sources\\", ".c")
+ASFILES        = allFolderFile(".\\Sources\\", ".s")
 OFILES      = allFolderFile(".\\ofiles\\", ".o")
-ftp 		= FTP()
-FILE		= COPYTOPATH
+ftp         = FTP()
+FILE        = COPYTOPATH
 
 def connect(host, port):
     ftp.connect(host, port);
@@ -57,6 +57,10 @@ def ls():
 
 def send(path, FILE2):
     file = open(FILE, 'rb');
+    try:
+        ftp.mkd(path);
+    except Exception as e:
+        pass
     ftp.cwd(path);
     ftp.storbinary('STOR '+ FILE2, file);
     file.close();
