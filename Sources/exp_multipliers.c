@@ -12,20 +12,8 @@
 static char currentEXP[40] = "Undefined";
 u8 exp_rate = 1;
 
-u32 o_exp[2] =            {0x00595800, 0x0048F1EC};
-
 // EXP menu entry
 void    expMenu(void) {
-
-    switch(gameVer) {
-        case 10:
-            break;
-        case 11:
-            o_exp[0] +=       0x1F00;
-            o_exp[1] +=       0x1C60;
-            break;
-    }
-
     updateEXP();
 
     new_spoiler("EXP Multiplier");
@@ -40,6 +28,19 @@ void    expMenu(void) {
 
 // Reads current EXP modifier and prints it to the menu
 void	updateEXP(void) {
+    u32 offset[][2] = {
+        {0x00595800, 0x0048F1EC},
+        {0x00597700, 0x00490E4C},
+        {0x00597700, 0x00490E74}
+    };
+
+    u32 data[] =
+    {
+        0xEB041983,
+        0xEB041A2B,
+        0xEB041A21
+    };
+
     static const u8 buffer[] =
     {
         0xB2, 0x02, 0xD0, 0xE1,
@@ -48,16 +49,10 @@ void	updateEXP(void) {
         0x90, 0x01, 0x00, 0xE0,
         0x02, 0x80, 0xBD, 0xE8
     };
-    memcpy((void *)(o_exp[0]), buffer, 0x14);
-    WRITEU8(o_exp[0] + 0x08, exp_rate);
-    switch(gameVer) {
-        case 10:
-            WRITEU32(o_exp[1], 0xEB041983);
-            break;
-        case 11:
-            WRITEU32(o_exp[1], 0xEB041A2B);
-            break;
-    }
+    memcpy((void *)(offset[gameVer][0]), buffer, 0x14);
+    WRITEU8(offset[gameVer][0] + 0x08, exp_rate);
+    WRITEU32(offset[gameVer][1], data[gameVer]);
+
     xsprintf(currentEXP, "Current EXP rate: %3dx", exp_rate);
 }
 
