@@ -1,21 +1,31 @@
 #include "cheats.h"
 
 char	*builder_name = "AnalogMan",
-        version[7] = "v0.5.0",
-        formattedVer[23];
+        version[7] = "v0.6.0",
+        updateVer[12] = "Update v?.?",
+        formattedVer[35];
 
 int gameVer = 0;
 bool battleInfo = false;
 
 void getVersion(void) {
     protect_region(0x00100000);
-
-    if (READU8(0x00100040) == 0x30)
-        gameVer = 10;
-    else if (READU8(0x00100040) == 0x78)
-        gameVer = 11;
-    else
-        new_unselectable_entry("Version not supported");
+    switch (READU8(0x00100040)) {
+        case 0x30:
+            gameVer = 0;
+            xsprintf(updateVer, "%s", "Update v1.0");
+            break;
+        case 0x78:
+            gameVer = 1;
+            xsprintf(updateVer, "%s", "Update v1.1");
+            break;
+        case 0x80:
+            gameVer = 2;
+            xsprintf(updateVer, "%s", "Update v1.2");
+            break;
+        default:
+            xsprintf(updateVer, "%s", "Update v?.?");
+    }
 }
 
 void    disableOnlineCheats(void) {
@@ -40,7 +50,7 @@ void    always_run(void) {
 void	my_menus(void) {
     overlayInit();
     getVersion();
-    xsprintf(formattedVer, "%22s", version);
+    xsprintf(formattedVer, "%14s %s", version, updateVer);
     new_unselectable_entry("Entries w/ an orange background");
     new_unselectable_entry("have notes. Press (Y) to view.");
     new_super_unselectable_entry(formattedVer, always_run);

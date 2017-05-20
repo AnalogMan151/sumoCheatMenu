@@ -10,8 +10,6 @@
  *                              *
  ********************************/
 
-u32 o_pokespawn[2] = {0x005957E0, 0x003988DC};
-
 int spawnID = 1,
     spawnLVL = 5,
     formIndex = 0;
@@ -25,15 +23,6 @@ bool spawnIsOn = false,
 
 // Pokémon Spawner menu entry
 void    pokemonSpawnMenu(void) {
-
-    switch(gameVer) {
-        case 10:
-            break;
-        case 11: ;
-            o_pokespawn[0] +=     0x1F00;
-            o_pokespawn[1] +=     0x13D8;
-            break;
-    }
 
     getForms(spawnID);
     updateSpawn();
@@ -89,36 +78,36 @@ void    updateSpawn(void) {
 // Redirects stack calls to custom location with selected data
 void    generateSpawn(void) {
 
-    u32 hook_value[3];
-    switch(gameVer) {
-        case 10:
-            hook_value[0] = 0xEB07F3BF;
-            hook_value[1] = 0xEB07F3BB;
-            hook_value[2] = 0xEB07F3B4;
-            break;
-        case 11:
-            hook_value[0] = 0xEB07F689;
-            hook_value[1] = 0xEB07F685;
-            hook_value[2] = 0xEB07F67E;
-    }
+    u32 offset[][2] =
+    {
+        {0x005957E0, 0x003988DC},
+        {0x005976E0, 0x00399CB4},
+        {0x005976E0, 0x00399CB4}
+    };
+    u32 data[][3] =
+    {
+        {0xEB07F3BF, 0xEB07F3BB, 0xEB07F3B4},
+        {0xEB07F689, 0xEB07F685, 0xEB07F67E},
+        {0xEB07F689, 0xEB07F685, 0xEB07F67E}
+    };
 
     if (spawnIsOn)
-        WRITEU32(o_pokespawn[0] + 0x04, 0xE59F000C);
+        WRITEU32(offset[gameVer][0] + 0x04, 0xE59F000C);
     else
-        WRITEU32(o_pokespawn[0] + 0x04, 0xE12FFF1E);
+        WRITEU32(offset[gameVer][0] + 0x04, 0xE12FFF1E);
 
-    WRITEU32(o_pokespawn[0] + 0x00, 0xE1D500B0);
+    WRITEU32(offset[gameVer][0] + 0x00, 0xE1D500B0);
     if (levelpass)
-        WRITEU32(o_pokespawn[0] + 0x08, 0xE1A00000);
+        WRITEU32(offset[gameVer][0] + 0x08, 0xE1A00000);
     else
-        WRITEU32(o_pokespawn[0] + 0x08, 0xE5C40004);
-    WRITEU32(o_pokespawn[0] + 0x0C, 0xE59F0000);
-    WRITEU32(o_pokespawn[0] + 0x10, 0xE12FFF1E);
-    WRITEU32(o_pokespawn[0] + 0x14, spawnID + (0x800 * formIndex));
-    WRITEU32(o_pokespawn[0] + 0x18, spawnLVL);
-    WRITEU32(o_pokespawn[1] + 0x00, hook_value[0]);
-    WRITEU32(o_pokespawn[1] + 0x10, hook_value[1]);
-    WRITEU32(o_pokespawn[1] + 0x2C, hook_value[2]);
+        WRITEU32(offset[gameVer][0] + 0x08, 0xE5C40004);
+    WRITEU32(offset[gameVer][0] + 0x0C, 0xE59F0000);
+    WRITEU32(offset[gameVer][0] + 0x10, 0xE12FFF1E);
+    WRITEU32(offset[gameVer][0] + 0x14, spawnID + (0x800 * formIndex));
+    WRITEU32(offset[gameVer][0] + 0x18, spawnLVL);
+    WRITEU32(offset[gameVer][1] + 0x00, data[gameVer][0]);
+    WRITEU32(offset[gameVer][1] + 0x10, data[gameVer][1]);
+    WRITEU32(offset[gameVer][1] + 0x2C, data[gameVer][2]);
 }
 
 //

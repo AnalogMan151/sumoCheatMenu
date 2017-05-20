@@ -23,13 +23,6 @@ u32 o_gender =          0x330D67D5,
 // Appearance menu entry
 void    appearanceMenu(void) {
 
-    switch(gameVer) {
-        case 10:
-            break;
-        case 11:
-            break;
-    }
-
     // Reads currently set Gender and Skin tone from memory to initialize menu with
     currentGender = READU8(o_gender);
     currentSkintone = READU8(o_skintone);

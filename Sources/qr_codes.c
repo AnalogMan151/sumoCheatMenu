@@ -9,19 +9,8 @@
  *                              *
  ********************************/
 
-u32 o_islandwait =          0x0043DAA8,
-    o_qr100 =               0x3313EF33;
-
 // QR Codes menu entry
 void    qrMenu(void) {
-
-    switch(gameVer) {
-        case 10:
-            break;
-        case 11: ;
-            o_islandwait +=   0x1C0D;
-            break;
-    }
 
     new_spoiler("QR Codes");
         new_entry("Remove Island Scan Wait", removeIslandScanWait);
@@ -33,11 +22,17 @@ void    qrMenu(void) {
 
 // Remove 24 hour wait time for island scanning
 void	removeIslandScanWait(void) {
-	WRITEU32(o_islandwait, 0xE3A00000);
+    u32 offset[] =
+    {
+        0x0043DAA8,
+        0x0043F6B4,
+        0x0043F6D8
+    };
+	WRITEU32(offset[gameVer], 0xE3A00000);
 }
 
 
 // Sets QR Scan points to 100 allowing you to Island Scan
 void	qrScan100(void) {
-	WRITEU8(o_qr100, 0x64);
+	WRITEU8(0x3313EF33, 0x64);
 }

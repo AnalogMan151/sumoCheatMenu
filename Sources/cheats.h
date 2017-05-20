@@ -139,7 +139,7 @@ void    fixMakeupBag(void);
 
 // Battle Modifiers
 void    battleMenu(void);
-void    noEncounters(void);
+void    noEncounters(u32 state);
 void    alwaysCritical(void);
 void    showOpponentInfo(u32 state);
 void    maxBattleStats(u32 state);

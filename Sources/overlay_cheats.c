@@ -14,11 +14,23 @@ Handle fsUserHandle = 0;
 #define TICKS_PER_MSEC (268123.480)
 #define BLANK 255,255,255
 
-u32 battleOff = 0x006747D8;
 Opponent selectedOpponent = PRIMARY;
 
 bool isInBattle() {
-    if (READU32(battleOff) >= 0x40400000 && READU32(battleOff) <= 0x40410000)
+    u32 offset[] =
+    {
+        0x006731A4,
+        0x006747D8,
+        0x006747E0
+    };
+
+    u32 data[] =
+    {
+        0x00000000,
+        0x40400000,
+        0x40400000
+    };
+    if (READU32(offset[gameVer]) >= data[gameVer] && READU32(offset[gameVer]) <= data[gameVer] + 0x10000)
         return true;
     return false;
 }

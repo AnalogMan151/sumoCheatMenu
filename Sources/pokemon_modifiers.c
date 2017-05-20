@@ -9,24 +9,8 @@
  *                              *
  ********************************/
 
-
-u32 o_renamepokemon =           0x004A84F8,
-    o_instantegg =              0x00444A6C,
-    o_instanthatch[2] =         {0x005958C0, 0x004919E0};
-
 // Pokémon menu entry
 void    pokemonMenu(void) {
-
-    switch(gameVer) {
-        case 10:
-            break;
-        case 11: ;
-            o_renamepokemon +=    0x1DA0;
-            o_instantegg +=       0x1C18;
-            o_instanthatch[0] +=  0x1F00;
-            o_instanthatch[1] +=  0x1C60;
-            break;
-    }
 
     new_spoiler("Pokemon");
         new_entry("Rename any Pokemon", renamePokemon);
@@ -39,20 +23,46 @@ void    pokemonMenu(void) {
 
 // Rename any Pokemon at the Name Rater
 void	renamePokemon(void) {
-	WRITEU32(o_renamepokemon, 0xE3A00001);
+    u32 offset[] =
+    {
+        0x004A84F8,
+        0x004AA298,
+        0x004AA2C0
+    };
+	WRITEU32(offset[gameVer], 0xE3A00001);
 }
 
 
 // Egg instantly ready when talking to Nursery NPC while holding L
 void	instantEgg(void) {
-    WRITEU32(o_instantegg + 0x00, (is_pressed(BUTTON_L)) ? 0xE3A01001 : 0xE2800E1E);
-    WRITEU32(o_instantegg + 0x04, (is_pressed(BUTTON_L)) ? 0xE5C011E0 : 0xE1D000D0);
-    WRITEU32(o_instantegg + 0x08, (is_pressed(BUTTON_L)) ? 0xEA00684B : 0xE12FFF1E);
+    u32 offset[] =
+    {
+        0x00444A6C,
+        0x00446684,
+        0x004466A8
+    };
+    WRITEU32(offset[gameVer] + 0x00, (is_pressed(BUTTON_L)) ? 0xE3A01001 : 0xE2800E1E);
+    WRITEU32(offset[gameVer] + 0x04, (is_pressed(BUTTON_L)) ? 0xE5C011E0 : 0xE1D000D0);
+    WRITEU32(offset[gameVer] + 0x08, (is_pressed(BUTTON_L)) ? 0xEA00684B : 0xE12FFF1E);
 }
 
 
 // Instant egg hatching in one step
 void	instantHatch(u32 state) {
+
+    u32 offset[][2] =
+    {
+        {0x005958C0, 0x004919E0},
+        {0x005977C0, 0x00493640},
+        {0x005977C0, 0x00493668}
+    };
+    u32 data[][2] =
+    {
+        {0x006CE724, 0xEB040FB6},
+        {0x006D08C0, 0xEB04105E},
+        {0x006D08C0, 0xEB041054}
+    };
+
     if (state) {
         static const u8 buffer[] =
         {
@@ -63,20 +73,11 @@ void	instantHatch(u32 state) {
             0x04, 0x00, 0xA0, 0x11,
             0x1E, 0xFF, 0x2F, 0xE1
         };
-        memcpy((void *)(o_instanthatch[0]), buffer, 0x18);
-
-        switch(gameVer) {
-            case 10:
-                WRITEU32(o_instanthatch[0] + 0x18, 0x006CE724);
-                WRITEU32(o_instanthatch[1], 0xEB040FB6);
-                break;
-            case 11:
-                WRITEU32(o_instanthatch[0] + 0x18, 0x006D08C0);
-                WRITEU32(o_instanthatch[1], 0xEB04105E);
-                break;
-        }
+        memcpy((void *)(offset[gameVer][0]), buffer, 0x18);
+        WRITEU32(offset[gameVer][0] + 0x18, data[gameVer][0]);
+        WRITEU32(offset[gameVer][1], data[gameVer][1]);
     } else {
-        WRITEU32(o_instanthatch[1], 0xE1A00004);
+        WRITEU32(offset[gameVer][1], 0xE1A00004);
     }
 
 }
