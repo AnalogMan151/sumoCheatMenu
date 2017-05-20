@@ -5,7 +5,7 @@ A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMe
 
 To compile you'll need DevKitARM (from DevKitPro) and Python2.
 
-To run you'll need a 3DS, Custom Firmware, and BootNTR Selector. Start BootNTR Selector BootNTR Selector Mode-3 for o3DS) to load NTR and then start the game. Activate by pressing SELECT in game. This plugin supports both version 1.0 and v1.1 of the games.
+To run you'll need a 3DS, Custom Firmware, and BootNTR Selector. Start BootNTR Selector BootNTR Selector Mode-3 for o3DS) to load NTR and then start the game. Activate by pressing SELECT in game. This plugin supports both version 1.0, v1.1 and v1.2 of the games.
 
 ### Cheats include:
 
