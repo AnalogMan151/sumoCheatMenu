@@ -9,12 +9,11 @@
  *                              *
  ********************************/
 
-static char currentEXP[40] = "Undefined";
+static char currentEXP[40] = "Current EXP rate:   1x";
 u8 exp_rate = 1;
 
 // EXP menu entry
 void    expMenu(void) {
-    updateEXP();
 
     new_spoiler("EXP Multiplier");
         new_unselectable_entry(currentEXP);
@@ -28,7 +27,8 @@ void    expMenu(void) {
 
 // Reads current EXP modifier and prints it to the menu
 void	updateEXP(void) {
-    u32 offset[][2] = {
+    u32 offset[][2] =
+    {
         {0x00595800, 0x0048F1EC},
         {0x00597700, 0x00490E4C},
         {0x00597700, 0x00490E74}
