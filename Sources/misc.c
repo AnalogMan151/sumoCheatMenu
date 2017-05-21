@@ -88,14 +88,14 @@ void    cameraZoom(void) {
     {
         {0x00595824, 0x0803797C},
         {0x00597724, 0x08037B18},
-        {0x00597724, 0x08037B18},
+        {0x00597840, 0x08037B18},
     };
 
     u32 data[] =
     {
         0xEBFAEBA8,
         0xEBFAEB01,
-        0xEBFAEB01
+        0xEBFAEB48
     };
 
     static const u8    buffer[] = {

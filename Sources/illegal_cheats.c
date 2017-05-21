@@ -9,24 +9,7 @@
  *                              *
  ********************************/
 
-u32 o_catchtrial[2] =           {0x080B8440, 0x0807638C},
-    o_catchtrainers =           0x08035000,
-    o_learnanyTM =              0x0048F0AC,
-    o_relearnanymove =          0x0042DCD4;
-
 void    illegalMenu(void) {
-
-    switch(gameVer) {
-        case 10:
-            break;
-        case 11:
-            o_catchtrial[0] +=     0x04BC;
-            o_catchtrial[1] +=     0x01A4;
-            o_catchtrainers -=     0x01D0;
-            o_learnanyTM +=        0x1C60;
-            o_relearnanymove +=    0x19C4;
-            break;
-    }
 
     new_entry("Catch Trial Pokemon", catchTrial);
     new_entry("Catch Trainer's Pokemon", catchTrainers);
@@ -44,7 +27,7 @@ void    catchTrial(void) {
         {0x080B8914, 0x08076530}
     };
 
-    if (!checkAddress(o_catchtrial[0]))
+    if (!checkAddress(offset[gameVer][0]))
         return;
     if (READU32(offset[gameVer][0]) == 0xE1A01004) {
         WRITEU32(offset[gameVer][1], 0xE3A00001);
@@ -63,7 +46,7 @@ void    catchTrainers(void) {
         0x08034E30
     };
 
-    if (!checkAddress(o_catchtrainers + 0xC84))
+    if (!checkAddress(offset[gameVer] + 0xC84))
         return;
     if (READU32(offset[gameVer] + 0xC84) == 0x0A00000B) {
         WRITEU32(offset[gameVer] + 0xC78, 0xE3A0B000);
