@@ -1,7 +1,7 @@
 #include "cheats.h"
 
 char	*builder_name = "AnalogMan",
-        version[7] = "v0.6.0",
+        version[7] = "v0.6.1",
         updateVer[12] = "Update v?.?",
         formattedVer[35];
 
