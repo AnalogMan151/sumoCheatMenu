@@ -1,7 +1,10 @@
 #include "cheats.h"
 
+// Note: Luma3DS LayeredFS writes code up to 0x005977B8. Do not use addresses
+// prior to this when storing ASM code for cheats
+
 char	*builder_name = "AnalogMan",
-        version[7] = "v0.6.1",
+        version[7] = "v0.6.2",
         updateVer[12] = "Update v?.?",
         formattedVer[35];
 

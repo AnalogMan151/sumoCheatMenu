@@ -82,13 +82,13 @@ void    generateSpawn(void) {
     {
         {0x005957E0, 0x003988DC},
         {0x005976E0, 0x00399CB4},
-        {0x005976E0, 0x00399CB4}
+        {0x0059785C, 0x00399CB4}
     };
     u32 data[][3] =
     {
         {0xEB07F3BF, 0xEB07F3BB, 0xEB07F3B4},
         {0xEB07F689, 0xEB07F685, 0xEB07F67E},
-        {0xEB07F689, 0xEB07F685, 0xEB07F67E}
+        {0xEB07F6E8, 0xEB07F6E4, 0xEB07F6DD}
     };
 
     if (spawnIsOn)
