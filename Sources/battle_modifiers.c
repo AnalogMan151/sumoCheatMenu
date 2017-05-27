@@ -54,9 +54,25 @@ void    noEncounters(u32 state) {
     }
 }
 
-
 // Shows opponent Pokémon's info during battle on bottom screen when icon is tapped
+void    showOpponentInfoOld(void) {
+    if (battleInfo) {
+        u32 offset[] =
+        {
+            0x080AE178,
+            0x080AE5F8,
+            0x080AE610
+        };
+        if (checkAddress(offset[gameVer])) {
+            if (READU32(offset[gameVer]) == 0xE92D40F8)
+                WRITEU32(offset[gameVer], 0xEAFFFEE7);
+        }
+    }
+}
+
+// Shows opponent Pokémon's info during battle on top screen when X is held
 void    showOpponentInfo(u32 state) {
+
     if (state)
         battleInfo = true;
     else

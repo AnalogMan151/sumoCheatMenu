@@ -141,6 +141,7 @@ void    fixMakeupBag(void);
 void    battleMenu(void);
 void    noEncounters(u32 state);
 void    alwaysCritical(void);
+void    showOpponentInfoOld(void);
 void    showOpponentInfo(u32 state);
 void    maxBattleStats(u32 state);
 void	catch100(void);
