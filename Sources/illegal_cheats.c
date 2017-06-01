@@ -81,7 +81,7 @@ void    relearnAnyMove(u32 state) {
     {
         {0x0042DCD4, 0x004A6B30},
         {0x0042F698, 0x004A88D0},
-        {0x0042F698, 0x004A88D0}
+        {0x0042F698, 0x004A88F8}
     };
 
     static u32 original[4];
