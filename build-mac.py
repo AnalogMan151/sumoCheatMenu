@@ -7,6 +7,10 @@ import datetime
 import shutil
 from ftplib import FTP
 
+def usage():
+    print("Usage: " + sys.argv[0] + " OLD|NEW");
+    sys.exit();
+
 def allFile(pattern):
     s = "";
     for file in glob.glob(pattern):
@@ -20,6 +24,9 @@ def allFolderFile(pattern, ext):
             s+= os.path.join(dirpath, filename) + ' '
     return s;
 
+if (len(sys.argv) != 2):
+    usage();
+
 SUN_TID     = "0004000000164800"
 MOON_TID     = "0004000000175E00"
 NAME         = "SUMO"
@@ -27,6 +34,10 @@ FTP_FOLDER    = "/plugin/"
 HOST        = "192.168.1.133"
 PORT        = "5000"
 COPYTOPATH    = NAME + ".plg"
+if (sys.argv[1] == "OLD") or (sys.argv[1] == "old"):
+    OLD           = "-D OLD "
+else:
+    OLD           = ""
 CC             = "arm-none-eabi-gcc"
 CP             = "arm-none-eabi-g++"
 OC            = "arm-none-eabi-objcopy"
@@ -35,7 +46,7 @@ CTRULIB     = '../libctru'
 DEVKITARM     = 'opt/devkitPro/devkitARM'
 LIBPATH     = '-L ./lib '
 ARCH         = ' -march=armv6k -mlittle-endian -mtune=mpcore -mfloat-abi=hard '
-CFLAGS        = ' -Os -c ' + ARCH
+CFLAGS        = ' -Os -c ' + OLD + ARCH
 ASFLAGS        = ' -Os -c -s ' + ARCH
 LIBFLAGS     = " -lntr -lShark2NTR_dev -lctr -lg -lsysbase -lc -lgcc "
 LDFLAGS        = ' -pie --gc-sections -T 3ds.ld -Map=' + NAME +'.map '
