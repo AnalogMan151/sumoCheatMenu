@@ -14,10 +14,10 @@ u8 matchingHair,
    currentGender,
    currentSkintone;
 
-u32 o_gender =          0x330D67D5,
-    o_skintone =        0x330D6824,
-    o_appearance =      0x330D67D4,
-    o_keyitems =        0x330D5FEC;
+static u32 o_gender =          0x330D67D5,
+           o_skintone =        0x330D6824,
+           o_appearance =      0x330D67D4,
+           o_keyitems =        0x330D5FEC;
 
 
 // Appearance menu entry

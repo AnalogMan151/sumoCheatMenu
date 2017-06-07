@@ -8,7 +8,7 @@
 
 
 // Array for all Poké Ball types
-int arr_allPokeBalls[22] =
+static const int arr_allPokeBalls[22] =
 {
       1,   2,   3,   4,   6,   7,   8,   9,
      10,  11,  12,  13,  14,  15, 492, 493,
@@ -17,7 +17,7 @@ int arr_allPokeBalls[22] =
 
 
 // Array of legal items
-int arr_allItems[236] =
+static const int arr_allItems[236] =
 {
       55,  56,  57,  58,  59,  60,  61,  62,
       63,  72,  73,  74,  75,  76,  77,  78,
@@ -53,7 +53,7 @@ int arr_allItems[236] =
 
 
 // Array of legal medicine
-int arr_allMedicine[51] =
+static const int arr_allMedicine[51] =
 {
      17,  18,  19,  20,  21,  22,  23,  24,
      25,  26,  27,  28,  29,  30,  31,  32,
@@ -66,7 +66,7 @@ int arr_allMedicine[51] =
 
 
 // Array of legal TMs
-int arr_allTMs[100] =
+static const int arr_allTMs[100] =
 {
     328, 329, 330, 331, 332, 333, 334, 335,
     336, 337, 338, 339, 340, 341, 342, 343,
@@ -85,7 +85,7 @@ int arr_allTMs[100] =
 
 
 // Array of legal berries
-int arr_allBerries[50] =
+static const int arr_allBerries[50] =
 {
     149, 150, 151, 152, 153, 154, 155, 156,
     157, 158, 159, 160, 161, 162, 163, 165,

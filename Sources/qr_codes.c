@@ -22,7 +22,7 @@ void    qrMenu(void) {
 
 // Remove 24 hour wait time for island scanning
 void	removeIslandScanWait(void) {
-    u32 offset[] =
+    static const u32 offset[] =
     {
         0x0043DAA8,
         0x0043F6B4,

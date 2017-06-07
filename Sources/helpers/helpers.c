@@ -54,7 +54,7 @@ int    randomNum(int start, int end) {
     return r[rand()%20];
 }
 
-bool    isinArray(int val, int *arr, int size) {
+bool    isinArray(int val, const int *arr, int size) {
     for (int i = 0; i < (size / 4); i++) {
         if (arr[i] == val)
             return true;

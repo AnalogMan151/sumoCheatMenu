@@ -3,13 +3,13 @@
 
 
 // Array of Pokémon IDs and names
-typedef struct  arrayPokemon
+typedef struct arrayPokemon
 {
     int     id;
     char    *name;
 }               spawnPokemon;
 
-spawnPokemon     pokemonID[802] =
+static const spawnPokemon     pokemonID[802] =
 {
     {1, "Bulbasaur"},
     {2, "Ivysaur"},

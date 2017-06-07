@@ -83,5 +83,7 @@ $RECYCLE.BIN/
 # Production Files
 # =========================
 
-SUMO.plg
-SUMO.zip
+SUMO-new3DS.plg
+SUMO-old3DS.plg
+SUMO-new3DS.zip
+SUMO-old3DS.zip

@@ -20,7 +20,7 @@ void    illegalMenu(void) {
 // Catch Pokémon during Trial
 void    catchTrial(void) {
 
-    u32 offset[][2] =
+    static const u32 offset[][2] =
     {
         {0x080B8440, 0x0807638C},
         {0x080B88FC, 0x08076530},
@@ -39,7 +39,7 @@ void    catchTrial(void) {
 // Catch Trainer's Pokémon
 void    catchTrainers(void) {
 
-    u32 offset[] =
+    static const u32 offset[] =
     {
         0x08035000,
         0x08034E30,
@@ -58,7 +58,7 @@ void    catchTrainers(void) {
 
 void    learnAnyTM(u32 state) {
 
-    u32 offset[] =
+    static const u32 offset[] =
     {
         0x0048F0AC,
         0x00490D0C,
@@ -77,7 +77,7 @@ void    learnAnyTM(u32 state) {
 
 void    relearnAnyMove(u32 state) {
 
-    u32 offset[][2] =
+    static const u32 offset[][2] =
     {
         {0x0042DCD4, 0x004A6B30},
         {0x0042F698, 0x004A88D0},

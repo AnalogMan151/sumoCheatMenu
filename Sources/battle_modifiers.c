@@ -31,7 +31,7 @@ void    battleMenu(void) {
 
 // No wild encounters unless START is held
 void    noEncounters(u32 state) {
-    u32 offset[] =
+    static const u32 offset[] =
     {
         0x0807A28C,
         0x0807A5E8,
@@ -57,7 +57,7 @@ void    noEncounters(u32 state) {
 // Shows opponent Pokémon's info during battle on bottom screen when icon is tapped
 void    showOpponentInfoOld(void) {
     if (battleInfo) {
-        u32 offset[] =
+        static const u32 offset[] =
         {
             0x080AE178,
             0x080AE5F8,
@@ -83,13 +83,13 @@ void    showOpponentInfo(u32 state) {
 
 // Sets all in-battle stats to +6 ranks
 void    maxBattleStats(u32 state) {
-    u32 offset[][2] =
+    static const u32 offset[][2] =
     {
         {0x00595A00, 0x0029A048},
         {0x00597900, 0x0029A168},
         {0x00597900, 0x0029A168}
     };
-    u32 data[] =
+    static const u32 data[] =
     {
         0xEA0BEE6C,
         0xEA0BF5E4,
@@ -140,7 +140,7 @@ void    maxBattleStats(u32 state) {
 
 // 100% Catch rate for Pokemon
 void    catch100(void) {
-    u32 offset[] =
+    static const u32 offset[] =
     {
         0x0803528C,
         0x080350BC,
@@ -172,7 +172,7 @@ void    decreaseShinyChance(void) {
 
 // Make wild Pokemon shiny
 void	shinyPokemon(void) {
-    u32 offset[] =
+    static const u32 offset[] =
     {
         0x003183EC,
         0x00318AF0,
@@ -193,13 +193,13 @@ void	shinyPokemon(void) {
 
 // Use Z-Moves without the need of a Z-Crystal
 void    zMoves(u32 state) {
-    u32 offset[][3] =
+    static const u32 offset[][3] =
     {
         {0x00595900, 0x00313DC0, 0x0036D0EC},
         {0x00597800, 0x00314300, 0x0036DFF4},
         {0x00597800, 0x00314300, 0x0036DFF4}
     };
-    u32 data[][3] =
+    static const u32 data[][3] =
     {
         {0x0078BA28, 0xEB0A06CE, 0xEB0A06B5},
         {0x0078BF60, 0xEB0A0D3E, 0xEB0A0D25},
@@ -231,7 +231,7 @@ void    zMoves(u32 state) {
 
 // Inifinite Z-Moves
 void    infZMoves(void) {
-    u32 offset = 0x08031100;
+    static const u32 offset = 0x08031100;
 
     if (!checkAddress(offset + 0xDC))
         return;

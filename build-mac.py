@@ -29,15 +29,18 @@ if (len(sys.argv) != 2):
 
 SUN_TID     = "0004000000164800"
 MOON_TID     = "0004000000175E00"
-NAME         = "SUMO"
 FTP_FOLDER    = "/plugin/"
 HOST        = "192.168.1.133"
 PORT        = "5000"
-COPYTOPATH    = NAME + ".plg"
+ARCH         = ' -march=armv6k -mlittle-endian -mtune=mpcore -mfloat-abi=hard '
 if (sys.argv[1] == "OLD") or (sys.argv[1] == "old"):
-    OLD           = "-D OLD "
+    NAME         = "SUMO-old3DS"
+    COPYTOPATH    = NAME + ".plg"
+    CFLAGS        = ' -Os -c -D OLD ' + ARCH
 else:
-    OLD           = ""
+    NAME         = "SUMO-new3DS"
+    COPYTOPATH    = NAME + ".plg"
+    CFLAGS        = ' -Os -c ' + ARCH
 CC             = "arm-none-eabi-gcc"
 CP             = "arm-none-eabi-g++"
 OC            = "arm-none-eabi-objcopy"
@@ -45,8 +48,6 @@ LD             = "arm-none-eabi-ld"
 CTRULIB     = '../libctru'
 DEVKITARM     = 'opt/devkitPro/devkitARM'
 LIBPATH     = '-L ./lib '
-ARCH         = ' -march=armv6k -mlittle-endian -mtune=mpcore -mfloat-abi=hard '
-CFLAGS        = ' -Os -c ' + OLD + ARCH
 ASFLAGS        = ' -Os -c -s ' + ARCH
 LIBFLAGS     = " -lntr -lShark2NTR_dev -lctr -lg -lsysbase -lc -lgcc "
 LDFLAGS        = ' -pie --gc-sections -T 3ds.ld -Map=' + NAME +'.map '

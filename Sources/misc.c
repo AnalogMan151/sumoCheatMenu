@@ -33,9 +33,9 @@ void    miscMenu(void) {
 // Displays IVs or EVs in place of stats on Pokémon Status screen when X or START is held
 void    viewIVEV(void) {
 
-    u32 offset = 0x08010000;
+    static const u32 offset = 0x08010000;
 
-    u32 version_diff[] =
+    static const u32 version_diff[] =
     {
         0x00,
         0xE8,
@@ -84,14 +84,14 @@ void    viewIVEV(void) {
 // Zooms camera out or in with START+L / START+R
 void    cameraZoom(void) {
 
-    u32 offset[][2] =
+    static const u32 offset[][2] =
     {
         {0x00595824, 0x0803797C},
         {0x00597724, 0x08037B18},
         {0x00597840, 0x08037B18},
     };
 
-    u32 data[] =
+    static const u32 data[] =
     {
         0xEBFAEBA8,
         0xEBFAEB01,
@@ -124,7 +124,7 @@ void    cameraZoom(void) {
 // Sets text speed to instant
 void	instantText(void) {
 
-    u32 offset[] =
+    static const u32 offset[] =
     {
         0x003BE9C8,
         0x003BFBF4,
@@ -139,14 +139,14 @@ void	instantText(void) {
 // Access PC from anywhere by opening options menu
 void    pcAnywhere(u32 state) {
 
-    u32 offset[][3] =
+    static const u32 offset[][3] =
     {
         {0x00595978, 0x00373C48, 0x00373C48},
         {0x00597878, 0x0037E5E4, 0x00374C3C},
         {0x00597878, 0x0037E5E4, 0x00374C3C}
     };
 
-    u32 data[][7] =
+    static const u32 data[][7] =
     {
         {0x1AF77D09, 0xEBF7D9CE, 0x00636000, 0x0067206C, 0xEB088755, 0xEB086104, 0xEAF77D09},
         {0x1AF77958, 0xEBF7D6DC, 0x00638000, 0x006740B4, 0xEB088B18, 0xEB0864A3, 0xEAF77958},
@@ -192,7 +192,7 @@ void    pcAnywhere(u32 state) {
 // Re-battle trainer that have already been fought. Active by holding L and talking to them
 void	rematchTrainers(void) {
 
-    u32 offset[] =
+    static const u32 offset[] =
     {
         0x0049D200,
         0x0049EFA0,
@@ -207,7 +207,7 @@ void	rematchTrainers(void) {
 // Toggles model outlines for player and Pokémon off and on
 void	toggleOutlines(u32 state) {
 
-    u32 offset[] =
+    static const u32 offset[] =
     {
         0x0041B748,
         0x0041CFCC,
@@ -221,7 +221,7 @@ void	toggleOutlines(u32 state) {
 // Disables inGame NFC to allow NTR connection outside of Festival Plaza.
 void    toggleNFC(u32 state) {
 
-    u32 offset[] =
+    static const u32 offset[] =
     {
         0x003DFFD0,
         0x003E14C0,

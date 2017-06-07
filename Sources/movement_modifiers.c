@@ -23,7 +23,7 @@ void    movementMenu(void) {
 
 // Increases run speed to 1.375x
 void	runFaster(void) {
-    u32 offset[] =
+    static const u32 offset[] =
     {
         0x0039AF74,
         0x0039C394,
@@ -41,14 +41,14 @@ void	neverTrip(void) {
 
 // Walk through wall while R is held down
 void	walkThruWalls(void) {
-    u32 offset[] =
+    static const u32 offset[] =
     {
         0x0039D140,
         0x0039E560,
         0x0039E560
     };
 
-    u32 original[][2] =
+    static const u32 original[][2] =
     {
         {0xEB01E7E7, 0xEB01E79A},
         {0xEB01E8DC, 0xEB01E88F},

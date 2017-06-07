@@ -27,14 +27,14 @@ void    expMenu(void) {
 
 // Reads current EXP modifier and prints it to the menu
 void	updateEXP(void) {
-    u32 offset[][2] =
+    static const u32 offset[][2] =
     {
         {0x00595800, 0x0048F1EC},
         {0x00597700, 0x00490E4C},
         {0x0059782C, 0x00490E74}
     };
 
-    u32 data[] =
+    static const u32 data[] =
     {
         0xEB041983,
         0xEB041A2B,

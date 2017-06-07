@@ -23,7 +23,7 @@ void    pokemonMenu(void) {
 
 // Rename any Pokemon at the Name Rater
 void	renamePokemon(void) {
-    u32 offset[] =
+    static const u32 offset[] =
     {
         0x004A84F8,
         0x004AA298,
@@ -35,7 +35,7 @@ void	renamePokemon(void) {
 
 // Egg instantly ready when talking to Nursery NPC while holding L
 void	instantEgg(void) {
-    u32 offset[] =
+    static const u32 offset[] =
     {
         0x00444A6C,
         0x00446684,
@@ -50,13 +50,14 @@ void	instantEgg(void) {
 // Instant egg hatching in one step
 void	instantHatch(u32 state) {
 
-    u32 offset[][2] =
+    static const u32 offset[][2] =
     {
         {0x005958C0, 0x004919E0},
         {0x005977C0, 0x00493640},
         {0x005977C0, 0x00493668}
     };
-    u32 data[][2] =
+
+    static const u32 data[][2] =
     {
         {0x006CE724, 0xEB040FB6},
         {0x006D08C0, 0xEB04105E},
