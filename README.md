@@ -32,6 +32,8 @@ To run you'll need a 3DS, Custom Firmware, and BootNTR Selector. Start BootNTR S
   5. Stat Stages +6 (Raises all in-battle stat stages to max)
   6. Use Z-Moves without Z-Crystal
   7. Infinite Z-Moves
+  8. 1-Hit KO
+  9. Invincible Party
 
 - Movement Modifiers
   1. Run Faster
