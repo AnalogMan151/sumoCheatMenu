@@ -39,8 +39,10 @@ void	neverTrip(void) {
 }
 
 
-// Walk through wall while R is held down
+// Walk through wall while R is held down or toggle with R+A
 void	walkThruWalls(void) {
+    static bool permActivation = false;
+    static bool btn = false;
     static const u32 offset[] =
     {
         0x0039D140,
@@ -55,6 +57,20 @@ void	walkThruWalls(void) {
         {0xEB01E8DC, 0xEB01E88F}
     };
 
-    WRITEU32(offset[gameVer], (is_pressed(BUTTON_R)) ? 0xE1A00000 : original[gameVer][0]);
-    WRITEU32(offset[gameVer] + 0x134, (is_pressed(BUTTON_R)) ? 0xE1A00000 : original[gameVer][1]);
+    if (is_pressed(BUTTON_R)) {
+        WRITEU32(offset[gameVer], 0xE1A00000);
+        WRITEU32(offset[gameVer] + 0x134, 0xE1A00000);
+        if (is_pressed(BUTTON_A) && !btn) {
+            permActivation = !permActivation;
+            btn = true;
+        } else if (!is_pressed(BUTTON_A)) {
+            btn = false;
+        }
+    } else if (permActivation) {
+        WRITEU32(offset[gameVer], 0xE1A00000);
+        WRITEU32(offset[gameVer] + 0x134, 0xE1A00000);
+    } else {
+        WRITEU32(offset[gameVer], original[gameVer][0]);
+        WRITEU32(offset[gameVer] + 0x134, original[gameVer][1]);
+    }
 }

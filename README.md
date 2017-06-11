@@ -3,7 +3,7 @@
 
 A plugin created using [@RyDog199](https://github.com/RyDog199/)'s [blankCheatMenu](https://github.com/RyDog199/blankCheatMenu) base which in turn was based off [@Nanquitas](https://github.com/Nanquitas/) work.
 
-To compile you'll need DevKitARM (from DevKitPro) and Python2.
+To compile you'll need DevKitARM (from DevKitPro) and Python 2 or 3.
 
 To run you'll need a 3DS, Custom Firmware, and BootNTR Selector. Start BootNTR Selector BootNTR Selector Mode-3 for o3DS) to load NTR and then start the game. Activate by pressing SELECT in game. This plugin supports both version 1.0, v1.1 and v1.2 of the games.
 
@@ -36,7 +36,7 @@ To run you'll need a 3DS, Custom Firmware, and BootNTR Selector. Start BootNTR S
 - Movement Modifiers
   1. Run Faster
   2. No trip animation
-  3. Walk through Walls (Hold R to activate)
+  3. Walk through Walls (Hold R to activate or toggle with R+A)
 
 - Pokémon Modifiers
   1. Rename any Pokémon at the Name Rater
