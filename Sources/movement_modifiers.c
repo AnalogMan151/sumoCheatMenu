@@ -15,7 +15,7 @@ void    movementMenu(void) {
     new_spoiler("Movement");
         new_entry("Run Faster", runFaster);
         new_entry("Never Trip", neverTrip);
-        new_entry_managed_note("Walk Through Walls", "Hold R = Enable", walkThruWalls, WALKTHROUGHWALLS, 0);
+        new_entry_managed_note("Walk Through Walls", "Hold R = Enable\nPress R+A to toggle", walkThruWalls, WALKTHROUGHWALLS, 0);
         new_line();
     exit_spoiler();
 }
