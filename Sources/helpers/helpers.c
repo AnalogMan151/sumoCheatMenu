@@ -62,9 +62,13 @@ bool    isinArray(int val, const int *arr, int size) {
     return false;
 }
 
+bool    isInBattle(void) {
+    if (READU32(0x30000158) == 0x40001)
+        return true;
+    return false;
+}
 
-bool getWifiStatus()
-{
+bool getWifiStatus() {
     Result r = 0;
     u32 wifiStatus = 0;
     static bool wifiInit = false;

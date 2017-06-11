@@ -4,25 +4,25 @@
 
 // https://github.com/drgoku282/PKMN-NTR
 
-#define NUM_OPPONENTS 7
+#define NUM_OPPONENTS 6
 
 typedef enum Stat {
     HP=0, ATK, DEF, SPE, SPA, SPD
 } Stat;
 
 typedef enum Opponent {
-    PRIMARY = 0,
-    SECONDARY,
-    SOS0, SOS1, SOS2, SOS3, SOS4
+    FIRST = 0,
+    SECOND,
+    THIRD, FOURTH, FIFTH, SIXTH
 } Opponent;
 
 static const u8* OPPONENT_POINTERS[NUM_OPPONENTS] = {
-    (u8*)0x3254F4AC, (u8*)0x32550284, (u8*)0x3003969C, (u8*)0x3002FD64,
-    (u8*)0x3002FF48, (u8*)0x3003012C, (u8*)0x30030310
+    (u8*)0x3002F7B8, (u8*)0x3002F99C, (u8*)0x3002FB80, (u8*)0x3002FD64,
+    (u8*)0x3002FD64, (u8*)0x3003012C
 };
 
 static const char *OPPONENT_NAMES[NUM_OPPONENTS] = {
-    "1st", "2nd", "SOS0", "SOS1", "SOS2", "SOS3", "SOS4"
+    "1st", "2nd", "3rd", "4th", "5th", "6th"
 };
 
 static const char *STAT_NAME[] = {

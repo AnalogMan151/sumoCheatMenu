@@ -14,31 +14,15 @@ Handle fsUserHandle = 0;
 #define TICKS_PER_MSEC (268123.480)
 #define BLANK 255,255,255
 
-Opponent selectedOpponent = PRIMARY;
-
-bool isInBattle() {
-    u32 offset[] =
-    {
-        0x006731A4,
-        0x006747D8,
-        0x006747E0
-    };
-
-    u32 data[] =
-    {
-        0x00000000,
-        0x40400000,
-        0x40400000
-    };
-    if (READU32(offset[gameVer]) >= data[gameVer] && READU32(offset[gameVer]) <= data[gameVer] + 0x10000)
-        return true;
-    return false;
-}
+Opponent selectedOpponent = FIRST;
 
 void drawPokemonID() {
-    if (is_pressed(BUTTON_R)) {
+    static bool btn = false;
+    if (is_pressed(BUTTON_R) && !btn) {
         selectedOpponent = (selectedOpponent + 1) % NUM_OPPONENTS;
-        svc_sleepThread(300000000);
+        btn = true;
+    } else if (!is_pressed(BUTTON_R)) {
+        btn = false;
     }
     u8 pkbytes[232];
     Pokemon* pkm = (Pokemon*)pkbytes;
