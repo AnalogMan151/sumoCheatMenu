@@ -4,7 +4,7 @@
 // prior to this when storing ASM code for cheats
 
 char	*builder_name = "AnalogMan",
-        version[7] = "v0.6.4",
+        version[7] = "v0.7.0",
         updateVer[12] = "Update v?.?",
         formattedVer[35];
 
@@ -37,6 +37,8 @@ void    disableOnlineCheats(void) {
         disable_entry(ZMOVES);
         disable_entry(INFZMOVES);
         disable_entry(SHOWOPPONENTINFO);
+        disable_entry(ONEHITKO);
+        disable_entry(INVINCIBLEPARTY);
     }
 }
 

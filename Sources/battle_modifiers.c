@@ -16,14 +16,19 @@ void    battleMenu(void) {
 
     // Creates spoiler and cheat entries
 
-    new_spoiler("Battle");
-        new_entry_arg_note("No Wild Encounters", "Hold START to temporarily enable encounters", noEncounters, 0, NOENCOUNTERS, TOGGLE);
-        new_entry("100% Capture Rate", catch100);
-        new_entry_managed("Shiny Chance: XXXXXX", decreaseShinyChance, DECREASESHINYCHANCE, AUTO_DISABLE);
-        new_entry_arg_note("View Opponent's Info", "Hold X during battle\nPress R to cycle enemies", showOpponentInfo, 0, SHOWOPPONENTINFO, TOGGLE);
+    new_spoiler("Party");
         new_entry_arg("Stat Stages +6", maxBattleStats, 0, MAXBATTLESTATS, TOGGLE);
         new_entry_arg("Use Z-Moves w/o Z-Crystal", zMoves, 0, ZMOVES, TOGGLE);
         new_entry_managed("Infinite Z-Moves", infZMoves, INFZMOVES, 0);
+        new_entry_managed("Invincible Party", invincibleParty, INVINCIBLEPARTY, 0);
+        new_line();
+    exit_spoiler();
+    new_spoiler("Opponent");
+        new_entry_arg_note("No Wild Encounters", "Hold START to temporarily enable encounters", noEncounters, 0, NOENCOUNTERS, TOGGLE);
+        new_entry("100% Capture Rate", catch100);
+        new_entry_arg_note("View Opponent's Info", "Hold X during battle\nPress R to cycle enemies", showOpponentInfo, 0, SHOWOPPONENTINFO, TOGGLE);
+        new_entry_managed("1-Hit KO", oneHitKO, ONEHITKO, 0);
+        new_entry_managed("Shiny Chance: XXXXXX", decreaseShinyChance, DECREASESHINYCHANCE, AUTO_DISABLE);
         new_line();
     exit_spoiler();
     updateShiny();
@@ -240,6 +245,51 @@ void    infZMoves(void) {
             WRITEU32(offset + 0xD4, 0xE3A00000);
             WRITEU32(offset + 0xD8, 0xE5C30005);
             WRITEU32(offset + 0xDC, 0xE1500000);
+        }
+    }
+}
+
+// 1-Hit KO
+void    oneHitKO(void) {
+    static const u32 offset[3] =
+    {
+        0x30004DB6,  // Max HP
+        0x30004DB8,  // Displayed HP
+        0x3000BDA0   // Actual HP
+    };
+
+    if (isInBattle()) {
+        for (int i = 0; i < 6; i++) {
+            // If Actual HP is above 1, set it to 1
+            if (READU16(offset[2] + (i * 0x330)) > 1) {
+                WRITEU16(offset[1] + (i * 0x330), READU16(offset[0] + (i * 0x330)));
+                WRITEU16(offset[2] + (i * 0x330), 1);
+
+            // If actual HP is 0, make displayed HP match
+            } else if (READU16(offset[2] + (i * 0x330)) == 0)
+                WRITEU16(offset[1] + (i * 0x330), 0);
+        }
+    }
+}
+
+// Invincible Party
+void    invincibleParty(void) {
+    static const u32 offset[3] =
+    {
+        0x30002776,  // Max HP
+        0x30002778,  // Displayed HP
+        0x30009760   // Actual HP
+    };
+    if (isInBattle()) {
+        for (int i = 0; i < 6; i++) {
+            if (READU16(offset[2] + (i * 0x330)) > 0) {
+                // If Actual HP is less than 65535 then set it to 65535
+                if (READU16(offset[2] + (i * 0x330)) < 0xFFFF)
+                    WRITEU16(offset[2] + (i * 0x330), 0xFFFF);
+                // If Display HP is less than max then set it to max
+                if (READU16(offset[1] + (i * 0x330)) < READU16(offset[0] + (i * 0x330)))
+                    WRITEU16(offset[1] + (i * 0x330), READU16(offset[0] + (i * 0x330)));
+            }
         }
     }
 }

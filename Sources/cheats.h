@@ -68,7 +68,9 @@ enum {
     VIEWIVEV,
     SHOWOPPONENTINFO,
     DECREASESHINYCHANCE,
-    INFZMOVES
+    INFZMOVES,
+    ONEHITKO,
+    INVINCIBLEPARTY
 } e_identifiers;
 
 // Helpers
@@ -91,6 +93,7 @@ void    protect_region(u32 addr);
 bool    checkAddress(u32 address);
 int     randomNum(int start, int end);
 bool    getWifiStatus(void);
+bool    isInBattle(void);
 
 // Offsets
 void    getVersion(void);
@@ -150,6 +153,8 @@ void    decreaseShinyChance(void);
 void	shinyPokemon(void);
 void    zMoves(u32 state);
 void    infZMoves(void);
+void    oneHitKO(void);
+void    invincibleParty(void);
 
 
 // Movement Modifiers
