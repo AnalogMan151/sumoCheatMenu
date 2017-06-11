@@ -6,6 +6,7 @@ import glob
 import datetime
 import shutil
 from ftplib import FTP
+from sys import platform as _platform
 
 def usage():
     print("Usage: " + sys.argv[0] + " OLD|NEW");
@@ -27,26 +28,33 @@ def allFolderFile(pattern, ext):
 if (len(sys.argv) != 2):
     usage();
 
+
+if _platform == "darwin":
+    DEVKITARM     = 'opt/devkitPro/devkitARM'
+elif _platform == "win32":
+    DEVKITARM     = 'c:/devkitPro/devkitARM'
+
 SUN_TID     = "0004000000164800"
 MOON_TID     = "0004000000175E00"
 FTP_FOLDER    = "/plugin/"
 HOST        = "192.168.1.133"
-PORT        = "5000"
+PORT        = 5000
 ARCH         = ' -march=armv6k -mlittle-endian -mtune=mpcore -mfloat-abi=hard '
 if (sys.argv[1] == "OLD") or (sys.argv[1] == "old"):
     NAME         = "SUMO-old3DS"
     COPYTOPATH    = NAME + ".plg"
     CFLAGS        = ' -Os -c -D OLD ' + ARCH
-else:
+elif (sys.argv[1] == "NEW") or (sys.argv[1] == "new"):
     NAME         = "SUMO-new3DS"
     COPYTOPATH    = NAME + ".plg"
     CFLAGS        = ' -Os -c ' + ARCH
+else:
+    usage();
 CC             = "arm-none-eabi-gcc"
 CP             = "arm-none-eabi-g++"
 OC            = "arm-none-eabi-objcopy"
 LD             = "arm-none-eabi-ld"
 CTRULIB     = '../libctru'
-DEVKITARM     = 'opt/devkitPro/devkitARM'
 LIBPATH     = '-L ./lib '
 ASFLAGS        = ' -Os -c -s ' + ARCH
 LIBFLAGS     = " -lntr -lShark2NTR_dev -lctr -lg -lsysbase -lc -lgcc "
@@ -139,12 +147,16 @@ if (os.path.isfile("./" + FTP_FOLDER + "/.DS_Store")):
 printf("Creating the zip folder...");
 shutil.make_archive(NAME, 'zip', "./plugin");
 printf("Should I send the plugin on your console? (y/N)");
-user = raw_input();
+try: user = raw_input();
+except NameError:
+    user = input();
 if (user == "yes" or user == "y"):
     print("");
     printf("You got it!");
     printf("What is the IP address?");
-    HOST = raw_input();
+    try: HOST = raw_input();
+    except NameError:
+        HOST = input();
     printf("Sending the plugin right now...\n");
     connect(HOST, PORT);
     send(FTP_FOLDER + SUN_TID, "Sun.plg");
