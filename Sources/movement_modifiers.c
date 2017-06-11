@@ -29,7 +29,7 @@ void	runFaster(void) {
         0x0039C394,
         0x0039C394
     };
-    WRITEU32(offset[gameVer], (is_pressed(BUTTON_B)) ? 0x3FB00000 : 0x3F800000);
+    WRITEFLOAT(offset[gameVer], (is_pressed(BUTTON_B)) ? 1.375f : 1.0f);
 }
 
 

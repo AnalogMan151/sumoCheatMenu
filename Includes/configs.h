@@ -7,6 +7,9 @@
 #ifndef WRITEU32
 #	define WRITEU32(addr, data) 	*(vu32*)(addr) = data
 #endif
+#ifndef WRITEFLOAT
+#	define WRITEFLOAT(addr, data) 	*(volatile float *)addr = (float)data
+#endif
 #ifndef READU8
 #	define READU8(addr) 			*(volatile unsigned char*)(addr)
 #endif
@@ -16,7 +19,9 @@
 #ifndef READU32
 #	define READU32(addr) 			*(volatile unsigned int*)(addr)
 #endif
-
+#ifndef READFLOAT
+#   define READFLOAT(addr)          *(volatile float *)(addr)
+#endif
 #ifndef IO_BASE_PAD
 #	define IO_BASE_PAD				1
 #endif
