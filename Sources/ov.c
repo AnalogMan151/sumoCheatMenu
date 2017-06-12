@@ -1,6 +1,7 @@
 #include "global.h"
 #include "font_mini_4x6.h"
 #include "font6x10Linux.h"
+#include "pokeutil/symbols.h"
 #include "ov.h"
 
 static u32  g_lframebuf;
@@ -37,11 +38,11 @@ void    OvDrawTranspartBlackRect(int posX, int posY, int width, int height, u8 l
 
     for (int posC = posX; posC < posX + width; posC++)
     {
-        if (g_format == 2) 
+        if (g_format == 2)
         {
             u16* sp = (u16*)(addr + g_stride * posC + 240 * 2 - 2 * (posY + height - 1));
             u16* spEnd = sp + height;
-            while (sp < spEnd) 
+            while (sp < spEnd)
             {
                 u16 pix = *sp;
                 u16 r = (pix >> 11) & 0x1f;
@@ -51,12 +52,12 @@ void    OvDrawTranspartBlackRect(int posX, int posY, int width, int height, u8 l
                 *sp = pix;
                 sp++;
             }
-        } 
-        else if (g_format == 1) 
+        }
+        else if (g_format == 1)
         {
             u8* sp = (u8*)(addr + g_stride * posC + 240 * 3 - 3 * (posY + height - 1));
             u8* spEnd = sp +  3 * height;
-            while (sp < spEnd) 
+            while (sp < spEnd)
             {
                 sp[0] >>= level;
                 sp[1] >>= level;
@@ -69,12 +70,12 @@ void    OvDrawTranspartBlackRect(int posX, int posY, int width, int height, u8 l
 
 static inline void OvDrawPixel(u32 addr, int posX, int posY, u32 r, u32 g, u32 b)
 {
-    if (g_format == 2) 
+    if (g_format == 2)
     {
         u16 pix = ((r ) << 11) | ((g ) << 5) | (b );
         *(u16*)(addr + g_stride * posX + 240 * 2 -2 * posY) = pix;
-    } 
-    else 
+    }
+    else
     {
         u8* sp = (u8*)(addr + g_stride * posX + 240 * 3 - 3 * posY);
         sp[0] = b;
@@ -83,7 +84,29 @@ static inline void OvDrawPixel(u32 addr, int posX, int posY, u32 r, u32 g, u32 b
     }
 }
 
-void    OvDrawRect(int posX, int posY, int width, int height, u32 r, u32 g, u32 b) 
+// DRAW POKEBALL FROM PIXEL ARRAY
+void OvDrawPokeball(u32 colOffset, u32 yOffset, u32 BALL[]){
+	static int mode3D = 0;
+	u32 addr = mode3D ? g_rframebuf : g_lframebuf;
+
+    u32 color = 0xFFFFFF;
+    int x = 0;
+    int y = 0;
+    for(int i = 0; i < 576; i++){
+        // beastball()
+        color = BALL[i];
+        if(i % 24 == 0){
+            y++;
+        }
+        x = i % 24;
+        if(color != 0xFF00FF){
+            // ovDrawPixel(addr, stride, format, yOffset + y, colOffset + x, (color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF);
+			OvDrawPixel(addr, colOffset + x, yOffset + y, (color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF);
+        }
+    }
+}
+
+void    OvDrawRect(int posX, int posY, int width, int height, u32 r, u32 g, u32 b)
 {
     static int mode3D = 0;
 
@@ -96,7 +119,7 @@ void    OvDrawRect(int posX, int posY, int width, int height, u32 r, u32 g, u32 
 
     u32  addr = mode3D ? g_rframebuf : g_lframebuf;
 
-    for (int x = posX; x < posX + width; x++) 
+    for (int x = posX; x < posX + width; x++)
     {
         for (int y = posY; y < posY + height; y++)
         {
@@ -138,6 +161,43 @@ void    OvDrawChar(char letter, int posX, int posY, u32 r, u32 g, u32 b)
     }
 }
 
+
+void OvDrawSymbol(char letter, int posX, int posY, u32 r, u32 g, u32 b)
+{
+
+    static int mode3D = 0;
+
+    if (g_is3DEnabled && mode3D == 0)
+    {
+        mode3D = 1;
+        OvDrawChar(letter, posX - 5, posY, r, g, b);
+        mode3D = 0;
+    }
+
+    u32  addr = mode3D ? g_rframebuf : g_lframebuf;
+
+    int c = letter * 24;
+
+    for (int y = 0; y < 24; y++)
+    {
+        int ry = posY + (y / 2);
+        int my = y % 2;
+        u8 l = symbols[y + c];
+        for (int x = 8; x > 0; x--)
+        {
+            int rx = my == 0 ? posX + x - 1 : posX + x + 7;
+            // if(!(my == 1 && rx > 16)){
+            // }
+            int pix = (l >> (8 - x)) & 0x1;
+            if(pix){
+                OvDrawPixel(addr, rx, ry, r, g, b);
+            }else{
+                // OvDrawPixel(addr, rx, ry, 255, 0, 255);
+            }
+        }
+    }
+}
+
 int     OvDrawString(char *str, int posX, int posY, u32 r, u32 g, u32 b)
 {
     while(*str)
@@ -149,10 +209,10 @@ int     OvDrawString(char *str, int posX, int posY, u32 r, u32 g, u32 b)
 
         OvDrawChar(*str, posX, posY, r, g, b);
         str++;
-        posX += 6;    
+        posX += 6;
     }
-    return (posY + 12);
-} 
+    return (posY + 10);
+}
 
 void    OvDrawCharTiny(char letter, int posX, int posY, u32 r, u32 g, u32 b)
 {
@@ -198,7 +258,7 @@ int     OvDrawStringTiny(char *str, int posX, int posY, u32 r, u32 g, u32 b)
 
         OvDrawCharTiny(*str, posX, posY, r, g, b);
         str++;
-        posX += 4;    
+        posX += 4;
     }
-    return (posY + 8);
-} 
+    return (posY + 7);
+}

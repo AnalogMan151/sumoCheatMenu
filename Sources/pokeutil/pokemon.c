@@ -24,24 +24,76 @@ void unshuffle(u8* shuffled, u8* pkm, u32 sv) {
 
 void decryptPokemon(Opponent slot, Pokemon* poke) {
     if(poke == 0) return;
+
+    // ENCRYPTED DATA POINTER TO FIRST BYTE
     const u8* ekm = OPPONENT_POINTERS[slot];
+
+    // NEW ARRAY TO STORE THE SHUFFLED DATA
     u8 shuffled[232];
 
+    // ENCRYPTION KEY FROM FIRST 4 BYTES OF EK7
     u32 pkval = *(u32*)ekm;
+
+    // SHUFFLE VALUE USED TO UNSHUFFLE THE DATA
     u32 shval = (((pkval >> 0xD) & 0x1F) % 24);
+
+    // GET INITIAL SEED FROM FIRST 4 BYTES, SAME AS ENC KEY
     u32 seed = *(u32*)ekm;
 
+    // COPY DATA TO NEW ARRAY
     memcpy(shuffled, ekm, 232);
 
     u16 a;
     u16 b;
     for(int i = 4; i < 116; i ++) {
+
+        // CALCULATE NEXT SEED
         seed = lcrng(seed);
+
+        // USE SEED TO GET REAL VALUE
         a = (seed >> 16);
         b = *((u16*)ekm + i) ^ a;
+
+        // MOVE REAL VALUE B TO SHUFFLED ARRAY
         *(((u16*)shuffled) + i) = b;
     }
+    // UNSHUFFLE DATA
     unshuffle(shuffled, (u8*)poke, shval);
+}
+
+void decryptBattleData(Opponent slot, BattleData* bdata) {
+    if(bdata == 0) return;
+
+    // ENCRYPTED DATA POINTER TO FIRST OPONENT BYTE
+    const u8* ekm = OPPONENT_POINTERS[slot];
+
+    // ENCRYPTED DATA POINTER TO FIRST BATTLE DATA BYTE
+    const u8* ekm2 = OPPONENT_POINTERS[slot] + 0x0158;
+
+    // NEW ARRAY TO STORE THE DATA
+    u8 decrypted[28];
+
+    // ENCRYPTION KEY FROM FIRST 4 BYTES OF EK7
+    u32 pkval = *(u32*)ekm;
+
+    // GET INITIAL SEED FROM FIRST 4 BYTES, SAME AS ENC KEY
+    u32 seed = *(u32*)ekm;
+
+    u16 a;
+    u16 b;
+    for(int i = 0; i < 14; i ++) {
+
+        // CALCULATE NEXT SEED
+        seed = lcrng(seed);
+
+        // USE SEED TO GET REAL VALUE FROM THE EKM2
+        a = (seed >> 16);
+        b = *((u16*)ekm2 + i) ^ a;
+
+        // MOVE REAL VALUE B TO DECRYPTED ARRAY
+        *(((u16*)decrypted) + i) = b;
+    }
+    memcpy(bdata, decrypted, 28);
 }
 
 u8 getIV(Pokemon* poke, Stat stat) {
@@ -79,4 +131,13 @@ int isValid(Pokemon* poke) {
 
     // 3. Ensure species is in a valid range.
     return (poke->species >= 1 && poke->species <= 802);
+}
+
+char getHiddenPower(Pokemon* poke) {
+	char type = 0;
+	for(Stat i = HP; i <= SPD; i++) {
+		type |= ((getIV(poke, i) % 2) << i);
+	}
+	type = (type * 15) / 63;
+	return type;
 }
