@@ -226,12 +226,12 @@ void drawPokemonID() {
                 }
                 if(is_pressed(BUTTON_L)){
                     buttonAckX2 = 1;
-                    xtoggle = !xtoggle;
+                    //xtoggle = !xtoggle;
                 }
                 if(is_pressed(BUTTON_R)){
                     buttonAckX2 = 1;
-                    toggleDebug = !toggleDebug;
-                    loopreset = 1;
+                    //toggleDebug = !toggleDebug;
+                    //loopreset = 1;
                 }
                 if(is_pressed(BUTTON_DR)){
                     // INCREASE POKEMON FORM
@@ -632,7 +632,7 @@ void drawPokemonID() {
             // DRAW NATURE AND CURRENT LEVEL
 		  	if(pkm->nature < NATURE_COUNT)
 		  	{
-                xsprintf(buf, "Nat: %s Lv: %d", NATURE_LOOKUP[pkm->nature], pklevel);
+                xsprintf(buf, "Nat: %-7s Lv: %d", NATURE_LOOKUP[pkm->nature], pklevel);
 				posY = OvDrawString(buf, posX, posY, BLANK);
 			}
 

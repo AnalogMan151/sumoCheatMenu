@@ -4618,11 +4618,11 @@ static const short POKEMON_LOOKUP[][6][11] = {
 // NATURE BENEFITS TABLES
 static const char *NATURE_PLUS[] = {
     "", "ATK", "ATK", "ATK", "ATK", "DEF", "", "DEF", "DEF", "DEF", "SPE", "SPE",
-    "", "SPE", "SPE", "SPA", "SPA", "SPA", "", "SPA", "SPD", "SPD", "SPD", "SPD", ""
+    "", "SPE", "SPE", "SpA", "SpA", "SpA", "", "SpA", "SpD", "SpD", "SpD", "SpD", ""
 };
 static const char *NATURE_MINUS[] = {
-    "", "DEF", "SPE", "SPA", "SPD", "ATK", "", "SPE", "SPA", "SPD", "ATK", "DEF",
-    "", "SPA", "SPD", "ATK", "DEF", "SPE", "", "SPD", "ATK", "DEF", "SPE", "SPA", ""
+    "", "DEF", "SPE", "SpA", "SpD", "ATK", "", "SPE", "SpA", "SpD", "ATK", "DEF",
+    "", "SpA", "SpD", "ATK", "DEF", "SPE", "", "SpD", "ATK", "DEF", "SPE", "SpA", ""
 };
 
 

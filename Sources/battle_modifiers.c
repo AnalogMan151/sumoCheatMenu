@@ -61,7 +61,7 @@ void    noEncounters(u32 state) {
 
 // Shows opponent Pokémon's info during battle on bottom screen when icon is tapped
 void    showOpponentInfoOld(void) {
-    if (battleInfo) {
+    if (battleInfo && !getWifiStatus) {
         static const u32 offset[] =
         {
             0x080AE178,
