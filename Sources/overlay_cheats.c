@@ -163,11 +163,6 @@ void drawPokemonID() {
         	selectedOpponent = (selectedOpponent + 1) % NUM_OPPONENTS;
 	    }
 	}
-	if(getWifiStatus()) {
-		if(selectedOpponent >= OPPONENT_INDEX && selectedOpponent <= (PARTY_INDEX + 5)){
-			selectedOpponent = 13;
-		}
-	}
 
     //--- L BUTTON
     //--- L BUTTON
@@ -188,11 +183,6 @@ void drawPokemonID() {
 	        	selectedOpponent = (selectedOpponent + NUM_OPPONENTS - 1) % NUM_OPPONENTS;
 	    }
 	}
-    if(getWifiStatus()) {
-        if(selectedOpponent >= OPPONENT_INDEX && selectedOpponent <= (PARTY_INDEX + 5)){
-            selectedOpponent = 0;
-        }
-    }
     //--- X BUTTON COMBO
     //--- X BUTTON COMBO
     //--- X BUTTON COMBO

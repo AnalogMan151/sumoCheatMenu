@@ -4,7 +4,7 @@
 
 // https://github.com/drgoku282/PKMN-NTR
 
-#define NUM_OPPONENTS 17
+#define NUM_OPPONENTS 15
 #define NUM_OPPONENTSWIFI 6
 #define PARTY_INDEX 7
 #define OPPONENT_INDEX 1
@@ -21,9 +21,9 @@ typedef enum Opponent {
     BOXP,
 	// SOS0, SOS1, SOS2, SOS3, SOS4,
 	TRADE,
-	GTSTRADE,
+	// GTSTRADE,
     // DAYCARE1,DAYCARE2,
-    NURSERYEGG,
+    // NURSERYEGG,
 	// BOX11, BOX12, BOX13, BOX14, BOX15, BOX16,
 
 
@@ -35,13 +35,7 @@ static const u8* OPPONENT_POINTERS[NUM_OPPONENTS] = {
 	(u8*)(0),
     // (u8*)0x32550284,
 
-    // OPPONENT PARTY IN BATTLE IS ONLY VISIBLE INSIDE A BATTLE
-    // (u8*)(0x3002F7B8),
-    // (u8*)(0x3002F7B8 + 0x01E4 * 1),
-    // (u8*)(0x3002F7B8 + 0x01E4 * 2),
-    // (u8*)(0x3002F7B8 + 0x01E4 * 3),
-    // (u8*)(0x3002F7B8 + 0x01E4 * 4),
-    // (u8*)(0x3002F7B8 + 0x01E4 * 5),
+    // OPPONENT PARTY IN BATTLE IS ONLY UPDATED INSIDE A BATTLE
     (u8*)(0x3254F4AC),
     (u8*)(0x3254F4AC + 0x01E4 * 1),
     (u8*)(0x3254F4AC + 0x01E4 * 2),
@@ -49,13 +43,7 @@ static const u8* OPPONENT_POINTERS[NUM_OPPONENTS] = {
     (u8*)(0x3254F4AC + 0x01E4 * 4),
     (u8*)(0x3254F4AC + 0x01E4 * 5),
 
-    // PLAYER PARTY (ONY WHEN IN BATTLE) GETS UPDATED ON LVL UP AND AT THE BEGINING OF A BATTLE
-    // (u8*)(0x3002E070),
-    // (u8*)(0x3002E070 + 0x01E4 * 1), // 0x3002E254
-    // (u8*)(0x3002E070 + 0x01E4 * 2),
-    // (u8*)(0x3002E070 + 0x01E4 * 3),
-    // (u8*)(0x3002E070 + 0x01E4 * 4),
-    // (u8*)(0x3002E070 + 0x01E4 * 5),
+    // PLAYER PARTY
     (u8*)(0x34195E10),
     (u8*)(0x34195E10 + 0x01E4 * 1), // 0x3002E254
     (u8*)(0x34195E10 + 0x01E4 * 2),
@@ -72,13 +60,13 @@ static const u8* OPPONENT_POINTERS[NUM_OPPONENTS] = {
 	// POKEMON shown when Trading
 	(u8*)(0x32A870C8),
     // POKEMON TRADE DEPOSITED GTS
-    (u8*)(0x330D8C88),
+    // (u8*)(0x330D8C88),
 	//DayCare1
 	// (u8*)(0x3313EC01),
 	//DayCare2
 	// (u8*)(0x3313ECEA),
     // Nursery Egg
-    (u8*)(0x3313EB18),
+    // (u8*)(unknown),
 
     // PARTY BOX POINTERS ONLY SHOWS AND CHANGES IF VIEWING BOX
     // 0x30413E40 + 0x01E4 * 0   /// SHOWS SLOT 3
@@ -137,9 +125,9 @@ static const char *OPPONENT_NAMES[NUM_OPPONENTS] = {
     "Box",
     // "SOS0", "SOS1", "SOS2", "SOS3", "SOS4",
 	"Trade",
-	"GTS Trade",
+	// "GTS Trade",
     // "Parent 1","Parent 2",
-    "Nursery",
+    // "Nursery",
 	// "Box 1-1", "Box 1-2", "Box 1-3", "Box 1-4", "Box 1-5", "Box 1-6",
 };
 
