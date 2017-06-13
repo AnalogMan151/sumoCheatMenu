@@ -76,6 +76,7 @@ enum {
 // Array of forms
 typedef struct  arrayForms {
     char    *name;
+    int     battleOnly;
 }               spawnForms;
 
 // Helpers
