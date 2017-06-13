@@ -23,7 +23,7 @@ void unshuffle(u8* shuffled, u8* pkm, u32 sv) {
 }
 
 void decryptPokemon(Opponent slot, Pokemon* poke) {
-    if(poke == 0) return;
+    if(poke == 0 || slot == 0) return;
 
     // ENCRYPTED DATA POINTER TO FIRST BYTE
     const u8* ekm = OPPONENT_POINTERS[slot];

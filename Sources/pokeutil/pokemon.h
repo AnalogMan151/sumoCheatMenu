@@ -4,33 +4,64 @@
 
 // https://github.com/drgoku282/PKMN-NTR
 
-#define NUM_OPPONENTS 19
-#define NUM_OPPONENTSWIFI 13
+#define NUM_OPPONENTS 17
+#define NUM_OPPONENTSWIFI 6
 #define PARTY_INDEX 7
-#define OPPONENT_INDEX 13
+#define OPPONENT_INDEX 1
 
 typedef enum Stat {
     HP=0, ATK, DEF, SPE, SPA, SPD
 } Stat;
 
 typedef enum Opponent {
-	PRIMARY = 0,
-	SECONDARY,
+    PRIMARY=0,
+	// SECONDARY,
+    OPP1, OPP2, OPP3, OPP4, OPP5, OPP6,
+    PARTY1, PARTY2, PARTY3, PARTY4, PARTY5, PARTY6,
     BOXP,
 	// SOS0, SOS1, SOS2, SOS3, SOS4,
 	TRADE,
 	GTSTRADE,
-    DAYCARE1,DAYCARE2,
+    // DAYCARE1,DAYCARE2,
+    NURSERYEGG,
 	// BOX11, BOX12, BOX13, BOX14, BOX15, BOX16,
-    PARTY1, PARTY2, PARTY3, PARTY4, PARTY5, PARTY6,
-	OPP1, OPP2, OPP3, OPP4, OPP5, OPP6
+
+
 } Opponent;
 
 static const u8* OPPONENT_POINTERS[NUM_OPPONENTS] = {
 
     // PRIMARY, SECONDARY
-	(u8*)0x3254F4AC,
-    (u8*)0x32550284,
+	(u8*)(0),
+    // (u8*)0x32550284,
+
+    // OPPONENT PARTY IN BATTLE IS ONLY VISIBLE INSIDE A BATTLE
+    // (u8*)(0x3002F7B8),
+    // (u8*)(0x3002F7B8 + 0x01E4 * 1),
+    // (u8*)(0x3002F7B8 + 0x01E4 * 2),
+    // (u8*)(0x3002F7B8 + 0x01E4 * 3),
+    // (u8*)(0x3002F7B8 + 0x01E4 * 4),
+    // (u8*)(0x3002F7B8 + 0x01E4 * 5),
+    (u8*)(0x3254F4AC),
+    (u8*)(0x3254F4AC + 0x01E4 * 1),
+    (u8*)(0x3254F4AC + 0x01E4 * 2),
+    (u8*)(0x3254F4AC + 0x01E4 * 3),
+    (u8*)(0x3254F4AC + 0x01E4 * 4),
+    (u8*)(0x3254F4AC + 0x01E4 * 5),
+
+    // PLAYER PARTY (ONY WHEN IN BATTLE) GETS UPDATED ON LVL UP AND AT THE BEGINING OF A BATTLE
+    // (u8*)(0x3002E070),
+    // (u8*)(0x3002E070 + 0x01E4 * 1), // 0x3002E254
+    // (u8*)(0x3002E070 + 0x01E4 * 2),
+    // (u8*)(0x3002E070 + 0x01E4 * 3),
+    // (u8*)(0x3002E070 + 0x01E4 * 4),
+    // (u8*)(0x3002E070 + 0x01E4 * 5),
+    (u8*)(0x34195E10),
+    (u8*)(0x34195E10 + 0x01E4 * 1), // 0x3002E254
+    (u8*)(0x34195E10 + 0x01E4 * 2),
+    (u8*)(0x34195E10 + 0x01E4 * 3),
+    (u8*)(0x34195E10 + 0x01E4 * 4),
+    (u8*)(0x34195E10 + 0x01E4 * 5),
 
     // POKEMON BOX POINTER
     (u8*)(0x30000298),
@@ -43,9 +74,11 @@ static const u8* OPPONENT_POINTERS[NUM_OPPONENTS] = {
     // POKEMON TRADE DEPOSITED GTS
     (u8*)(0x330D8C88),
 	//DayCare1
-	(u8*)(0x3313EC01),
+	// (u8*)(0x3313EC01),
 	//DayCare2
-	(u8*)(0x3313ECEA),
+	// (u8*)(0x3313ECEA),
+    // Nursery Egg
+    (u8*)(0x3313EB18),
 
     // PARTY BOX POINTERS ONLY SHOWS AND CHANGES IF VIEWING BOX
     // 0x30413E40 + 0x01E4 * 0   /// SHOWS SLOT 3
@@ -91,37 +124,23 @@ static const u8* OPPONENT_POINTERS[NUM_OPPONENTS] = {
     // 0x34000000 + 0x195E10
     // 0x34195E10 + 0x01E4 * 0
 
+    // TO GET BATTLE DATA ADD + 0x0158
 
-	// PLAYER PARTY (ONY WHEN IN BATTLE) GETS UPDATED ON LVL UP AND AT THE BEGINING OF A BATTLE
-	(u8*)(0x3002E070),
-	(u8*)(0x3002E070 + 0x01E4 * 1), // 0x3002E254
-	(u8*)(0x3002E070 + 0x01E4 * 2),
-	(u8*)(0x3002E070 + 0x01E4 * 3),
-	(u8*)(0x3002E070 + 0x01E4 * 4),
-	(u8*)(0x3002E070 + 0x01E4 * 5),
 
-    // TO GET BATTLE DATA ADD + 0x0158;
-
-	// OPPONENT PARTY IN BATTLE IS ONLY VISIBLE INSIDE A BATTLE
-	(u8*)(0x3002F7B8),
-	(u8*)(0x3002F7B8 + 0x01E4 * 1),
-	(u8*)(0x3002F7B8 + 0x01E4 * 2),
-	(u8*)(0x3002F7B8 + 0x01E4 * 3),
-	(u8*)(0x3002F7B8 + 0x01E4 * 4),
-	(u8*)(0x3002F7B8 + 0x01E4 * 5)
 };
 
 
 static const char *OPPONENT_NAMES[NUM_OPPONENTS] = {
-	"1st Opp", "2nd Opp",
-    "Box Pointer",
+	"Info", // "2nd Opp",
+    "Opp 1", "Opp 2", "Opp 3", "Opp 4", "Opp 5", "Opp 6",
+    "Party 1", "Party 2", "Party 3", "Party 4", "Party 5", "Party 6",
+    "Box",
     // "SOS0", "SOS1", "SOS2", "SOS3", "SOS4",
 	"Trade",
 	"GTS Trade",
-    "DayCare1","DayCare2",
+    // "Parent 1","Parent 2",
+    "Nursery",
 	// "Box 1-1", "Box 1-2", "Box 1-3", "Box 1-4", "Box 1-5", "Box 1-6",
-    "Party 1", "Party 2", "Party 3", "Party 4", "Party 5", "Party 6",
-	"Opp 1", "Opp 2", "Opp 3", "Opp 4", "Opp 5", "Opp 6"
 };
 
 static const char *STAT_NAME[] = {

@@ -7,6 +7,7 @@
 #include "pokeutil/pokemon.h"
 #include "pokeutil/lookup.h"
 #include "pokeutil/pokeball.h"
+#include "pokemon_spawner.h"
 
 Handle fsUserHandle = 0;
 
@@ -26,7 +27,6 @@ vu16 currentpkmnID = 0;
 vu8 buttonAck = 0, buttonAckR = 0, buttonAckL = 0, buttonAckX = 0, buttonAckU = 0, buttonAckD = 0;
 vu8 buttonAck2 = 0, buttonAckR2 = 0, buttonAckL2 = 0, buttonAckX2 = 0, buttonAckDL = 0, buttonAckDR = 0;
 vu8 randini = 0, rand1 = 0, rand2 = 0, rand3 = 0, rand4 = 0, rand5 = 0, rand6 = 0, rand7 = 0, rand8 = 0, rand9 = 0;
-vu8 xtoggle = 0;
 vu8 isBottomToggle = 0;
 vu8 toggleDebug = 0;
 vu16 loopcounter = 0;
@@ -160,16 +160,12 @@ void drawPokemonID() {
 
             randomizePokeballs();
 
-			if(getWifiStatus() && !xtoggle) {
-				selectedOpponent = (selectedOpponent + 1) % NUM_OPPONENTSWIFI;
-			}else{
-	        	selectedOpponent = (selectedOpponent + 1) % NUM_OPPONENTS;
-			}
+        	selectedOpponent = (selectedOpponent + 1) % NUM_OPPONENTS;
 	    }
 	}
-	if(getWifiStatus() && !xtoggle) {
-		if(selectedOpponent >= NUM_OPPONENTSWIFI){
-			selectedOpponent = 0;
+	if(getWifiStatus()) {
+		if(selectedOpponent >= OPPONENT_INDEX && selectedOpponent <= (PARTY_INDEX + 5)){
+			selectedOpponent = 13;
 		}
 	}
 
@@ -189,14 +185,14 @@ void drawPokemonID() {
 
             randomizePokeballs();
 
-			if(getWifiStatus() && !xtoggle) {
-	        	selectedOpponent = (selectedOpponent + NUM_OPPONENTSWIFI - 1) % NUM_OPPONENTSWIFI;
-			}else{
 	        	selectedOpponent = (selectedOpponent + NUM_OPPONENTS - 1) % NUM_OPPONENTS;
-			}
 	    }
 	}
-
+    if(getWifiStatus()) {
+        if(selectedOpponent >= OPPONENT_INDEX && selectedOpponent <= (PARTY_INDEX + 5)){
+            selectedOpponent = 0;
+        }
+    }
     //--- X BUTTON COMBO
     //--- X BUTTON COMBO
     //--- X BUTTON COMBO
@@ -226,12 +222,9 @@ void drawPokemonID() {
                 }
                 if(is_pressed(BUTTON_L)){
                     buttonAckX2 = 1;
-                    //xtoggle = !xtoggle;
                 }
                 if(is_pressed(BUTTON_R)){
                     buttonAckX2 = 1;
-                    //toggleDebug = !toggleDebug;
-                    //loopreset = 1;
                 }
                 if(is_pressed(BUTTON_DR)){
                     // INCREASE POKEMON FORM
@@ -499,8 +492,8 @@ void drawPokemonID() {
 
             u8 ScreenLines = 23;
             // Draw background twice. Better contrast.
-			OvDrawTranspartBlackRect(posX - 4, posY - 4, 200, (10 * ScreenLines) + 2, 1);
-			OvDrawTranspartBlackRect(posX - 4, posY - 4, 200, (10 * ScreenLines) + 2, 1);
+			OvDrawTranspartBlackRect(posX - 4, posY - 4, 210, (10 * ScreenLines) + 2, 1);
+			OvDrawTranspartBlackRect(posX - 4, posY - 4, 210, (10 * ScreenLines) + 2, 1);
 
             ///HYPER TRAINING FLAG POKEMON DATA 0XDE
 			//otData starts from 0xB0
@@ -518,7 +511,7 @@ void drawPokemonID() {
         	u8 fate = (pkm->miscData >> 0) & 0x01; // 1 bit
         	u8 gen = (pkm->miscData >> 1) & 0x01; // 1 bit
         	u8 gless = (pkm->miscData >> 2) & 0x01; // 1 bit
-        	u8 form = (pkm->miscData >> 3) & 0x0F;
+        	u8 form = (pkm->miscData >> 3) & 0xFF;
 	        char *gender = (gless == 0x1) ? "-" : (gen == 0x0) ? " " : " ";
 	        char genderq = (gless == 0x1) ? 2 : (gen == 0x0) ? 0 : 1;
 
@@ -535,8 +528,12 @@ void drawPokemonID() {
             // Get pokedex number
             currentpkmnID = pkm->species;
 
+            const spawnPokemon *pokemon;
+            pokemon = &pokemonID[currentpkmnID - 1];
+
+
             // Print the pointer index / the nick of the pokemon, pokedex number / and pointer name
-			xsprintf(buf, "[%d] %s [%d] %s", selectedOpponent + 1, nick, currentpkmnID, OPPONENT_NAMES[selectedOpponent]);
+			xsprintf(buf, "[%s] %-11s [%03d]", OPPONENT_NAMES[selectedOpponent], pokemon->name, currentpkmnID);
             posY = OvDrawString(buf, posX, posY, BLANK);
             // posY will move to the next line's position each time a string is drawn on screen
 
@@ -546,6 +543,7 @@ void drawPokemonID() {
             // DETECT IF FORM EXISTS BEFORE GETTING DATA
             // this is to avoid random crashes when changing pokemon who don't have a certain form
             char formsnum = POKEMON_LOOKUP[currentpkmnID - 1][0][0];
+
             if(plooklocation + 1 > formsnum){
                 // IF IT DOESNT EXISTS CHANGE FORM TO SLOT 0
                 plooklocation = 0;
@@ -632,7 +630,7 @@ void drawPokemonID() {
             // DRAW NATURE AND CURRENT LEVEL
 		  	if(pkm->nature < NATURE_COUNT)
 		  	{
-                xsprintf(buf, "Nat: %-7s Lv: %d", NATURE_LOOKUP[pkm->nature], pklevel);
+                xsprintf(buf, "Nat: %-11s Lv: %d", NATURE_LOOKUP[pkm->nature], pklevel);
 				posY = OvDrawString(buf, posX, posY, BLANK);
 			}
 
@@ -669,15 +667,22 @@ void drawPokemonID() {
 
             // DRAW SHINY STAR
             if(shiny){
-                OvDrawSymbol(0x02, posX + 105 + 24, posY - 1, 255,0,0);
-                OvDrawSymbol(0x04, posX + 105 + 24, posY - 1, 0,0,0);
+                OvDrawSymbol(0x02, posX + 105 + 52, posY - 1, 255,0,0);
             }
+            OvDrawSymbol(0x04, posX + 105 + 52, posY - 1, 0,0,0);
 
             // FORM AND SHINY STRING
-            xsprintf(buf, "               Shiny:", form);
+            xsprintf(buf, "%26s", "Shiny:");
             OvDrawString(buf, posX, posY, BLANK);
 
-            xsprintf(buf, "Form ID: %d", form);
+            spawnForms formID[30] = {0};
+            getForms(currentpkmnID, formID);
+            spawnForms *forms;
+            spawnForms *simform;
+            forms = &formID[form];
+            simform = &formID[plooklocation];
+
+            xsprintf(buf, "Form: %s", forms->name);
             posY = OvDrawString(buf, posX, posY, BLANK);
 
             // LEVEL AND NAME
@@ -698,19 +703,19 @@ void drawPokemonID() {
             }
 
             // DRAW BORDER SPRITES
-            drawTypeBorder(posX + 30, posY - 1, 9, PKM_COLORS[xcolor][0], PKM_COLORS[xcolor][1], PKM_COLORS[xcolor][2], PKM_COLORS[xcolor][3], PKM_COLORS[xcolor][4], PKM_COLORS[xcolor][5]);
+            // drawTypeBorder(posX + 30, posY - 1, 9, PKM_COLORS[xcolor][0], PKM_COLORS[xcolor][1], PKM_COLORS[xcolor][2], PKM_COLORS[xcolor][3], PKM_COLORS[xcolor][4], PKM_COLORS[xcolor][5]);
 
             // DRAW LEVEL USED FOR STAT CALCULATION
-            xsprintf(buf, "[%d]", pklevel);
-			OvDrawString(buf, posX,  posY, BLANK);
+            xsprintf(buf, "Sim Lv: %-3d  Sim Form: %s", pklevel, simform->name);
+			posY = OvDrawString(buf, posX,  posY, BLANK);
 
             // DRAW POKEMON NAME ON TOP OF THE COLOR BORDER
-            xsprintf(buf, "      %s", POKEMON_LOOKUP_NAME[currentpkmnID - 1][plooklocation][0]);
+            // xsprintf(buf, "      %s", POKEMON_LOOKUP_NAME[currentpkmnID - 1][plooklocation][0]);
             char xdark = false;
             if(xcolor == 9 || xcolor == 8 || xcolor == 5 || xcolor == 3){ // WHITE YELLOW PINK GRAY => DARK TEXT
-			    posY = OvDrawString(buf, posX,  posY, 55,55,55);
+			    // posY = OvDrawString(buf, posX,  posY, 55,55,55);
             }else{
-			    posY = OvDrawString(buf, posX,  posY, BLANK);
+			    // posY = OvDrawString(buf, posX,  posY, BLANK);
             }
 
 
@@ -857,6 +862,7 @@ void drawPokemonID() {
 			for(u8 i = 0; i < 4; i++) {
 
                 // CREATE VARIABLES TO STORE MOVE VALUES
+                char movePP_s[5];
                 char maxPP_s[5];
                 char move_damage_s[5];
                 char move_acc_s[5];
@@ -869,17 +875,18 @@ void drawPokemonID() {
 
                 // STORE MOVE DATA INSIDE THE STRING VARIABLES
                 //
+                itoa(movePP,movePP_s,10);
                 itoa(MOVE_PP[move],maxPP_s,10);
                 itoa(MOVE_DAMAGE[move],move_damage_s,10);
                 itoa(MOVE_ACC[move],move_acc_s,10);
 
                 // CREATE MOVE STRING
-				xsprintf(buf, "%s %d|%s[%s][%s]",
+				xsprintf(buf, "%-16s %2s|%2s[%3s][%3s]",
                     MOVE_LOOKUP[move],
-                    movePP,
-                    MOVE_PP[move] < 0 ? "-" : maxPP_s,
-                    MOVE_DAMAGE[move] < 0 ? "-" : move_damage_s,
-                    MOVE_ACC[move] < 0 ? "-" : MOVE_ACC[move] > 900 ? "-" : move_acc_s);
+                    movePP <= 0 ? "--" : movePP_s,
+                    MOVE_PP[move] <= 0 ? "--" : MOVE_PP[move] == 255 ? "--" : maxPP_s,
+                    MOVE_DAMAGE[move] <= 0 ? "---" : move_damage_s,
+                    MOVE_ACC[move] <= 0 ? "---" : MOVE_ACC[move] > 900 ? "---" : move_acc_s);
 
                 // GET MOVE COLOR
 				u8 r = (u8)MOVE_TYPE_RED[move];
@@ -915,8 +922,8 @@ void drawPokemonID() {
             int NoDataScreenLines = 11;
 
             // DRAW DOUBLE BACKGROUND
-            OvDrawTranspartBlackRect(posX - 4, posY - 4, 200, (10 * NoDataScreenLines) + 6, 1);
-			OvDrawTranspartBlackRect(posX - 4, posY - 4, 200, (10 * NoDataScreenLines) + 6, 1);
+            OvDrawTranspartBlackRect(posX - 4, posY - 4, 210, (10 * NoDataScreenLines) + 6, 1);
+			OvDrawTranspartBlackRect(posX - 4, posY - 4, 210, (10 * NoDataScreenLines) + 6, 1);
 
 
             // DRAW POKEBALL SYMBOL WHITE RED
@@ -934,11 +941,8 @@ void drawPokemonID() {
             OvDrawSymbol(0x0B, posX + 142 + 10 + 12*2, posY - 2, 0,0,0);
 
 
-			if(xtoggle){
-				xsprintf(buf, "[%s] No Data*", OPPONENT_NAMES[selectedOpponent]);
-			}else{
-				xsprintf(buf, "[%s] No Data", OPPONENT_NAMES[selectedOpponent]);
-			}
+			xsprintf(buf, "[%s] No Data", OPPONENT_NAMES[selectedOpponent]);
+
 			posY = OvDrawString(buf, posX, posY, BLANK);
 
             int offsetl = 6;
@@ -957,7 +961,7 @@ void drawPokemonID() {
 			xsprintf(buf, "[X+Down] Toggle Bottom Screen");
 			posY = OvDrawString(buf, posX + offsetl, posY, BLANK);
 
-			xsprintf(buf, "%s  %s", getWifiStatus() ? "Wifi [On]" : "Wifi [Off]", isInBattle() ? "In Battle [1]" : "Not In Battle [0]");
+			xsprintf(buf, "%s  %s", getWifiStatus() ? "Wifi [On]" : "Wifi [Off]", isInBattle() ? "In Battle" : "Not In Battle");
 			posY = OvDrawString(buf, posX + 6, posY, BLANK);
 			xsprintf(buf, "SOS Counter %s [%d]", sosactivate ? "On" : "Off", soscounter - 1 < 0 ? 0 : soscounter - 1);
 			posY = OvDrawString(buf, posX + 6, posY, BLANK);
@@ -992,8 +996,8 @@ u32 overlayCallback(u32 isBottom, u32 addr, u32 addrB, u32 stride, u32 format) {
 			buttonAck = 0;
 		}
 	}else{
-	    // if(is_pressed(BUTTON_ST) && battleInfo) {
-	    if(is_pressed(BUTTON_ST)) {
+	    if(is_pressed(BUTTON_ST) && battleInfo) {
+	    // if(is_pressed(BUTTON_ST)) {
 			buttonAck = 1;
 			enabled = !enabled;
 	    }

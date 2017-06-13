@@ -21,10 +21,12 @@ bool spawnIsOn = false,
      randomIsOn = false,
      levelpass = false;
 
+spawnForms formID[30] = {0};
+
 // Pokémon Spawner menu entry
 void    pokemonSpawnMenu(void) {
 
-    getForms(spawnID);
+    getForms(spawnID, formID);
     updateSpawn();
     new_spoiler("Pokemon Spawner");
         new_unselectable_entry(currentSpawn);
@@ -136,7 +138,7 @@ void	increaseID1(void) {
 
     // Adds ones place back in
     spawnID += ones;
-    getForms(spawnID);
+    getForms(spawnID, formID);
     formIndex = 0;
     updateSpawn();
 }
@@ -162,7 +164,7 @@ void	increaseID10(void) {
 
     // Adds tens place back in
     spawnID += (tens * 10);
-    getForms(spawnID);
+    getForms(spawnID, formID);
     formIndex = 0;
     updateSpawn();
 }
@@ -188,7 +190,7 @@ void	increaseID100(void) {
 
     // Adds hundreds place back in
     spawnID += (hundreds * 100);
-    getForms(spawnID);
+    getForms(spawnID, formID);
     formIndex = 0;
     updateSpawn();
 }
@@ -211,7 +213,7 @@ void    setRandomID(void) {
         if (!checkAddress(0x080AE178))
             return;
         spawnID = randomNum(1, 802);
-        getForms(spawnID);
+        getForms(spawnID, formID);
         formIndex = 28;
         while (!formID[formIndex].name) {
             formIndex = randomNum(0, 27);
@@ -292,7 +294,7 @@ void    setForm(void) {
 
 
 // Looks up ID from switch case and loads available forms into array
-void    getForms(u32 id) {
+void    getForms(u32 id, spawnForms *formID) {
     memset32(formID, 0, sizeof(formID));
     switch(id) {
         case 19:  // Rattata

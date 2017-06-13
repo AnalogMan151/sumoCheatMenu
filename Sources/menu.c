@@ -36,7 +36,6 @@ void    disableOnlineCheats(void) {
         disable_entry(MAXBATTLESTATS);
         disable_entry(ZMOVES);
         disable_entry(INFZMOVES);
-        disable_entry(SHOWOPPONENTINFO);
         disable_entry(ONEHITKO);
         disable_entry(INVINCIBLEPARTY);
     }
