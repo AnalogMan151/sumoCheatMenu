@@ -297,13 +297,13 @@ void    setForm(void) {
 void    getForms(u32 id, spawnForms *formID) {
     memset32(formID, 0, sizeof(formID));
     switch(id) {
-        case 003:
-        case 009:
-        case 015:
-        case 018:
-        case 065:
-        case 080:
-        case 094:
+        case 3:
+        case 9:
+        case 15:
+        case 18:
+        case 65:
+        case 80:
+        case 94:
         case 115:
         case 127:
         case 130:
@@ -345,7 +345,7 @@ void    getForms(u32 id, spawnForms *formID) {
             formID[1].name = "Mega";
             formID[1].battleOnly = 1;
             break;
-        case 006:
+        case 6:
         case 150:
             formID[0].name = "Normal";
             formID[1].name = "Mega X";
