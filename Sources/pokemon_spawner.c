@@ -297,56 +297,56 @@ void    setForm(void) {
 void    getForms(u32 id, spawnForms *formID) {
     memset32(formID, 0, sizeof(formID));
     switch(id) {
-        case 3:
-        case 9:
-        case 15:
-        case 18:
-        case 65:
-        case 80:
-        case 94:
-        case 115:
-        case 127:
-        case 130:
-        case 142:
-        case 181:
-        case 208:
-        case 212:
-        case 214:
-        case 229:
-        case 248:
-        case 254:
-        case 257:
-        case 260:
-        case 282:
-        case 302:
-        case 303:
-        case 306:
-        case 308:
-        case 310:
-        case 319:
-        case 323:
-        case 334:
-        case 354:
-        case 359:
-        case 362:
-        case 373:
-        case 376:
-        case 380:
-        case 381:
-        case 384:
-        case 428:
-        case 445:
-        case 448:
-        case 460:
-        case 475:
-        case 531:
-        case 719:
+        case 3:   // Venusaur
+        case 9:   // Blastoise
+        case 15:  // Beedrill
+        case 18:  // Pidgeot
+        case 65:  // Alakazam
+        case 80:  // Slowbro
+        case 94:  // Gengar
+        case 115: // Kangaskhan
+        case 127: // Pinsir
+        case 130: // Gyarados
+        case 142: // Aerodactyl
+        case 181: // Ampharos
+        case 208: // Steelix
+        case 212: // Scizor
+        case 214: // Heracross
+        case 229: // Houndoom
+        case 248: // Tyranitar
+        case 254: // Sceptile
+        case 257: // Blaziken
+        case 260: // Swampert
+        case 282: // Gardevoir
+        case 302: // Sableye
+        case 303: // Mawile
+        case 306: // Aggron
+        case 308: // Medicham
+        case 310: // Manectric
+        case 319: // Sharpedo
+        case 323: // Camerupt
+        case 334: // Altaria
+        case 354: // Banette
+        case 359: // Absol
+        case 362: // Glalie
+        case 373: // Salamence
+        case 376: // Metagross
+        case 380: // Latias
+        case 381: // Latios
+        case 384: // Rayquaza
+        case 428: // Lopunny
+        case 445: // Garchomp
+        case 448: // Lucario
+        case 460: // Abomasnow
+        case 475: // Gallade
+        case 531: // Audino
+        case 719: // Diancie
             formID[0].name = "Normal";
             formID[1].name = "Mega";
             formID[1].battleOnly = 1;
             break;
-        case 6:
-        case 150:
+        case 6:   // Charizard
+        case 150: // Mewtwo
             formID[0].name = "Normal";
             formID[1].name = "Mega X";
             formID[1].battleOnly = 1;
@@ -413,7 +413,7 @@ void    getForms(u32 id, spawnForms *formID) {
             formID[26].name = "!";
             formID[27].name = "?";
             break;
-        case 351:
+        case 351: // Castform
             formID[0].name = "Normal";
             formID[1].name = "Sunny";
             formID[1].battleOnly = 1;
@@ -422,8 +422,8 @@ void    getForms(u32 id, spawnForms *formID) {
             formID[3].name = "Snowy";
             formID[3].battleOnly = 1;
             break;
-        case 382:
-        case 383:
+        case 382: // Kyogre
+        case 383: // Groudon
             formID[0].name = "Normal";
             formID[1].name = "Primal";
             formID[1].battleOnly = 1;
@@ -441,7 +441,7 @@ void    getForms(u32 id, spawnForms *formID) {
             formID[1].name = "Sandy";
             formID[2].name = "Trash";
             break;
-        case 422:
+        case 422: // Shellos
         case 423: //Gastrodon
             formID[0].name = "East";
             formID[1].name = "West";
@@ -458,7 +458,7 @@ void    getForms(u32 id, spawnForms *formID) {
             formID[0].name = "Altered";
             formID[1].name = "Origin";
             break;
-        case 492:
+        case 492: // Shaymin
             formID[0].name = "Land";
             formID[1].name = "Sky";
             formID[1].battleOnly = 1;
@@ -505,7 +505,7 @@ void    getForms(u32 id, spawnForms *formID) {
             formID[0].name = "Red";
             formID[1].name = "Blue";
             break;
-        case 555:
+        case 555: // Darmanitan
             formID[0].name = "Standard";
             formID[1].name = "Zen";
             formID[1].battleOnly = 1;
@@ -532,12 +532,12 @@ void    getForms(u32 id, spawnForms *formID) {
             formID[0].name = "Ordinary";
             formID[1].name = "Resolute";
             break;
-        case 648:
+        case 648: // Meloetta
             formID[0].name = "Aria";
             formID[1].name = "Pirouette";
             formID[1].battleOnly = 1;
             break;
-        case 649:
+        case 649: // Genesect
             formID[0].name = "Normal";
             formID[1].name = "Douse";
             formID[1].battleOnly = 1;
@@ -605,7 +605,7 @@ void    getForms(u32 id, spawnForms *formID) {
             formID[8].name = "Kabuki";
             formID[9].name = "Pharaoh";
             break;
-        case 681:
+        case 681: // Aegislash
             formID[0].name = "Shield";
             formID[1].name = "Blade";
             formID[1].battleOnly = 1;
@@ -617,11 +617,11 @@ void    getForms(u32 id, spawnForms *formID) {
             formID[2].name = "Large";
             formID[3].name = "Super";
             break;
-        case 716:
+        case 716: // Xerneas
             formID[0].name = "Neutral";
             formID[1].name = "Active";
             break;
-        case 718:
+        case 718: // Zygarde
             formID[0].name = "50%";
             formID[1].name = "10%";
             formID[1].battleOnly = 1;
@@ -632,7 +632,7 @@ void    getForms(u32 id, spawnForms *formID) {
             formID[4].name = "100%-C";
             formID[4].battleOnly = 1;
             break;
-        case 720:
+        case 720: // Hoopa
             formID[0].name = "Confined";
             formID[1].name = "Unbound";
             formID[1].battleOnly = 1;
@@ -676,7 +676,7 @@ void    getForms(u32 id, spawnForms *formID) {
             formID[13].name = "V-Core"; // Core Violet
             formID[13].battleOnly = 1;
             break;
-        case 778:
+        case 778: // Mimikyu
             formID[0].name = "Disguised";
             formID[1].name = "Busted";
             formID[1].battleOnly = 1;
