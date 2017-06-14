@@ -160,16 +160,15 @@ void drawMove(const char* move, char type, short posX, short posY){
     if(type < 1 || type > 18){
         return;
     }
-    char buf[18];
+    char buf[17];
     type = type - 1;
     drawTypeBorder(posX, posY, 6, TYPE_COLORS[type][0],TYPE_COLORS[type][1],TYPE_COLORS[type][2],
         TYPE_COLORS_DARK[type][0],TYPE_COLORS_DARK[type][1],TYPE_COLORS_DARK[type][2]);
 
     char len = strlen(move);
-    char mlen = len % 2;
-    char space = ((14 - len) * 3) + (mlen == 1 ? 0 : 0);
-    xsprintf(buf, "%s", move);
-    OvDrawString(buf, posX + 12 + space, posY + 1, BLANK);
+    char space = len < 16 ? ((16 - len) * 3) : 0;
+    xsprintf(buf, "%-16s", move);
+    OvDrawString(buf, posX + 8 + space, posY + 1, BLANK);
 }
 
 
