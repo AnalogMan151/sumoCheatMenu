@@ -87,3 +87,9 @@ SUMO-new3DS.plg
 SUMO-old3DS.plg
 SUMO-new3DS.zip
 SUMO-old3DS.zip
+buildx.bat
+buildNEW.bat
+buildnyo.py
+buildOLD.bat
+Includes/configs.h
+Includes/configs.h

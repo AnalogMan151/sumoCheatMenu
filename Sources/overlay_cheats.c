@@ -134,6 +134,44 @@ void drawType(char type, short posX, short posY){
     OvDrawString(buf, posX + 7 + space, posY + 1, BLANK);
 }
 
+// DRAW POKEMON NAME WITH A FANCY COLOR BORDER
+void drawName(char* name, char color, short posX, short posY){
+    if(color < 1 || color > 10){
+        color = 1;
+    }
+    char buf[11];
+    drawTypeBorder(posX, posY, 5, PKM_COLORS[color][0],PKM_COLORS[color][1],PKM_COLORS[color][2],
+        PKM_COLORS[color][3],PKM_COLORS[color][4],PKM_COLORS[color][5]);
+
+    char len = strlen(name);
+    char mlen = len % 2;
+    char space = ((12 - len) * 3) + (mlen == 1 ? 0 : 0);
+    xsprintf(buf, "%s", name);
+    if(color == 3 || color == 5 || color == 8 || color == 9){
+        // DRAW BLACK FONT ON TOP OF DARK COLORS
+        OvDrawString(buf, posX + 9 + space, posY + 1, 0,0,0);
+    }else{
+        OvDrawString(buf, posX + 9 + space, posY + 1, BLANK);
+    }
+}
+
+// DRAW POKEMON MOVE WITH A FANCY COLOR BORDER
+void drawMove(const char* move, char type, short posX, short posY){
+    if(type < 1 || type > 18){
+        return;
+    }
+    char buf[18];
+    type = type - 1;
+    drawTypeBorder(posX, posY, 6, TYPE_COLORS[type][0],TYPE_COLORS[type][1],TYPE_COLORS[type][2],
+        TYPE_COLORS_DARK[type][0],TYPE_COLORS_DARK[type][1],TYPE_COLORS_DARK[type][2]);
+
+    char len = strlen(move);
+    char mlen = len % 2;
+    char space = ((14 - len) * 3) + (mlen == 1 ? 0 : 0);
+    xsprintf(buf, "%s", move);
+    OvDrawString(buf, posX + 12 + space, posY + 1, BLANK);
+}
+
 
 void drawPokemonID() {
 
@@ -212,6 +250,7 @@ void drawPokemonID() {
                 }
                 if(is_pressed(BUTTON_L)){
                     buttonAckX2 = 1;
+                    toggleDebug = !toggleDebug;
                 }
                 if(is_pressed(BUTTON_R)){
                     buttonAckX2 = 1;
@@ -393,8 +432,8 @@ void drawPokemonID() {
         u8 value = 0;
         u32 xaddress = 0x30000000;
 
-        OvDrawTranspartBlackRect(posX - 4, posY - 4, 350, (10 * (RamLines + 1)) + 4, 1);
-        OvDrawTranspartBlackRect(posX - 4, posY - 4, 350, (10 * (RamLines + 1)) + 4, 1);
+        OvDrawTranspartBlackRect(posX - 4, posY - 4, 350, (10 * (RamLines + 1)) + 6, 1);
+        OvDrawTranspartBlackRect(posX - 4, posY - 4, 350, (10 * (RamLines + 1)) + 6, 1);
 
         xsprintf(buf, "Offset 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F %x", loopcounter);
         posY = OvDrawString(buf, posX, posY, 152, 216, 216);
@@ -470,7 +509,7 @@ void drawPokemonID() {
         char buf[100];
         char nick[13];
         int posX = 14;
-        int posY = 11;
+        int posY = 9;
 		int posXsav = 0;
 		int posYsav = 0;
         u8 battleDataValid = 0;
@@ -522,14 +561,6 @@ void drawPokemonID() {
             pokemon = &pokemonID[currentpkmnID - 1];
 
 
-            // Print the pointer index / the nick of the pokemon, pokedex number / and pointer name
-			xsprintf(buf, "[%s] %-11s [%03d]", OPPONENT_NAMES[selectedOpponent], pokemon->name, currentpkmnID);
-            posY = OvDrawString(buf, posX, posY, BLANK);
-            // posY will move to the next line's position each time a string is drawn on screen
-
-            posX += 6; // This works as a tab and moves all lines one character to the right
-            posY += 2; // Little Space from header
-
             // DETECT IF FORM EXISTS BEFORE GETTING DATA
             // this is to avoid random crashes when changing pokemon who don't have a certain form
             char formsnum = POKEMON_LOOKUP[currentpkmnID - 1][0][0];
@@ -538,6 +569,26 @@ void drawPokemonID() {
                 // IF IT DOESNT EXISTS CHANGE FORM TO SLOT 0
                 plooklocation = 0;
             }
+
+            // GET POKEMON GENERAL COLOR
+            char xcolor = POKEMON_LOOKUP[currentpkmnID - 1][plooklocation][8] - 1;
+
+            // DRAW FANCY BORDERED NAME
+            drawName(pokemon->name, xcolor, posX + 56, posY - 2);
+
+            // Print the pointer index / the nick of the pokemon, pokedex number / and pointer name
+			// xsprintf(buf, "[%s] %-11s [%03d]", OPPONENT_NAMES[selectedOpponent], pokemon->name, currentpkmnID);
+			xsprintf(buf, "[%s]", OPPONENT_NAMES[selectedOpponent]);
+            OvDrawString(buf, posX, posY, BLANK);
+
+			xsprintf(buf, "No. %03d", currentpkmnID);
+            posY = OvDrawString(buf, 170, posY, BLANK);
+            // posY will move to the next line's position each time a string is drawn on screen
+
+            posX += 6; // This works as a tab and moves all lines one character to the right
+            posY += 2; // Little Space from header
+
+
 
             // GET LEVEL
             // Level is calculated with the experience and the exprate.
@@ -570,22 +621,23 @@ void drawPokemonID() {
                 u16 selectedSPA = battleStats->specialAttack;
                 u16 selectedSPD = battleStats->specialDefense;
                 u16 selectedSPE = battleStats->speed;
-
-                if(selectedOpponent >= OPPONENT_INDEX && selectedOpponent < (OPPONENT_INDEX + 6)){
-                    selectedHP = (u16)*((u16*)(0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330));
-                    // selectedATT = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 0)));
-                    // selectedDEF = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 1)));
-                    // selectedSPA = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 2)));
-                    // selectedSPD = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 3)));
-                    // selectedSPE = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 4)));
-                }
-                if(selectedOpponent >= PARTY_INDEX && selectedOpponent < (PARTY_INDEX + 6)){
-                    selectedHP = (u16)*((u16*)(0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330));
-                    // selectedATT = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 0)));
-                    // selectedDEF = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 1)));
-                    // selectedSPA = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 2)));
-                    // selectedSPD = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 3)));
-                    // selectedSPE = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 4)));
+                if(isInBattle()){
+                    if(selectedOpponent >= OPPONENT_INDEX && selectedOpponent < (OPPONENT_INDEX + 6)){
+                        selectedHP = (u16)*((u16*)(0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330));
+                        // selectedATT = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 0)));
+                        // selectedDEF = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 1)));
+                        // selectedSPA = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 2)));
+                        // selectedSPD = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 3)));
+                        // selectedSPE = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 4)));
+                    }
+                    if(selectedOpponent >= PARTY_INDEX && selectedOpponent < (PARTY_INDEX + 6)){
+                        selectedHP = (u16)*((u16*)(0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330));
+                        // selectedATT = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 0)));
+                        // selectedDEF = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 1)));
+                        // selectedSPA = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 2)));
+                        // selectedSPD = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 3)));
+                        // selectedSPE = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 4)));
+                    }
                 }
                 bstats[0] = selectedHP;
                 bstats[1] = selectedATT;
@@ -610,7 +662,7 @@ void drawPokemonID() {
             OvDrawSymbol(0x0F, posX + 30, posY - 2, 255,255,255);
 
             // DRAW POKEBALL SPRITE
-			OvDrawPokeball(posX + 150, 22 - 5, BALLS7ARR[xpokeball]);
+			OvDrawPokeball(posX + 156, 20, BALLS7ARR[xpokeball]);
 
             // DRAW POKEBALL NAME
             xsprintf(buf, "Bll:   %s", BALLS7[xpokeball]);
@@ -623,6 +675,8 @@ void drawPokemonID() {
                 xsprintf(buf, "Nat: %-11s Lv: %d", NATURE_LOOKUP[pkm->nature], pklevel);
 				posY = OvDrawString(buf, posX, posY, BLANK);
 			}
+
+
 
             // DRAW ABILITY
 			if(pkm->ability < ABILITY_COUNT)
@@ -682,31 +736,25 @@ void drawPokemonID() {
 
 
             // Move the line index a bit to match the colored border sprites
-            posY = posY + 2;
+            // Not needed anymore as the Pokemon name and color are not drawed
+            // posY = posY + 2;
 
-            // GET POKEMON GENERAL COLOR
-            char xcolor = POKEMON_LOOKUP[currentpkmnID - 1][plooklocation][8] - 1;
-            if(xcolor >= 0 && xcolor <=9){
-                //
-            }else{
-                xcolor = 0;
-            }
 
-            // DRAW BORDER SPRITES
-            // drawTypeBorder(posX + 30, posY - 1, 9, PKM_COLORS[xcolor][0], PKM_COLORS[xcolor][1], PKM_COLORS[xcolor][2], PKM_COLORS[xcolor][3], PKM_COLORS[xcolor][4], PKM_COLORS[xcolor][5]);
+            // // DRAW LEVEL USED FOR STAT CALCULATION
+            xsprintf(buf, "Sim Lv:       Sim Form: %s", simform->name);
+			OvDrawString(buf, posX,  posY, BLANK);
 
-            // DRAW LEVEL USED FOR STAT CALCULATION
-            xsprintf(buf, "Sim Lv: %-3d  Sim Form: %s", pklevel, simform->name);
-			posY = OvDrawString(buf, posX,  posY, BLANK);
+            // // DRAW LEVEL AND HIGHLIGHT SIMULATION BASE LVL WHEN ACTIVE
+            xsprintf(buf, "        %d", pklevel);
+			posY = OvDrawString(buf, posX,  posY, togglebaselevel50 ? 255 : 255, togglebaselevel50 ? 0 : 255, togglebaselevel50 ? 0 : 255);
 
             // DRAW POKEMON NAME ON TOP OF THE COLOR BORDER
             // xsprintf(buf, "      %s", POKEMON_LOOKUP_NAME[currentpkmnID - 1][plooklocation][0]);
-            char xdark = false;
-            if(xcolor == 9 || xcolor == 8 || xcolor == 5 || xcolor == 3){ // WHITE YELLOW PINK GRAY => DARK TEXT
+            // if(xcolor == 9 || xcolor == 8 || xcolor == 5 || xcolor == 3){ // WHITE YELLOW PINK GRAY => DARK TEXT
 			    // posY = OvDrawString(buf, posX,  posY, 55,55,55);
-            }else{
+            // }else{
 			    // posY = OvDrawString(buf, posX,  posY, BLANK);
-            }
+            // }
 
 
             // DRAW BOTH TYPES
@@ -847,6 +895,7 @@ void drawPokemonID() {
 
             // RESTORE X POS
             posX = posXsav;
+            posY += 1;
 
 			// MOVES
 			for(u8 i = 0; i < 4; i++) {
@@ -863,28 +912,44 @@ void drawPokemonID() {
                 // GET MOVE PP
 				u8 movePP = pkm->movePP[i];
 
+                // GET MOVE TYPE
+                u8 moveType = MOVE_DATA[move][0];
+
                 // STORE MOVE DATA INSIDE THE STRING VARIABLES
                 //
                 itoa(movePP,movePP_s,10);
-                itoa(MOVE_PP[move],maxPP_s,10);
-                itoa(MOVE_DAMAGE[move],move_damage_s,10);
-                itoa(MOVE_ACC[move],move_acc_s,10);
+                itoa(MOVE_DATA[move][2],maxPP_s,10);
+                itoa(MOVE_DATA[move][3],move_damage_s,10);
+                itoa(MOVE_DATA[move][4],move_acc_s,10);
 
                 // CREATE MOVE STRING
-				xsprintf(buf, "%-16s %2s|%2s[%3s][%3s]",
-                    MOVE_LOOKUP[move],
-                    movePP <= 0 ? "--" : movePP_s,
-                    MOVE_PP[move] <= 0 ? "--" : MOVE_PP[move] == 255 ? "--" : maxPP_s,
-                    MOVE_DAMAGE[move] <= 0 ? "---" : move_damage_s,
-                    MOVE_ACC[move] <= 0 ? "---" : MOVE_ACC[move] > 900 ? "---" : move_acc_s);
+				// xsprintf(buf, "%-16s %2s|%2s[%3s][%3s]",
+                //     "",
+                //     movePP <= 0 ? "--" : movePP_s,
+                //     MOVE_PP[move] <= 0 ? "--" : MOVE_PP[move] == 255 ? "--" : maxPP_s,
+                //     MOVE_DAMAGE[move] <= 0 ? "---" : move_damage_s,
+                //     MOVE_ACC[move] <= 0 ? "---" : MOVE_ACC[move] > 900 ? "---" : move_acc_s);
 
-                // GET MOVE COLOR
-				u8 r = (u8)MOVE_TYPE_RED[move];
-				u8 g = (u8)MOVE_TYPE_GREEN[move];
-				u8 b = (u8)MOVE_TYPE_BLUE[move];
+				xsprintf(buf, "%-17s %2s|%2s[%3s][%3s]",
+                    "",
+                    movePP < 0 ? "--" : movePP_s,
+                    (u8)MOVE_DATA[move][2] < 0 ? "--" : (u8)MOVE_DATA[move][2] >= 255 ? "--" : maxPP_s,
+                    (u8)MOVE_DATA[move][3] < 0 ? "---" : (u8)MOVE_DATA[move][3] >= 255 ? "---" : move_damage_s,
+                    (u8)MOVE_DATA[move][4] < 0 ? "---" : (u8)MOVE_DATA[move][4] >= 255 ? "---" : move_acc_s);
 
+                if(move == 0){
+				    xsprintf(buf, "");
+                }else{
+                    drawMove(MOVE_LOOKUP[move], moveType, posX - 3, posY -2);
+                }
+
+                // // GET MOVE COLOR
+				u8 r = (u8)TYPE_COLORS[moveType - 1][0];
+				u8 g = (u8)TYPE_COLORS[moveType - 1][1];
+				u8 b = (u8)TYPE_COLORS[moveType - 1][2];
                 // DRAW MOVE STRING
 				posY = OvDrawString(buf, posX, posY, r, g, b);
+                posY += 1;
 			}
 
 
@@ -934,6 +999,7 @@ void drawPokemonID() {
 			xsprintf(buf, "[%s] No Data", OPPONENT_NAMES[selectedOpponent]);
 
 			posY = OvDrawString(buf, posX, posY, BLANK);
+            posY += 2;
 
             int offsetl = 6;
 			xsprintf(buf, "[L][R] To switch pokemon slots");
@@ -962,15 +1028,15 @@ void drawPokemonID() {
     		// 	posY = OvDrawString(buf, posX + 6, posY, BLANK);
             // }
 
-			OvDrawPokeball(posX - 5 + (22 * 0), posY + 1, BALLS7ARR[rand1]);
-			OvDrawPokeball(posX - 5 + (22 * 1), posY + 1, BALLS7ARR[rand2]);
-			OvDrawPokeball(posX - 5 + (22 * 2), posY + 1, BALLS7ARR[rand3]);
-			OvDrawPokeball(posX - 5 + (22 * 3), posY + 1, BALLS7ARR[rand4]);
-			OvDrawPokeball(posX - 5 + (22 * 4), posY + 1, BALLS7ARR[rand5]);
-			OvDrawPokeball(posX - 5 + (22 * 5), posY + 1, BALLS7ARR[rand6]);
-			OvDrawPokeball(posX - 5 + (22 * 6), posY + 1, BALLS7ARR[rand7]);
-			OvDrawPokeball(posX - 5 + (22 * 7), posY + 1, BALLS7ARR[rand8]);
-			OvDrawPokeball(posX - 5 + (22 * 8), posY + 1, BALLS7ARR[rand9]);
+			OvDrawPokeball(posX + (22 * 0), posY + 3, BALLS7ARR[rand1]);
+			OvDrawPokeball(posX + (22 * 1), posY + 3, BALLS7ARR[rand2]);
+			OvDrawPokeball(posX + (22 * 2), posY + 3, BALLS7ARR[rand3]);
+			OvDrawPokeball(posX + (22 * 3), posY + 3, BALLS7ARR[rand4]);
+			OvDrawPokeball(posX + (22 * 4), posY + 3, BALLS7ARR[rand5]);
+			OvDrawPokeball(posX + (22 * 5), posY + 3, BALLS7ARR[rand6]);
+			OvDrawPokeball(posX + (22 * 6), posY + 3, BALLS7ARR[rand7]);
+			OvDrawPokeball(posX + (22 * 7), posY + 3, BALLS7ARR[rand8]);
+			OvDrawPokeball(posX + (22 * 8), posY + 3, BALLS7ARR[rand9]);
         }
     }
 }
@@ -986,8 +1052,8 @@ u32 overlayCallback(u32 isBottom, u32 addr, u32 addrB, u32 stride, u32 format) {
 			buttonAck = 0;
 		}
 	}else{
-	    if(is_pressed(BUTTON_ST) && battleInfo) {
-	    // if(is_pressed(BUTTON_ST)) {
+	    // if(is_pressed(BUTTON_ST) && battleInfo) {
+	    if(is_pressed(BUTTON_ST)) {
 			buttonAck = 1;
 			enabled = !enabled;
 	    }
