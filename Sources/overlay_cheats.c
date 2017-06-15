@@ -610,7 +610,7 @@ void drawPokemonID() {
             u8 battlebytes[28];
             BattleData* battleStats = (BattleData*)battlebytes;
             decryptBattleData(selectedOpponent, battleStats);
-            if(battleStats->level == pklevel){
+            if(battleStats->level == pklevel && isInBattle()){
                 battleDataValid = 1;
 
                 // GET DECRYPTED BATTLE DATA
@@ -620,24 +620,24 @@ void drawPokemonID() {
                 u16 selectedSPA = battleStats->specialAttack;
                 u16 selectedSPD = battleStats->specialDefense;
                 u16 selectedSPE = battleStats->speed;
-                if(isInBattle()){
-                    if(selectedOpponent >= OPPONENT_INDEX && selectedOpponent < (OPPONENT_INDEX + 6)){
-                        selectedHP = (u16)*((u16*)(0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330));
-                        // selectedATT = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 0)));
-                        // selectedDEF = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 1)));
-                        // selectedSPA = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 2)));
-                        // selectedSPD = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 3)));
-                        // selectedSPE = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 4)));
-                    }
-                    if(selectedOpponent >= PARTY_INDEX && selectedOpponent < (PARTY_INDEX + 6)){
-                        selectedHP = (u16)*((u16*)(0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330));
-                        // selectedATT = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 0)));
-                        // selectedDEF = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 1)));
-                        // selectedSPA = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 2)));
-                        // selectedSPD = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 3)));
-                        // selectedSPE = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 4)));
-                    }
+
+                if(selectedOpponent >= OPPONENT_INDEX && selectedOpponent < (OPPONENT_INDEX + 6)){
+                    selectedHP = (u16)*((u16*)(0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330));
+                    // selectedATT = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 0)));
+                    // selectedDEF = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 1)));
+                    // selectedSPA = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 2)));
+                    // selectedSPD = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 3)));
+                    // selectedSPE = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 4)));
                 }
+                if(selectedOpponent >= PARTY_INDEX && selectedOpponent < (PARTY_INDEX + 6)){
+                    selectedHP = (u16)*((u16*)(0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330));
+                    // selectedATT = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 0)));
+                    // selectedDEF = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 1)));
+                    // selectedSPA = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 2)));
+                    // selectedSPD = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 3)));
+                    // selectedSPE = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 4)));
+                }
+
                 bstats[0] = selectedHP;
                 bstats[1] = selectedATT;
                 bstats[2] = selectedDEF;
@@ -744,7 +744,7 @@ void drawPokemonID() {
 			OvDrawString(buf, posX,  posY, BLANK);
 
             // // DRAW LEVEL AND HIGHLIGHT SIMULATION BASE LVL WHEN ACTIVE
-            xsprintf(buf, "        %d", pklevel);
+            xsprintf(buf, "%10d", pklevel);
 			posY = OvDrawString(buf, posX,  posY, togglebaselevel50 ? 255 : 255, togglebaselevel50 ? 0 : 255, togglebaselevel50 ? 0 : 255);
 
             // DRAW POKEMON NAME ON TOP OF THE COLOR BORDER
@@ -776,7 +776,7 @@ void drawPokemonID() {
             posY = posY + 12;
 
             // HEADER STATS IVS EVS TOTAL
-			xsprintf(buf, "Stat   IV   EV   Total%s", battleDataValid ? "   Cur" : "");
+			xsprintf(buf, "Stat   IV   EV   Total %9s", battleDataValid ? "Current" : "");
 			posY = OvDrawString(buf, posX, posY, BLANK);
 
             // STORE INITIAL GRID X AND Y
@@ -893,9 +893,9 @@ void drawPokemonID() {
                     curstat = xfloor(xfloor((2 * curstat + iv + ev / 4) * pklevel / 100 + 5) * natmult);
                 }
 
-                if(battleDataValid){
+                if(battleDataValid) {
                     // DRAW SINGLE FINAL CURRENT STAT
-    				xsprintf(buf, "    %d", bstats[j]);
+    				xsprintf(buf, "%7d", bstats[j]);
     				OvDrawString(buf, posX + 24, posY, r, g, b);
                 }
 
