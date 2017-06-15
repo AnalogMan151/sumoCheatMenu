@@ -154,14 +154,14 @@ typedef struct Pokemon {
     u32    exp;                  // 0x10
     u8     ability;              // 0x14
     u8     abilityNum;           // 0x15
-    u8     trainingBagHits;      // 0x16
-    u8     trainingBag;          // 0x17
+    u8     markByte1;            // 0x16 - Symbol Marks 1st and 2nd byte => 0xBA
+    u8     markByte2;            // 0x17 - Symbol Marks 3rd byte, 4th byte Should be 0 => 0x0C
     u32    pid;                  // 0x18
     u8     nature;               // 0x1C
     u8     miscData;             // 0x1D - Fateful encounter, gender, form flags
     u8     evs[6];               // 0x1E - HP, ATK, DEF, SPE, SPA, SPD
     u8     contest[6];           // 0x24 - Cool, Beauty, Cute, Smart, Tough, Sheen
-    u8     markByte;             // 0x2A
+    u8     pokePelago;           // 0x2A - Poke Pelago Event Status Flag
     u8     pkrsData;             // 0x2B - Duration and strain
     u8     stData[4];            // 0x2C - Super training data
     u8     ribbons[6];           // 0x30 - Misc ribbon flags
@@ -195,7 +195,7 @@ typedef struct BattleData {
     u16   specialAttack;        // 0x12 - 0x13 0XFA - 0xFB
     u16   specialDefense;       // 0x14 - 0x15 0XFC - 0xFD
     u16   unknown4;             // 0x16 - 0x17 0XFE - 0xFF
-    u32    unknown5;             // 0x18 - 0x21 0X100 - 0x103
+    u32   unknown5;             // 0x18 - 0x21 0X100 - 0x103
 } BattleData;
 
 void decryptPokemon(Opponent slot, Pokemon* poke);

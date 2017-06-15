@@ -142,7 +142,7 @@ void    OvDrawChar(char letter, int posX, int posY, u32 r, u32 g, u32 b)
 
     u32  addr = mode3D ? g_rframebuf : g_lframebuf;
 
-    if ((letter < 32) || (letter > 127))
+    if ((letter < 32) || (letter > (127 + 9)))
     {
         letter = '?';
     }
@@ -153,7 +153,7 @@ void    OvDrawChar(char letter, int posX, int posY, u32 r, u32 g, u32 b)
     {
         u8 l = font[y + c];
         int xx = posX;
-        for (int x = 6; x > 0; x--, xx++)
+        for (int x = 8; x >= 0; x--, xx++)
         {
             if ((l >> x) & 1)
                 OvDrawPixel(addr, xx, posY + y, r, g, b);
