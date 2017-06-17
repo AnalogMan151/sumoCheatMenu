@@ -22,11 +22,12 @@ void unshuffle(u8* shuffled, u8* pkm, u32 sv) {
   }
 }
 
-void decryptPokemon(Opponent slot, Pokemon* poke) {
-    if(poke == 0 || slot == 0) return;
+// void decryptPokemon(Opponent slot, Pokemon* poke) {
+void decryptPokemon(u8* PokemonPointer, Pokemon* poke) {
+    if(poke == 0 || PokemonPointer == 0) return;
 
     // ENCRYPTED DATA POINTER TO FIRST BYTE
-    const u8* ekm = OPPONENT_POINTERS[slot];
+    const u8* ekm = PokemonPointer;
 
     // NEW ARRAY TO STORE THE SHUFFLED DATA
     u8 shuffled[232];
@@ -61,14 +62,14 @@ void decryptPokemon(Opponent slot, Pokemon* poke) {
     unshuffle(shuffled, (u8*)poke, shval);
 }
 
-void decryptBattleData(Opponent slot, BattleData* bdata) {
+void decryptBattleData(u8* BattlePointer, BattleData* bdata) {
     if(bdata == 0) return;
 
     // ENCRYPTED DATA POINTER TO FIRST OPONENT BYTE
-    const u8* ekm = OPPONENT_POINTERS[slot];
+    const u8* ekm = BattlePointer;
 
     // ENCRYPTED DATA POINTER TO FIRST BATTLE DATA BYTE
-    const u8* ekm2 = OPPONENT_POINTERS[slot] + 0x0158;
+    const u8* ekm2 = BattlePointer + 0x0158;
 
     // NEW ARRAY TO STORE THE DATA
     u8 decrypted[28];

@@ -4,9 +4,9 @@
 
 // https://github.com/drgoku282/PKMN-NTR
 
-#define NUM_OPPONENTS 15
-#define NUM_OPPONENTSWIFI 6
-#define PARTY_INDEX 7
+#define NUM_OPPONENTS 21
+// #define NUM_OPPONENTSWIFI 6 // We don't need this anymore
+#define PARTY_INDEX 13
 #define OPPONENT_INDEX 1
 
 typedef enum Stat {
@@ -17,6 +17,7 @@ typedef enum Opponent {
     PRIMARY=0,
 	// SECONDARY,
     OPP1, OPP2, OPP3, OPP4, OPP5, OPP6,
+    BPARTY1, BPARTY2, BPARTY3, BPARTY4, BPARTY5, BPARTY6,
     PARTY1, PARTY2, PARTY3, PARTY4, PARTY5, PARTY6,
     BOXP,
 	// SOS0, SOS1, SOS2, SOS3, SOS4,
@@ -29,6 +30,27 @@ typedef enum Opponent {
 
 } Opponent;
 
+
+
+static const u8* SOSPointers[12] = {
+    // OPPONENT SOS*
+    (u8*)(0x3002F7B8),
+    (u8*)(0x3002F7B8 + 0x01E4 * 1), // 0x3002E254
+    (u8*)(0x3002F7B8 + 0x01E4 * 2),
+    (u8*)(0x3002F7B8 + 0x01E4 * 3),
+    (u8*)(0x3002F7B8 + 0x01E4 * 4),
+    (u8*)(0x3002F7B8 + 0x01E4 * 5),
+
+    // PARTY SOS*
+    (u8*)(0x3002E070),
+    (u8*)(0x3002E070 + 0x01E4 * 1), // 0x3002E254
+    (u8*)(0x3002E070 + 0x01E4 * 2),
+    (u8*)(0x3002E070 + 0x01E4 * 3),
+    (u8*)(0x3002E070 + 0x01E4 * 4),
+    (u8*)(0x3002E070 + 0x01E4 * 5),
+};
+
+
 static const u8* OPPONENT_POINTERS[NUM_OPPONENTS] = {
 
     // PRIMARY, SECONDARY
@@ -36,12 +58,21 @@ static const u8* OPPONENT_POINTERS[NUM_OPPONENTS] = {
     // (u8*)0x32550284,
 
     // OPPONENT PARTY IN BATTLE IS ONLY UPDATED INSIDE A BATTLE
+    // THESE POINTERS DON'T UPDATE INSIDE THE BATTLE PROPERLY AND ARE MISSING BATTLE DATA
     (u8*)(0x3254F4AC),
-    (u8*)(0x3254F4AC + 0x01E4 * 1),
-    (u8*)(0x3254F4AC + 0x01E4 * 2),
-    (u8*)(0x3254F4AC + 0x01E4 * 3),
-    (u8*)(0x3254F4AC + 0x01E4 * 4),
-    (u8*)(0x3254F4AC + 0x01E4 * 5),
+    (u8*)(0x3254F4AC + 0x0104 * 1),
+    (u8*)(0x3254F4AC + 0x0104 * 2),
+    (u8*)(0x3254F4AC + 0x0104 * 3),
+    (u8*)(0x3254F4AC + 0x0104 * 4),
+    (u8*)(0x3254F4AC + 0x0104 * 5),
+
+    // PARTY ON BATTLE INITIAL DATA*
+    (u8*)(0x3254EE60),
+    (u8*)(0x3254EE60 + 0x0104 * 1), // 0x3002E254
+    (u8*)(0x3254EE60 + 0x0104 * 2),
+    (u8*)(0x3254EE60 + 0x0104 * 3),
+    (u8*)(0x3254EE60 + 0x0104 * 4),
+    (u8*)(0x3254EE60 + 0x0104 * 5),
 
     // PLAYER PARTY
     (u8*)(0x34195E10),
@@ -121,6 +152,7 @@ static const u8* OPPONENT_POINTERS[NUM_OPPONENTS] = {
 static const char *OPPONENT_NAMES[NUM_OPPONENTS] = {
 	"Info", // "2nd Opp",
     "Opp 1", "Opp 2", "Opp 3", "Opp 4", "Opp 5", "Opp 6",
+    "Team 1", "Team 2", "Team 3", "Team 4", "Team 5", "Team 6",
     "Party 1", "Party 2", "Party 3", "Party 4", "Party 5", "Party 6",
     "Box",
     // "SOS0", "SOS1", "SOS2", "SOS3", "SOS4",
@@ -198,8 +230,8 @@ typedef struct BattleData {
     u32   unknown5;             // 0x18 - 0x21 0X100 - 0x103
 } BattleData;
 
-void decryptPokemon(Opponent slot, Pokemon* poke);
-void decryptBattleData(Opponent slot, BattleData* bdata);
+void decryptPokemon(u8* PokemonPointer, Pokemon* poke);
+void decryptBattleData(u8* BattlePointer, BattleData* bdata);
 u8 getIV(Pokemon* poke, Stat stat);
 void asciiNick(Pokemon* poke, char* buf);
 char getHiddenPower(Pokemon* poke);

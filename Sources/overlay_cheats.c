@@ -33,9 +33,10 @@ vu8 toggleRelearn = 0;
 vu16 loopcounter = 0;
 vu8 loopreset = 0;
 
+vu8 sosenemydiff = 0;
 vu8 sosactivate = 0;
 vu8 soscounter = 0;
-vu16 sosarray[2][6];
+vu16 sosarray[3][12];
 
 u8 RamLines = 22; // max 22
 u16 pastValues[22][16][2];
@@ -43,29 +44,29 @@ u32 startupadd = 0x30009760;
 u32 iniaddress = 0x30009760;
 
 
-// u8 sosindex = OPPONENT_INDEX;
-// ALTERNATE IS IN BATTLE /// NOT USED
+// ALTERNATE IS IN BATTLE
 // THIS WILL CHECK THE FIRST OPONENT SLOT WHEN IN BATTLE
-// bool isInBattle2(){
-//     u8 pkbytes[232];
-//     Pokemon* pkm = (Pokemon*)pkbytes;
-//     if(pkm != 0) {
-//         decryptPokemon(sosindex, pkm);
-//         if(isValid(pkm)) {
-//             return true;
-//         }
-//     }
-//     return false;
-// }
+bool isInBattle2(){
+    u8 pkbytes[232];
+    Pokemon* pkm = (Pokemon*)pkbytes;
+    if(pkm != 0) {
+        decryptPokemon((u8*)SOSPointers[0], pkm);
+        if(isValid(pkm)) {
+            return true;
+        }
+    }
+    return false;
+}
 
 // This will put the whole enemy array PIDs into an array to compare later
 // The index used 0 for past state of enemys and 1 for current
-void parseSOSData(char index){
-    for (char i = 0; i < 6; i++) {
+void parseSOSData(char index, char initial){
+    for (char i = 0; i < 12; i++) {
         u8 pkbytes[232];
         Pokemon* pkm = (Pokemon*)pkbytes;
+        u8* sosP = initial ? (u8*)(OPPONENT_POINTERS[OPPONENT_INDEX + i]) : (u8*)(SOSPointers[i]);
         if(pkm != 0) {
-            decryptPokemon(OPPONENT_INDEX + i, pkm);
+            decryptPokemon(sosP, pkm);
             if(isValid(pkm)) {
                 sosarray[index][i] = pkm->pid;
             }
@@ -75,10 +76,10 @@ void parseSOSData(char index){
 
 // This will compare two enemy arrays, the past state and the current state
 // If they change it will return true
-bool compareSOSData(){
+bool compareSOSData(char index1, char index2){
     char j = 0;
     for (char i = 0; i < 6; i++) {
-        if(sosarray[0][i] != sosarray[1][i]){
+        if(sosarray[index1][i] != sosarray[index2][i]){
             j++;
         }
     }
@@ -102,19 +103,30 @@ void randomizePokeballs(){
 
 
 // DRAW FANCY COLOR BORDER FROM CUSTOM SPRITE DATA
-void drawTypeBorder(short posX, short posY, char xlen, char r, char g, char b, char r2, char g2, char b2){
-
-    // B-LEFT
-    OvDrawSymbol(0x05, posX, posY, r,g,b);
-    OvDrawSymbol(0x0C, posX, posY, r2,g2,b2);
-    for (char i = 1; i < xlen; i++) {
-        // C-ENTER
-        OvDrawSymbol(0x07, posX + (16 * i), posY, r,g,b);
-        OvDrawSymbol(0x0E, posX + (16 * i), posY, r2,g2,b2);
+void drawTypeBorder(char limit, short posX, short posY, char xlen, char r, char g, char b, char r2, char g2, char b2){
+    // LIMIT CONTROLS WHICH PART TO DRAW
+    if((limit >> 3) & 0x1){
+        // B-LEFT ALT
+        OvDrawSymbol(0x10, posX, posY, r,g,b);
+        OvDrawSymbol(0x11, posX, posY, r2,g2,b2);
     }
-    // B-RIGHT
-    OvDrawSymbol(0x06, posX + 16 * xlen, posY, r,g,b);
-    OvDrawSymbol(0x0D, posX + 16 * xlen, posY, r2,g2,b2);
+    if((limit >> 2) & 0x1){
+        // B-LEFT
+        OvDrawSymbol(0x05, posX, posY, r,g,b);
+        OvDrawSymbol(0x0C, posX, posY, r2,g2,b2);
+    }
+    if((limit >> 1) & 0x1){
+        for (char i = 1; i < xlen; i++) {
+            // C-ENTER
+            OvDrawSymbol(0x07, posX + (16 * i), posY, r,g,b);
+            OvDrawSymbol(0x0E, posX + (16 * i), posY, r2,g2,b2);
+        }
+    }
+    if((limit >> 0) & 0x1){
+        // B-RIGHT
+        OvDrawSymbol(0x06, posX + 16 * xlen, posY, r,g,b);
+        OvDrawSymbol(0x0D, posX + 16 * xlen, posY, r2,g2,b2);
+    }
 
 }
 
@@ -125,7 +137,7 @@ void drawType(char type, short posX, short posY){
     }
     char buf[10];
     type = type - 1;
-    drawTypeBorder(posX, posY, 3, TYPE_COLORS[type][0],TYPE_COLORS[type][1],TYPE_COLORS[type][2],
+    drawTypeBorder(0b0111, posX, posY, 3, TYPE_COLORS[type][0],TYPE_COLORS[type][1],TYPE_COLORS[type][2],
         TYPE_COLORS_DARK[type][0],TYPE_COLORS_DARK[type][1],TYPE_COLORS_DARK[type][2]);
 
     char len = strlen(TYPE_NAMES[type]);
@@ -140,7 +152,7 @@ void drawName(char* name, char color, short posX, short posY){
         color = 0;
     }
     char buf[11];
-    drawTypeBorder(posX, posY, 5, PKM_COLORS[color][0],PKM_COLORS[color][1],PKM_COLORS[color][2],
+    drawTypeBorder(0b0111, posX, posY, 5, PKM_COLORS[color][0],PKM_COLORS[color][1],PKM_COLORS[color][2],
         PKM_COLORS[color][3],PKM_COLORS[color][4],PKM_COLORS[color][5]);
 
     char len = strlen(name);
@@ -155,14 +167,40 @@ void drawName(char* name, char color, short posX, short posY){
 }
 
 // DRAW POKEMON MOVE WITH A FANCY COLOR BORDER
-void drawMove(const char* move, char type, short posX, short posY){
+void drawMove(const char* move, char type, char style, short posX, short posY){
     if(type < 1 || type > 18){
         return;
     }
     char buf[17];
     type = type - 1;
-    drawTypeBorder(posX, posY, 6, TYPE_COLORS[type][0],TYPE_COLORS[type][1],TYPE_COLORS[type][2],
+
+    // FIND COLOR OF THE BACKGROUND OF THE TYPE OF MOVE, 1 PHYSICAL 2 SPECIAL 3 STATUS
+    // RED PHYSICAL 252,83,2        DARK 176,58,2
+    // ORANGE PHYSICAL 254,238,2
+    // BLUE SPECIAL 40,120,235      DARK 17,84,182
+    // GRAY SPECIAL 220,255,255
+    // GRAY STATUS 169,159,147      DARK 133,121,106
+    u8 lr = (style == 1) ? 252 : (style == 2) ? 40  : (style == 3) ? 169 : 255;
+    u8 lg = (style == 1) ? 83  : (style == 2) ? 120 : (style == 3) ? 159 : 255;
+    u8 lb = (style == 1) ? 2   : (style == 2) ? 235 : (style == 3) ? 147 : 255;
+
+    u8 br = (style == 1) ? 176 : (style == 2) ? 17  : (style == 3) ? 133 : 255;
+    u8 bg = (style == 1) ? 58  : (style == 2) ? 84  : (style == 3) ? 121 : 255;
+    u8 bb = (style == 1) ? 2   : (style == 2) ? 182 : (style == 3) ? 106 : 255;
+
+    u8 ir = (style == 1) ? 254 : (style == 2) ? 220 : (style == 3) ? 255 : 255;
+    u8 ig = (style == 1) ? 238 : (style == 2) ? 255 : (style == 3) ? 255 : 255;
+    u8 ib = (style == 1) ? 2   : (style == 2) ? 255 : (style == 3) ? 255 : 255;
+
+    drawTypeBorder(0b0111, posX + 2, posY, 6, TYPE_COLORS[type][0],TYPE_COLORS[type][1],TYPE_COLORS[type][2],
         TYPE_COLORS_DARK[type][0],TYPE_COLORS_DARK[type][1],TYPE_COLORS_DARK[type][2]);
+
+    // THIS DRAWS THE BACKGROUND COLOR OF THE TYPE OF THE MOVE, 1 PHYSICAL 2 SPECIAL 3 STATUS
+    drawTypeBorder(0b1000, posX - 6, posY, 6, lr,lg,lb, br,bg,bb);
+    
+    // THIS DRAWS THE COLOR ICON OF THE TYPE OF THE MOVE, 1 PHYSICAL 2 SPECIAL 3 STATUS
+    u8 icon = (style == 1) ? 0x84 : (style == 2) ? 0x80  : (style == 3) ? 0x85 : 0x80;
+    OvDrawChar(icon, posX - 3, posY + 2, ir, ig, ib);
 
     char len = strlen(move);
     char space = len < 16 ? ((16 - len) * 3) : 0;
@@ -385,29 +423,35 @@ void drawPokemonID() {
 
     // ARRAY TO STORE ENEMY POKEMON
     if(sosactivate){
-        if(!isInBattle()){
+        if(!isInBattle2()){
             sosactivate = 0;
             soscounter = 0;
-            for (char i = 0; i < 6; i++) {
+            for (char i = 0; i < 12; i++) {
                 sosarray[0][i] = 0;
                 sosarray[1][i] = 0;
+                sosarray[2][i] = 0;
             }
         }
     }else{
-        if(isInBattle()){
+        if(isInBattle2()){
             // INITIALIZE ENEMY ARRAY AND RESET COUNTER
             sosactivate = 1;
             soscounter = 0;
-            parseSOSData(0);
+            parseSOSData(0,0);
+            parseSOSData(2,1);
+            sosenemydiff = 0;
+            if(compareSOSData(0,2)){
+                sosenemydiff = 1;
+            }
         }
     }
 
     // THIS ACTIVATE AS SOON AS A BATTLE STARTS
     if(sosactivate){
-        parseSOSData(1);
-        if(compareSOSData()){
+        parseSOSData(1,0);
+        if(compareSOSData(0,1)){
             soscounter++;
-            parseSOSData(0);
+            parseSOSData(0,0);
         }
     }
 
@@ -501,9 +545,27 @@ void drawPokemonID() {
         loopcounter = 0;
     }
 
+    // SKIP IN BATTLE POINTERS FOR PARTY AND ENEMY TEAM IF NOT INSIDE A BATTLE
+    if(!isInBattle2()){
+        if(selectedOpponent >= OPPONENT_INDEX && selectedOpponent < (OPPONENT_INDEX + 11)){
+            selectedOpponent = OPPONENT_INDEX + 12;
+        }
+        if(selectedOpponent >= (OPPONENT_INDEX + 11) && selectedOpponent < (OPPONENT_INDEX + 12)){
+            selectedOpponent = OPPONENT_INDEX - 1;
+        }
+    }
+    
+    u8 enemyIndex = (selectedOpponent >= OPPONENT_INDEX && selectedOpponent < ((u8)OPPONENT_INDEX + 12)) ? (u8)(selectedOpponent - (u8)OPPONENT_INDEX) : (u8)(0xFF);
+    u8 enemyExists = (enemyIndex != 0xFF && sosarray[2][enemyIndex] > 1) ? 1 : 0;
 
-    if(pkm != 0 && !toggleDebug) {
-        decryptPokemon(selectedOpponent, pkm);
+    u8* enemyPointer = (u8*)(OPPONENT_POINTERS[selectedOpponent]);
+    if(isInBattle2() && !sosenemydiff && enemyIndex != 0xFF){
+        enemyPointer = (u8*)(SOSPointers[enemyIndex]);
+    }
+
+    if(pkm != 0 && !toggleDebug ) {
+
+        decryptPokemon(enemyPointer, pkm);
 
         char buf[100];
         char nick[13];
@@ -609,7 +671,9 @@ void drawPokemonID() {
             // AFTER GETTING THE LEVEL TO COMPARE
             u8 battlebytes[28];
             BattleData* battleStats = (BattleData*)battlebytes;
-            decryptBattleData(selectedOpponent, battleStats);
+
+
+            decryptBattleData(enemyPointer, battleStats);
             if(battleStats->level == pklevel && isInBattle()){
                 battleDataValid = 1;
 
@@ -629,6 +693,12 @@ void drawPokemonID() {
                     // selectedSPD = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 3)));
                     // selectedSPE = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 4)));
                 }
+
+                // THIS ADDRESS IS NOT WORKING IN SOME BATTLES NEEDS MORE TESTING
+                if(selectedOpponent >= (OPPONENT_INDEX + 6) && selectedOpponent < (OPPONENT_INDEX + 12)){
+                    selectedHP = (u16)*((u16*)(0x30009760 + (selectedOpponent - OPPONENT_INDEX) * 0x0330));
+                }
+                
                 if(selectedOpponent >= PARTY_INDEX && selectedOpponent < (PARTY_INDEX + 6)){
                     selectedHP = (u16)*((u16*)(0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330));
                     // selectedATT = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 0)));
@@ -710,12 +780,12 @@ void drawPokemonID() {
 
             // DRAW SHINY STAR
             if(shiny){
-                OvDrawSymbol(0x02, posX + 105 + 56, posY - 1, 255,0,0);
+                OvDrawSymbol(0x02, posX + 105 + 68, posY - 1, 255,0,0);
             }
-            OvDrawSymbol(0x04, posX + 105 + 56, posY - 1, 0,0,0);
+            OvDrawSymbol(0x04, posX + 105 + 68, posY - 1, 0,0,0);
 
             // FORM AND SHINY STRING
-            xsprintf(buf, "%26s", "Shiny:");
+            xsprintf(buf, "%28s", "Shiny:");
             OvDrawString(buf, posX, posY, BLANK);
 
             spawnForms formID[30] = {0};
@@ -744,7 +814,7 @@ void drawPokemonID() {
 			OvDrawString(buf, posX,  posY, BLANK);
 
             // // DRAW LEVEL AND HIGHLIGHT SIMULATION BASE LVL WHEN ACTIVE
-            xsprintf(buf, "%10d", pklevel);
+            xsprintf(buf, "%11d", pklevel);
 			posY = OvDrawString(buf, posX,  posY, togglebaselevel50 ? 255 : 255, togglebaselevel50 ? 0 : 255, togglebaselevel50 ? 0 : 255);
 
             // DRAW POKEMON NAME ON TOP OF THE COLOR BORDER
@@ -754,7 +824,6 @@ void drawPokemonID() {
             // }else{
 			    // posY = OvDrawString(buf, posX,  posY, BLANK);
             // }
-
 
             // DRAW BOTH TYPES
             drawType(POKEMON_LOOKUP[currentpkmnID - 1][plooklocation][9], posX, posY);
@@ -911,7 +980,7 @@ void drawPokemonID() {
             posY += 1;
 
             if(toggleRelearn){
-                OvDrawChar(0x85, posX + 175, posY - 10, 255, 0, 0);;
+                OvDrawChar(0x85, posX + 187, posY - 10, 255, 0, 0);
             }
 			// MOVES
 			for(u8 i = 0; i < 4; i++) {
@@ -934,6 +1003,7 @@ void drawPokemonID() {
 
                 // GET MOVE TYPE
                 u8 moveType = MOVE_DATA[move][0];
+                u8 moveStyle = MOVE_DATA[move][1];
 
                 // STORE MOVE DATA INSIDE THE STRING VARIABLES
                 //
@@ -960,9 +1030,8 @@ void drawPokemonID() {
                 if(move == 0){
 				    xsprintf(buf, "");
                 }else{
-                    drawMove(MOVE_LOOKUP[move], moveType, posX - 3, posY -2);
+                    drawMove(MOVE_LOOKUP[move], moveType, moveStyle, posX - 3, posY -2);
                 }
-
 
                 // // GET MOVE COLOR
 				u8 r = (u8)TYPE_COLORS[moveType - 1][0];
@@ -973,7 +1042,6 @@ void drawPokemonID() {
 				posY = OvDrawString(buf, posX, posY, r, g, b);
                 posY += 1;
 			}
-
 
 			// DRAW HIDDEN POWER
             char hpow = getHiddenPower(pkm);
@@ -1034,8 +1102,8 @@ void drawPokemonID() {
 
 
 			xsprintf(buf, "[%s] No Data", OPPONENT_NAMES[selectedOpponent]);
-
 			posY = OvDrawString(buf, posX, posY, BLANK);
+
             posY += 2;
 
             int offsetl = 6;
@@ -1057,14 +1125,19 @@ void drawPokemonID() {
 			xsprintf(buf, "[X+Down] Toggle Bottom Screen");
 			posY = OvDrawString(buf, posX + offsetl, posY, BLANK);
 
-			xsprintf(buf, "%s  %s", getWifiStatus() ? "Wifi [On]" : "Wifi [Off]", isInBattle() ? "In Battle" : "Not In Battle");
+			xsprintf(buf, "%s  %s", getWifiStatus() ? "Wifi [On]" : "Wifi [Off]", isInBattle2() ? "In Battle" : "Not In Battle");
 			posY = OvDrawString(buf, posX + 6, posY, BLANK);
-			xsprintf(buf, "SOS Counter %s [%d]", sosactivate ? "On" : "Off", soscounter - 1 < 0 ? 0 : soscounter - 1);
+			xsprintf(buf, "SOS Counter %s [%x]", sosactivate ? "On" : "Off", soscounter);
 			posY = OvDrawString(buf, posX + 6, posY, BLANK);
 
+			// xsprintf(buf, "[%d] [%d] [%x][%x][%x]", enemyIndex, enemyExists, OPPONENT_POINTERS[selectedOpponent], enemyOffset, enemyPointer);
+			// posY = OvDrawString(buf, posX + 6, posY, BLANK);
+			// xsprintf(buf, "[%d]", sosenemydiff);
+			// posY = OvDrawString(buf, posX + 6, posY, BLANK);
+
             // // SHOW DATA FOR SOS POKEMON
-            // for (char i = 0; i < 4; i++) {
-    		// 	xsprintf(buf, "%x / %x", sosarray[0][i], sosarray[1][i]);
+            // for (char i = 0; i < 12; i++) {
+    		// 	xsprintf(buf, "SOS: %x | %x / %x", sosarray[2][i], sosarray[0][i], sosarray[1][i]);
     		// 	posY = OvDrawString(buf, posX + 6, posY, BLANK);
             // }
 
