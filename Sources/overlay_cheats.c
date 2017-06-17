@@ -32,6 +32,7 @@ vu8 toggleDebug = 0;
 vu8 toggleRelearn = 0;
 vu16 loopcounter = 0;
 vu8 loopreset = 0;
+vu16 lastPID = 0;
 
 vu8 sosenemydiff = 0;
 vu8 sosactivate = 0;
@@ -43,7 +44,7 @@ u16 pastValues[22][16][2];
 u32 startupadd = 0x30009760;
 u32 iniaddress = 0x30009760;
 
-
+// ((.*\/\/.*\r\n)?)(\s\s\s\s\})(,?)
 // ALTERNATE IS IN BATTLE
 // THIS WILL CHECK THE FIRST OPONENT SLOT WHEN IN BATTLE
 bool isInBattle2(){
@@ -295,14 +296,15 @@ void drawPokemonID() {
                 if(is_pressed(BUTTON_DR)){
                     // INCREASE POKEMON FORM
                     buttonAckX2 = 1;
-                    u8 cform = POKEMON_LOOKUP[currentpkmnID - 1][0][0];
-                    plookarraysize = cform == 1 ? 1 : 0;
-                    plookarraysize = cform == 2 ? 2 : plookarraysize;
-                    plookarraysize = cform == 3 ? 3 : plookarraysize;
-                    plookarraysize = cform == 4 ? 4 : plookarraysize;
-                    plookarraysize = cform == 5 ? 5 : plookarraysize;
-                    plookarraysize = cform == 6 ? 6 : plookarraysize;
-                    plooklocation = (plooklocation + 1) % plookarraysize;
+                    plooklocation = (plooklocation + 1) % PK_SIZE[currentpkmnID - 1];
+                    // u8 cform = POKEMON_LOOKUP[currentpkmnID - 1][0][0];
+                    // plookarraysize = cform == 1 ? 1 : 0;
+                    // plookarraysize = cform == 2 ? 2 : plookarraysize;
+                    // plookarraysize = cform == 3 ? 3 : plookarraysize;
+                    // plookarraysize = cform == 4 ? 4 : plookarraysize;
+                    // plookarraysize = cform == 5 ? 5 : plookarraysize;
+                    // plookarraysize = cform == 6 ? 6 : plookarraysize;
+                    // plooklocation = (plooklocation + 1) % plookarraysize;
                 }
             }
         }
@@ -579,11 +581,11 @@ void drawPokemonID() {
 
         // See if the pokemon's actually valid first
         if(isValid(pkm)) {
-
+            
             u8 ScreenLines = 23;
             // Draw background twice. Better contrast.
-			OvDrawTranspartBlackRect(posX - 4, posY - 4, 210, (10 * ScreenLines) + 3, 1);
-			OvDrawTranspartBlackRect(posX - 4, posY - 4, 210, (10 * ScreenLines) + 3, 1);
+			OvDrawTranspartBlackRect(posX - 5, posY - 4, 212, (10 * ScreenLines) + 3, 1);
+			OvDrawTranspartBlackRect(posX - 5, posY - 4, 212, (10 * ScreenLines) + 3, 1);
 
             ///HYPER TRAINING FLAG POKEMON DATA 0XDE
 			//otData starts from 0xB0
@@ -594,7 +596,6 @@ void drawPokemonID() {
 			//otData starts from 0xB0
 			//0xB0 + 44 = 0xDC
 			unsigned char pokeballFlag = (pkm->otData[44] & 0xFF);
-
 
             ///FATEFUL/GENDER/GENDERLESS/FORM BYTE
 			//miscData contains all this information
@@ -609,8 +610,12 @@ void drawPokemonID() {
             u16 esv = ((pkm->pid >> 16) ^ (pkm->pid & 0xFFFF)) >> 4;
             bool shiny = (tsv == esv) ? true : false;
 
-
-
+            // DETECT WHEN A NEW POKEMON IS SHOWING
+            if(lastPID != pkm->pid){
+                lastPID = pkm->pid;
+                // WHEN THIS HAPPENS SWITCH FORMS TO THE RIGHT ONE
+                plooklocation = form;
+            }
 
             // Get Pokemon nickname into nick char array
             asciiNick(pkm, nick);
@@ -624,15 +629,16 @@ void drawPokemonID() {
 
             // DETECT IF FORM EXISTS BEFORE GETTING DATA
             // this is to avoid random crashes when changing pokemon who don't have a certain form
-            char formsnum = POKEMON_LOOKUP[currentpkmnID - 1][0][0];
-
+            // char formsnum = POKEMON_LOOKUP[currentpkmnID - 1][0][0];
+            char formsnum = PK_SIZE[currentpkmnID - 1];
             if(plooklocation + 1 > formsnum){
                 // IF IT DOESNT EXISTS CHANGE FORM TO SLOT 0
                 plooklocation = 0;
             }
 
             // GET POKEMON GENERAL COLOR
-            char xcolor = POKEMON_LOOKUP[currentpkmnID - 1][plooklocation][8] - 1;
+            // char xcolor = POKEMON_LOOKUP[currentpkmnID - 1][plooklocation][7] - 1;
+            char xcolor = PK_LOOKUP[currentpkmnID - 1][(plooklocation * 9) + 6] - 1;
 
             // DRAW FANCY BORDERED NAME
             drawName(pokemon->name, xcolor, posX + 56, posY - 2);
@@ -775,6 +781,7 @@ void drawPokemonID() {
             }
 
             // DRAW GENDER & CATCH RATE STRING
+            // xsprintf(buf, "Gen: %s  Catch Rate: %d/255", gender, CATCH_RATE[currentpkmnID - 1] );
             xsprintf(buf, "Gen: %s  Catch Rate: %d/255", gender, CATCH_RATE[currentpkmnID - 1] );
             posY = OvDrawString(buf, posX, posY, BLANK);
 
@@ -826,8 +833,10 @@ void drawPokemonID() {
             // }
 
             // DRAW BOTH TYPES
-            drawType(POKEMON_LOOKUP[currentpkmnID - 1][plooklocation][9], posX, posY);
-            drawType(POKEMON_LOOKUP[currentpkmnID - 1][plooklocation][10], posX + 65, posY);
+            // drawType(POKEMON_LOOKUP[currentpkmnID - 1][plooklocation][8], posX, posY);
+            // drawType(POKEMON_LOOKUP[currentpkmnID - 1][plooklocation][9], posX + 65, posY);
+            drawType(PK_LOOKUP[currentpkmnID - 1][(plooklocation * 9) + 7], posX, posY);
+            drawType(PK_LOOKUP[currentpkmnID - 1][(plooklocation * 9) + 8], posX + 65, posY);
 
             u16 pkmarks = (pkm->markByte2 << 8) + pkm->markByte1;
             for (u8 i = 0; i < 6; i++) {
@@ -926,7 +935,8 @@ void drawPokemonID() {
 			for(u8 j = 0; j < 6; j++) {
 
                 // GET BASE STAT VALUE
-                int curstat = POKEMON_LOOKUP[currentpkmnID - 1][plooklocation][2 + j];
+                // int curstat = POKEMON_LOOKUP[currentpkmnID - 1][plooklocation][1 + j];
+                int curstat = PK_LOOKUP[currentpkmnID - 1][(plooklocation * 9) + j];
 
                 // CHANGE ORDER OF STATS TO MATCH HP/ATK/DEF/SpA/SpD/SPE
 				u8 i = statOrder[j];
@@ -1082,8 +1092,8 @@ void drawPokemonID() {
             int NoDataScreenLines = 12;
 
             // DRAW DOUBLE BACKGROUND
-            OvDrawTranspartBlackRect(posX - 4, posY - 4, 210, (10 * NoDataScreenLines) + 6, 1);
-			OvDrawTranspartBlackRect(posX - 4, posY - 4, 210, (10 * NoDataScreenLines) + 6, 1);
+            OvDrawTranspartBlackRect(posX - 6, posY - 4, 212, (10 * NoDataScreenLines) + 6, 1);
+			OvDrawTranspartBlackRect(posX - 6, posY - 4, 212, (10 * NoDataScreenLines) + 6, 1);
 
 
             // DRAW POKEBALL SYMBOL WHITE RED
