@@ -32,7 +32,7 @@ vu8 toggleDebug = 0;
 vu8 toggleRelearn = 0;
 vu16 loopcounter = 0;
 vu8 loopreset = 0;
-vu16 lastPID = 0;
+vu32 lastPID = 0;
 
 vu8 sosenemydiff = 0;
 vu8 sosactivate = 0;
@@ -53,7 +53,7 @@ bool isInBattle2(){
     if(pkm != 0) {
         decryptPokemon((u8*)SOSPointers[0], pkm);
         if(isValid(pkm)) {
-            return true;
+            return true && isInBattle();
         }
     }
     return false;
@@ -232,6 +232,14 @@ void drawPokemonID() {
 			buttonAckDR = 1;
 			plooklocation = 0;
 			currentpkmnID = 0;
+            if(toggleDebug){
+                loopcounter = 0;
+                loopreset = 1;
+                iniaddress += 20 * 16 * 10; // INCREASE 10 PAGES
+                if(iniaddress >= 0x34000000){
+                    iniaddress = 0x34000000;
+                }
+            }
 
             randomizePokeballs();
 
@@ -252,6 +260,14 @@ void drawPokemonID() {
 			buttonAckDL = 1;
 			plooklocation = 0;
 			currentpkmnID = 0;
+            if(toggleDebug){
+                loopcounter = 0;
+                loopreset = 1;
+                iniaddress -= 20 * 16 * 10; // DECREASE 10 PAGES
+                if(iniaddress <= 0x30000000){
+                    iniaddress = 0x30000000;
+                }
+            }
 
             randomizePokeballs();
 
@@ -271,10 +287,6 @@ void drawPokemonID() {
                 }
             }else{
 
-                if(toggleDebug){
-                    iniaddress = 0x30009760;
-                    loopreset = 1;
-                }
 
                 if(is_pressed(BUTTON_DD)){
                     buttonAckX2 = 1;
@@ -287,11 +299,15 @@ void drawPokemonID() {
                 }
                 if(is_pressed(BUTTON_L)){
                     buttonAckX2 = 1;
-                    // toggleDebug = !toggleDebug;
                     toggleRelearn = !toggleRelearn;
+                    if(toggleDebug){
+                        iniaddress = startupadd; // RESET TO INITIAL ADDRESS
+                        loopreset = 1;
+                    }
                 }
                 if(is_pressed(BUTTON_R)){
                     buttonAckX2 = 1;
+                    toggleDebug = !toggleDebug;
                 }
                 if(is_pressed(BUTTON_DR)){
                     // INCREASE POKEMON FORM
@@ -333,9 +349,9 @@ void drawPokemonID() {
             if(toggleDebug){
                 loopcounter = 0;
                 loopreset = 1;
-                iniaddress -= 20 * 16;
-                if(iniaddress >= 0x34000000){
-                    iniaddress = 0x34000000;
+                iniaddress -= 1 * 16; // DEREASE A PAGE
+                if(iniaddress <= 0x30000000){
+                    iniaddress = 0x30000000;
                 }
             }
 
@@ -360,9 +376,9 @@ void drawPokemonID() {
             if(toggleDebug){
                 loopcounter = 0;
                 loopreset = 1;
-                iniaddress += 20 * 16;
-                if(iniaddress <= 0x30000000){
-                    iniaddress = 0x30000000;
+                iniaddress += 1 * 16; // INCREASE A PAGE
+                if(iniaddress >= 0x34000000){
+                    iniaddress = 0x34000000;
                 }
             }
 	    }
@@ -378,13 +394,12 @@ void drawPokemonID() {
 	}else{
 	    if (is_pressed(BUTTON_DR)) {
             buttonAckR = 1;
-
-            // This activates when UP is pressed once
-
+            // This activates when RIGHT is pressed once
+            
             if(toggleDebug){
                 loopcounter = 0;
                 loopreset = 1;
-                iniaddress -= 1 * 16;
+                iniaddress += 20 * 16; // INCREASE A LINE
                 if(iniaddress >= 0x34000000){
                     iniaddress = 0x34000000;
                 }
@@ -404,12 +419,12 @@ void drawPokemonID() {
 	}else{
 	    if (is_pressed(BUTTON_DL)) {
     		buttonAckL = 1;
-            // This activates when DOWN is pressed once
+            // This activates when LEFT is pressed once
 
             if(toggleDebug){
                 loopcounter = 0;
                 loopreset = 1;
-                iniaddress += 1 * 16;
+                iniaddress -= 20 * 16; // DECREASE A LINE
                 if(iniaddress <= 0x30000000){
                     iniaddress = 0x30000000;
                 }
@@ -547,13 +562,21 @@ void drawPokemonID() {
         loopcounter = 0;
     }
 
-    // SKIP IN BATTLE POINTERS FOR PARTY AND ENEMY TEAM IF NOT INSIDE A BATTLE
     if(!isInBattle2()){
+        // HIDE OPPONENT AND TEAM OUTSIDE BATTLE
         if(selectedOpponent >= OPPONENT_INDEX && selectedOpponent < (OPPONENT_INDEX + 11)){
             selectedOpponent = OPPONENT_INDEX + 12;
         }
         if(selectedOpponent >= (OPPONENT_INDEX + 11) && selectedOpponent < (OPPONENT_INDEX + 12)){
             selectedOpponent = OPPONENT_INDEX - 1;
+        }
+    }else{        
+        // HIDE PARTY INSIDE A BATTLE
+        if(selectedOpponent >= PARTY_INDEX && selectedOpponent < (PARTY_INDEX + 5)){
+            selectedOpponent = PARTY_INDEX + 6;
+        }
+        if(selectedOpponent >= (PARTY_INDEX + 5) && selectedOpponent < (PARTY_INDEX + 6)){
+            selectedOpponent = PARTY_INDEX - 1;
         }
     }
     
@@ -578,14 +601,17 @@ void drawPokemonID() {
         u8 battleDataValid = 0;
 
         u16 bstats[6] = {0};
+        u8 buffs[7] = {0};
+        u8 sleepbit = 0;
+        u8 sleepbit2 = 0;
 
         // See if the pokemon's actually valid first
         if(isValid(pkm)) {
             
             u8 ScreenLines = 23;
             // Draw background twice. Better contrast.
-			OvDrawTranspartBlackRect(posX - 5, posY - 4, 212, (10 * ScreenLines) + 3, 1);
-			OvDrawTranspartBlackRect(posX - 5, posY - 4, 212, (10 * ScreenLines) + 3, 1);
+			OvDrawTranspartBlackRect(posX - 6, posY - 4, 212, (10 * ScreenLines) + 3, 1);
+			OvDrawTranspartBlackRect(posX - 6, posY - 4, 212, (10 * ScreenLines) + 3, 1);
 
             ///HYPER TRAINING FLAG POKEMON DATA 0XDE
 			//otData starts from 0xB0
@@ -611,9 +637,10 @@ void drawPokemonID() {
             bool shiny = (tsv == esv) ? true : false;
 
             // DETECT WHEN A NEW POKEMON IS SHOWING
-            if(lastPID != pkm->pid){
-                lastPID = pkm->pid;
+        
+            if((u16)lastPID != (u16)pkm->pid){
                 // WHEN THIS HAPPENS SWITCH FORMS TO THE RIGHT ONE
+                lastPID = pkm->pid;
                 plooklocation = form;
             }
 
@@ -622,7 +649,7 @@ void drawPokemonID() {
 
             // Get pokedex number
             currentpkmnID = pkm->species;
-
+            
             const spawnPokemon *pokemon;
             pokemon = &pokemonID[currentpkmnID - 1];
 
@@ -680,7 +707,7 @@ void drawPokemonID() {
 
 
             decryptBattleData(enemyPointer, battleStats);
-            if(battleStats->level == pklevel && isInBattle()){
+            if(battleStats->level == pklevel && isInBattle2()){
                 battleDataValid = 1;
 
                 // GET DECRYPTED BATTLE DATA
@@ -690,21 +717,70 @@ void drawPokemonID() {
                 u16 selectedSPA = battleStats->specialAttack;
                 u16 selectedSPD = battleStats->specialDefense;
                 u16 selectedSPE = battleStats->speed;
-
+                
+                
+                // CURRENT ENEMY HP AND BUFFS
                 if(selectedOpponent >= OPPONENT_INDEX && selectedOpponent < (OPPONENT_INDEX + 6)){
                     selectedHP = (u16)*((u16*)(0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330));
+
+                    // STATS STORED IN MEMORY OUTSIDE OF POKEMON BATTLE DATA
                     // selectedATT = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 0)));
                     // selectedDEF = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 1)));
                     // selectedSPA = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 2)));
                     // selectedSPD = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 3)));
                     // selectedSPE = (u16)*((u16*)((0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330) + 0x01CA + (0x02 * 4)));
+
+                    // ATTACK BUFF
+                    buffs[0] = (u8)*((u8*)(0x30004f92 + (selectedOpponent - OPPONENT_INDEX) * 0x0330));
+                    // DEFENSE BUFF
+                    buffs[1] = (u8)*((u8*)(0x30004f93 + (selectedOpponent - OPPONENT_INDEX) * 0x0330));
+                    // SPA BUFF
+                    buffs[2] = (u8)*((u8*)(0x30004f94 + (selectedOpponent - OPPONENT_INDEX) * 0x0330));
+                    // SPD BUFF
+                    buffs[3] = (u8)*((u8*)(0x30004f95 + (selectedOpponent - OPPONENT_INDEX) * 0x0330));
+                    // SPE BUFF
+                    buffs[4] = (u8)*((u8*)(0x30004f96 + (selectedOpponent - OPPONENT_INDEX) * 0x0330));
+                    
+                    // SLEEP
+                    // sleepbit2 = (u8)*((u8*)(0x30004DD8 + (selectedOpponent - OPPONENT_INDEX) * 0x0330));
+                    // sleepbit = (u8)*((u8*)(0x30004DD9 + (selectedOpponent - OPPONENT_INDEX) * 0x0330));
+
+                    // ACCURACY
+                    // buffs[5] = (u8)*((u8*)(0x30004f97 + (selectedOpponent - OPPONENT_INDEX) * 0x0330));
+                    // EVASION
+                    // buffs[6] = (u8)*((u8*)(0x30004f98 + (selectedOpponent - OPPONENT_INDEX) * 0x0330));
                 }
 
-                // THIS ADDRESS IS NOT WORKING IN SOME BATTLES NEEDS MORE TESTING
+                // DIFF BETWEEN ENEMY AND TEAM 1rst POKE
+                // == 0x2640
+                // == 0x1B9
+
+                // CURRENT TEAM HP AND BUFFS
                 if(selectedOpponent >= (OPPONENT_INDEX + 6) && selectedOpponent < (OPPONENT_INDEX + 12)){
-                    selectedHP = (u16)*((u16*)(0x30009760 + (selectedOpponent - OPPONENT_INDEX) * 0x0330));
+                    selectedHP = (u16)*((u16*)(0x30009760 + (selectedOpponent - OPPONENT_INDEX - 6) * 0x0330));
+                    
+                    // ATTACK BUFF
+                    buffs[0] = (u8)*((u8*)(0x30002952 + (selectedOpponent - OPPONENT_INDEX - 6) * 0x0330));
+                    // DEFENSE BUFF
+                    buffs[1] = (u8)*((u8*)(0x30002953 + (selectedOpponent - OPPONENT_INDEX - 6) * 0x0330));
+                    // SPA BUFF
+                    buffs[2] = (u8)*((u8*)(0x30002954 + (selectedOpponent - OPPONENT_INDEX - 6) * 0x0330));
+                    // SPD BUFF
+                    buffs[3] = (u8)*((u8*)(0x30002955 + (selectedOpponent - OPPONENT_INDEX - 6) * 0x0330));
+                    // SPE BUFF
+                    buffs[4] = (u8)*((u8*)(0x30002956 + (selectedOpponent - OPPONENT_INDEX - 6) * 0x0330));
+
+                    // SLEEP IF SLEEP = 3 POKEMON IS ASLEEP... UNKOWN TURNS
+                    // sleepbit2 = (u8)*((u8*)(0x30002798 + (selectedOpponent - OPPONENT_INDEX - 6) * 0x0330));
+                    // sleepbit = (u8)*((u8*)(0x30002799 + (selectedOpponent - OPPONENT_INDEX - 6) * 0x0330));
+                    
+                    // ACCURACY
+                    // buffs[5] = (u8)*((u8*)(0x30002957 + (selectedOpponent - OPPONENT_INDEX - 6) * 0x0330));
+                    // EVASION
+                    // buffs[6] = (u8)*((u8*)(0x30002958 + (selectedOpponent - OPPONENT_INDEX - 6) * 0x0330));
                 }
-                
+
+                // THIS IS NOT SHOWING CURRENTLY AS PARTY IS DISABLED ON BATTLE
                 if(selectedOpponent >= PARTY_INDEX && selectedOpponent < (PARTY_INDEX + 6)){
                     selectedHP = (u16)*((u16*)(0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330));
                     // selectedATT = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 0)));
@@ -714,14 +790,70 @@ void drawPokemonID() {
                     // selectedSPE = (u16)*((u16*)((0x30009760 + (selectedOpponent - PARTY_INDEX) * 0x0330) + 0x01CA + (0x02 * 4)));
                 }
 
+                // RESET BUFFS IF THEY ARE OVERLOADING
+                for (u8 i = 0; i < 6; i++) {
+                    if(buffs[i] > 12){
+                        for (u8 j = 0; j < 6; j++) {
+                            buffs[j] = 6;
+                        }
+                    }
+                }
+                
+                // HP
                 bstats[0] = selectedHP;
-                bstats[1] = selectedATT;
-                bstats[2] = selectedDEF;
-                bstats[3] = selectedSPA;
-                bstats[4] = selectedSPD;
-                bstats[5] = selectedSPE;
-            }
+                // ATTACK
+                bstats[1] = (buffs[0] - 6) < 0 ? xfloor((double)(selectedATT * 2 / (12 - buffs[0] - 4))) : xfloor((double)(selectedATT * (buffs[0] - 4) / 2));
+                // DEFENSE
+                bstats[2] = (buffs[1] - 6) < 0 ? xfloor((double)(selectedDEF * 2 / (12 - buffs[1] - 4))) : xfloor((double)(selectedDEF * (buffs[1] - 4) / 2));
+                // SPA
+                bstats[3] = (buffs[2] - 6) < 0 ? xfloor((double)(selectedSPA * 2 / (12 - buffs[2] - 4))) : xfloor((double)(selectedSPA * (buffs[2] - 4) / 2));
+                // SPD
+                bstats[4] = (buffs[3] - 6) < 0 ? xfloor((double)(selectedSPD * 2 / (12 - buffs[3] - 4))) : xfloor((double)(selectedSPD * (buffs[3] - 4) / 2));
+                // SPE
+                bstats[5] = (buffs[4] - 6) < 0 ? xfloor((double)(selectedSPE * 2 / (12 - buffs[4] - 4))) : xfloor((double)(selectedSPE * (buffs[4] - 4) / 2));
+                
 
+                // bstats[1] = selectedATT;
+                // bstats[2] = selectedDEF;
+                // bstats[3] = selectedSPA;
+                // bstats[4] = selectedSPD;
+                // bstats[5] = selectedSPE;
+
+                
+                
+            }
+        
+            // SLEEP ADDRESS holds 3 after rest
+            // 0x30002799 + (0x0330 * partyIndex)
+
+            
+            // STATS UPS Party Pokemon
+            // 0x30002952 + (0x0330 * partyIndex) ATT
+            // 0x30002953 + (0x0330 * partyIndex) DEF
+            // 0x30002954 + (0x0330 * partyIndex) SPA
+            // 0x30002955 + (0x0330 * partyIndex) SPD
+            // 0x30002956 + (0x0330 * partyIndex) SPE
+            // 0x30002957 + (0x0330 * partyIndex) ACC
+            // 0x30002958 + (0x0330 * partyIndex) EVASION
+
+            
+            // STATS UPS ENEMY Pokemon
+            // 0x30004f92 + (0x0330 * EnemyIndex) ATT
+            // 0x30004f93 + (0x0330 * EnemyIndex) DEF
+            // 0x30004f94 + (0x0330 * EnemyIndex) SPA
+            // 0x30004f95 + (0x0330 * EnemyIndex) SPD
+            // 0x30004f96 + (0x0330 * EnemyIndex) SPE
+            // 0x30004f97 + (0x0330 * EnemyIndex) ACC
+            // 0x30004f98 + (0x0330 * EnemyIndex) EVASION
+
+
+            // POISON BYTE FOR 1rst POKEMON
+            // 0x300029AC
+            
+
+            
+            
+            
             //POKEBALL
             // xpokeball identifies the index of the arrays containing the pokeball names and their sprites
 			int xpokeball = 0;
@@ -809,11 +941,6 @@ void drawPokemonID() {
 			if(togglebaselevel50 == 1){
 				pklevel = 50;
 			}
-
-
-            // Move the line index a bit to match the colored border sprites
-            // Not needed anymore as the Pokemon name and color are not drawed
-            // posY = posY + 2;
 
 
             // // DRAW LEVEL USED FOR STAT CALCULATION
@@ -976,6 +1103,22 @@ void drawPokemonID() {
                     // DRAW SINGLE FINAL CURRENT STAT
     				xsprintf(buf, "%7d", bstats[j]);
     				OvDrawString(buf, posX + 24, posY, r, g, b);
+                    // DRAW BUFFED STATS AND SYMBOLS
+                    if(j > 0){
+                        if(buffs[j - 1] < 6){
+    				        xsprintf(buf, "\x89");
+            				OvDrawString(buf, posX + 78, posY + 1, 152, 216, 216);
+                            
+    				        xsprintf(buf, " %d", 12 - buffs[j - 1] - 6);
+            				OvDrawString(buf, posX + 80, posY, 152, 216, 216);
+                        }else if(buffs[j - 1] > 6){
+                            xsprintf(buf, "\x81");
+            				OvDrawString(buf, posX + 78, posY + 1, 255, 0, 0);
+                            
+    				        xsprintf(buf, " %d", buffs[j - 1] - 6);
+            				OvDrawString(buf, posX + 80, posY, 255, 0, 0);
+                        }
+                    }
                 }
 
                 // DRAW SINGLE FINAL STAT

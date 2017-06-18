@@ -35,7 +35,7 @@ typedef enum Opponent {
 static const u8* SOSPointers[12] = {
     // OPPONENT SOS*
     (u8*)(0x3002F7B8),
-    (u8*)(0x3002F7B8 + 0x01E4 * 1), // 0x3002E254
+    (u8*)(0x3002F7B8 + 0x01E4 * 1),
     (u8*)(0x3002F7B8 + 0x01E4 * 2),
     (u8*)(0x3002F7B8 + 0x01E4 * 3),
     (u8*)(0x3002F7B8 + 0x01E4 * 4),
@@ -43,7 +43,7 @@ static const u8* SOSPointers[12] = {
 
     // PARTY SOS*
     (u8*)(0x3002E070),
-    (u8*)(0x3002E070 + 0x01E4 * 1), // 0x3002E254
+    (u8*)(0x3002E070 + 0x01E4 * 1),
     (u8*)(0x3002E070 + 0x01E4 * 2),
     (u8*)(0x3002E070 + 0x01E4 * 3),
     (u8*)(0x3002E070 + 0x01E4 * 4),
@@ -68,7 +68,7 @@ static const u8* OPPONENT_POINTERS[NUM_OPPONENTS] = {
 
     // PARTY ON BATTLE INITIAL DATA*
     (u8*)(0x3254EE60),
-    (u8*)(0x3254EE60 + 0x0104 * 1), // 0x3002E254
+    (u8*)(0x3254EE60 + 0x0104 * 1),
     (u8*)(0x3254EE60 + 0x0104 * 2),
     (u8*)(0x3254EE60 + 0x0104 * 3),
     (u8*)(0x3254EE60 + 0x0104 * 4),
@@ -76,7 +76,7 @@ static const u8* OPPONENT_POINTERS[NUM_OPPONENTS] = {
 
     // PLAYER PARTY
     (u8*)(0x34195E10),
-    (u8*)(0x34195E10 + 0x01E4 * 1), // 0x3002E254
+    (u8*)(0x34195E10 + 0x01E4 * 1),
     (u8*)(0x34195E10 + 0x01E4 * 2),
     (u8*)(0x34195E10 + 0x01E4 * 3),
     (u8*)(0x34195E10 + 0x01E4 * 4),
@@ -88,8 +88,10 @@ static const u8* OPPONENT_POINTERS[NUM_OPPONENTS] = {
     // SOS 0 1 2 3 4
     // DISABLED
     // (u8*)0x3003969C, (u8*)0x3002FD64, (u8*)0x3002FF48, (u8*)0x3003012C, (u8*)0x30030310,
+    
 	// POKEMON shown when Trading
 	(u8*)(0x32A870C8),
+    
     // POKEMON TRADE DEPOSITED GTS
     // (u8*)(0x330D8C88),
 	//DayCare1
@@ -109,22 +111,12 @@ static const u8* OPPONENT_POINTERS[NUM_OPPONENTS] = {
 
     // PARTY BOX POINTERS 2 UPDATES ONLY AFTER MOVING (FROM AND OUT) PARTY POKEMON TO BOX [RIGHT ORDER]
     // 0x307A632C + 0x01E4 * 0
-    // 0x307A632C + 0x01E4 * 1
-    // 0x307A632C + 0x01E4 * 2
-    // 0x307A632C + 0x01E4 * 3
-    // 0x307A632C + 0x01E4 * 4
-    // 0x307A632C + 0x01E4 * 5
 
     // PARTY BOX POINTERS 3 UPDATES AFTER GAME SAVE [RIGHT ORDER]
     // 0x330D689C + 0x01E4 * 0
-    // 0x330D689C + 0x01E4 * 1
-    // 0x330D689C + 0x01E4 * 2
-    // 0x330D689C + 0x01E4 * 3
-    // 0x330D689C + 0x01E4 * 4
-    // 0x330D689C + 0x01E4 * 5
 
 	// Box1 P1-P6
-	// (u8*)(0x330D9838),
+	// (u8*)(0x330D9838 + 0X00E8 * 0),
 	// (u8*)(0x330D9838 + 0X00E8 * 1),
 	// (u8*)(0x330D9838 + 0X00E8 * 2),
 	// (u8*)(0x330D9838 + 0X00E8 * 3),
@@ -143,7 +135,7 @@ static const u8* OPPONENT_POINTERS[NUM_OPPONENTS] = {
     // 0x34000000 + 0x195E10
     // 0x34195E10 + 0x01E4 * 0
 
-    // TO GET BATTLE DATA ADD + 0x0158
+    // TO GET BATTLE DATA ADD + 0x0158 IF OFFSET IS 0X01E4
 
 
 };

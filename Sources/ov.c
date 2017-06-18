@@ -142,7 +142,7 @@ void    OvDrawChar(char letter, int posX, int posY, u32 r, u32 g, u32 b)
 
     u32  addr = mode3D ? g_rframebuf : g_lframebuf;
 
-    if ((letter < 32) || (letter > (127 + 9)))
+    if ((letter < 32) || (letter > (127 + 10)))
     {
         letter = '?';
     }
