@@ -307,7 +307,7 @@ void drawPokemonID() {
                 }
                 if(is_pressed(BUTTON_R)){
                     buttonAckX2 = 1;
-                    toggleDebug = !toggleDebug;
+                    // toggleDebug = !toggleDebug;
                 }
                 if(is_pressed(BUTTON_DR)){
                     // INCREASE POKEMON FORM
