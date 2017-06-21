@@ -198,7 +198,7 @@ void drawMove(const char* move, char type, char style, short posX, short posY){
 
     // THIS DRAWS THE BACKGROUND COLOR OF THE TYPE OF THE MOVE, 1 PHYSICAL 2 SPECIAL 3 STATUS
     drawTypeBorder(0b1000, posX - 6, posY, 6, lr,lg,lb, br,bg,bb);
-    
+
     // THIS DRAWS THE COLOR ICON OF THE TYPE OF THE MOVE, 1 PHYSICAL 2 SPECIAL 3 STATUS
     u8 icon = (style == 1) ? 0x84 : (style == 2) ? 0x80  : (style == 3) ? 0x85 : 0x80;
     OvDrawChar(icon, posX - 3, posY + 2, ir, ig, ib);
@@ -395,7 +395,7 @@ void drawPokemonID() {
 	    if (is_pressed(BUTTON_DR)) {
             buttonAckR = 1;
             // This activates when RIGHT is pressed once
-            
+
             if(toggleDebug){
                 loopcounter = 0;
                 loopreset = 1;
@@ -570,7 +570,7 @@ void drawPokemonID() {
         if(selectedOpponent >= (OPPONENT_INDEX + 11) && selectedOpponent < (OPPONENT_INDEX + 12)){
             selectedOpponent = OPPONENT_INDEX - 1;
         }
-    }else{        
+    }else{
         // HIDE PARTY INSIDE A BATTLE
         if(selectedOpponent >= PARTY_INDEX && selectedOpponent < (PARTY_INDEX + 5)){
             selectedOpponent = PARTY_INDEX + 6;
@@ -579,7 +579,7 @@ void drawPokemonID() {
             selectedOpponent = PARTY_INDEX - 1;
         }
     }
-    
+
     u8 enemyIndex = (selectedOpponent >= OPPONENT_INDEX && selectedOpponent < ((u8)OPPONENT_INDEX + 12)) ? (u8)(selectedOpponent - (u8)OPPONENT_INDEX) : (u8)(0xFF);
     u8 enemyExists = (enemyIndex != 0xFF && sosarray[2][enemyIndex] > 1) ? 1 : 0;
 
@@ -607,7 +607,7 @@ void drawPokemonID() {
 
         // See if the pokemon's actually valid first
         if(isValid(pkm)) {
-            
+
             u8 ScreenLines = 23;
             // Draw background twice. Better contrast.
 			OvDrawTranspartBlackRect(posX - 6, posY - 4, 212, (10 * ScreenLines) + 3, 1);
@@ -637,7 +637,7 @@ void drawPokemonID() {
             bool shiny = (tsv == esv) ? true : false;
 
             // DETECT WHEN A NEW POKEMON IS SHOWING
-        
+
             if((u16)lastPID != (u16)pkm->pid){
                 // WHEN THIS HAPPENS SWITCH FORMS TO THE RIGHT ONE
                 lastPID = pkm->pid;
@@ -649,7 +649,7 @@ void drawPokemonID() {
 
             // Get pokedex number
             currentpkmnID = pkm->species;
-            
+
             const spawnPokemon *pokemon;
             pokemon = &pokemonID[currentpkmnID - 1];
 
@@ -717,8 +717,8 @@ void drawPokemonID() {
                 u16 selectedSPA = battleStats->specialAttack;
                 u16 selectedSPD = battleStats->specialDefense;
                 u16 selectedSPE = battleStats->speed;
-                
-                
+
+
                 // CURRENT ENEMY HP AND BUFFS
                 if(selectedOpponent >= OPPONENT_INDEX && selectedOpponent < (OPPONENT_INDEX + 6)){
                     selectedHP = (u16)*((u16*)(0x3000BDA0 + (selectedOpponent - OPPONENT_INDEX) * 0x0330));
@@ -740,7 +740,7 @@ void drawPokemonID() {
                     buffs[3] = (u8)*((u8*)(0x30004f95 + (selectedOpponent - OPPONENT_INDEX) * 0x0330));
                     // SPE BUFF
                     buffs[4] = (u8)*((u8*)(0x30004f96 + (selectedOpponent - OPPONENT_INDEX) * 0x0330));
-                    
+
                     // SLEEP
                     // sleepbit2 = (u8)*((u8*)(0x30004DD8 + (selectedOpponent - OPPONENT_INDEX) * 0x0330));
                     // sleepbit = (u8)*((u8*)(0x30004DD9 + (selectedOpponent - OPPONENT_INDEX) * 0x0330));
@@ -758,7 +758,7 @@ void drawPokemonID() {
                 // CURRENT TEAM HP AND BUFFS
                 if(selectedOpponent >= (OPPONENT_INDEX + 6) && selectedOpponent < (OPPONENT_INDEX + 12)){
                     selectedHP = (u16)*((u16*)(0x30009760 + (selectedOpponent - OPPONENT_INDEX - 6) * 0x0330));
-                    
+
                     // ATTACK BUFF
                     buffs[0] = (u8)*((u8*)(0x30002952 + (selectedOpponent - OPPONENT_INDEX - 6) * 0x0330));
                     // DEFENSE BUFF
@@ -773,7 +773,7 @@ void drawPokemonID() {
                     // SLEEP IF SLEEP = 3 POKEMON IS ASLEEP... UNKOWN TURNS
                     // sleepbit2 = (u8)*((u8*)(0x30002798 + (selectedOpponent - OPPONENT_INDEX - 6) * 0x0330));
                     // sleepbit = (u8)*((u8*)(0x30002799 + (selectedOpponent - OPPONENT_INDEX - 6) * 0x0330));
-                    
+
                     // ACCURACY
                     // buffs[5] = (u8)*((u8*)(0x30002957 + (selectedOpponent - OPPONENT_INDEX - 6) * 0x0330));
                     // EVASION
@@ -798,7 +798,7 @@ void drawPokemonID() {
                         }
                     }
                 }
-                
+
                 // HP
                 bstats[0] = selectedHP;
                 // ATTACK
@@ -811,7 +811,7 @@ void drawPokemonID() {
                 bstats[4] = (buffs[3] - 6) < 0 ? xfloor((double)(selectedSPD * 2 / (12 - buffs[3] - 4))) : xfloor((double)(selectedSPD * (buffs[3] - 4) / 2));
                 // SPE
                 bstats[5] = (buffs[4] - 6) < 0 ? xfloor((double)(selectedSPE * 2 / (12 - buffs[4] - 4))) : xfloor((double)(selectedSPE * (buffs[4] - 4) / 2));
-                
+
 
                 // bstats[1] = selectedATT;
                 // bstats[2] = selectedDEF;
@@ -819,14 +819,14 @@ void drawPokemonID() {
                 // bstats[4] = selectedSPD;
                 // bstats[5] = selectedSPE;
 
-                
-                
+
+
             }
-        
+
             // SLEEP ADDRESS holds 3 after rest
             // 0x30002799 + (0x0330 * partyIndex)
 
-            
+
             // STATS UPS Party Pokemon
             // 0x30002952 + (0x0330 * partyIndex) ATT
             // 0x30002953 + (0x0330 * partyIndex) DEF
@@ -836,7 +836,7 @@ void drawPokemonID() {
             // 0x30002957 + (0x0330 * partyIndex) ACC
             // 0x30002958 + (0x0330 * partyIndex) EVASION
 
-            
+
             // STATS UPS ENEMY Pokemon
             // 0x30004f92 + (0x0330 * EnemyIndex) ATT
             // 0x30004f93 + (0x0330 * EnemyIndex) DEF
@@ -849,11 +849,11 @@ void drawPokemonID() {
 
             // POISON BYTE FOR 1rst POKEMON
             // 0x300029AC
-            
 
-            
-            
-            
+
+
+
+
             //POKEBALL
             // xpokeball identifies the index of the arrays containing the pokeball names and their sprites
 			int xpokeball = 0;
@@ -1108,13 +1108,13 @@ void drawPokemonID() {
                         if(buffs[j - 1] < 6){
     				        xsprintf(buf, "\x89");
             				OvDrawString(buf, posX + 78, posY + 1, 152, 216, 216);
-                            
+
     				        xsprintf(buf, " %d", 12 - buffs[j - 1] - 6);
             				OvDrawString(buf, posX + 80, posY, 152, 216, 216);
                         }else if(buffs[j - 1] > 6){
                             xsprintf(buf, "\x81");
             				OvDrawString(buf, posX + 78, posY + 1, 255, 0, 0);
-                            
+
     				        xsprintf(buf, " %d", buffs[j - 1] - 6);
             				OvDrawString(buf, posX + 80, posY, 255, 0, 0);
                         }
@@ -1324,7 +1324,7 @@ u32 overlayCallback(u32 isBottom, u32 addr, u32 addrB, u32 stride, u32 format) {
 			enabled = !enabled;
 	    }
 	}
-	if(enabled && isBottom == isBottomToggle){
+	if(enabled && isBottom == isBottomToggle && battleInfo){
         drawPokemonID();
         return 0;
 	}
