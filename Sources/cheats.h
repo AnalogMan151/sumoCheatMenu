@@ -73,6 +73,12 @@ enum {
     INVINCIBLEPARTY
 } e_identifiers;
 
+// Array of forms
+typedef struct  arrayForms {
+    char    *name;
+    int     battleOnly;
+}               spawnForms;
+
 // Helpers
 void    disable_entry(int identifier);
 void    update_status(int state, int identifier);
@@ -111,7 +117,7 @@ void    increaseLVL10(void);
 void    passthruLevel(u32 state);
 void    activateSpawn(u32 state);
 void    generateSpawn(void);
-void    getForms(u32 id);
+void    getForms(u32 id, spawnForms *formID);
 void    setForm(void);
 
 

@@ -21,10 +21,12 @@ bool spawnIsOn = false,
      randomIsOn = false,
      levelpass = false;
 
+spawnForms formID[30] = {0};
+
 // Pokémon Spawner menu entry
 void    pokemonSpawnMenu(void) {
 
-    getForms(spawnID);
+    getForms(spawnID, formID);
     updateSpawn();
     new_spoiler("Pokemon Spawner");
         new_unselectable_entry(currentSpawn);
@@ -136,7 +138,7 @@ void	increaseID1(void) {
 
     // Adds ones place back in
     spawnID += ones;
-    getForms(spawnID);
+    getForms(spawnID, formID);
     formIndex = 0;
     updateSpawn();
 }
@@ -162,7 +164,7 @@ void	increaseID10(void) {
 
     // Adds tens place back in
     spawnID += (tens * 10);
-    getForms(spawnID);
+    getForms(spawnID, formID);
     formIndex = 0;
     updateSpawn();
 }
@@ -188,7 +190,7 @@ void	increaseID100(void) {
 
     // Adds hundreds place back in
     spawnID += (hundreds * 100);
-    getForms(spawnID);
+    getForms(spawnID, formID);
     formIndex = 0;
     updateSpawn();
 }
@@ -211,7 +213,7 @@ void    setRandomID(void) {
         if (!checkAddress(0x080AE178))
             return;
         spawnID = randomNum(1, 802);
-        getForms(spawnID);
+        getForms(spawnID, formID);
         formIndex = 28;
         while (!formID[formIndex].name) {
             formIndex = randomNum(0, 27);
@@ -282,7 +284,7 @@ void    passthruLevel(u32 state) {
 void    setForm(void) {
     if (strcmp(currentSpawn, "Pokemon: Random") == 0)
         return;
-    if (!formID[formIndex + 1].name)
+    if (!formID[formIndex + 1].name || formID[formIndex + 1].battleOnly)
         formIndex = 0;
     else
         formIndex++;
@@ -292,9 +294,65 @@ void    setForm(void) {
 
 
 // Looks up ID from switch case and loads available forms into array
-void    getForms(u32 id) {
+void    getForms(u32 id, spawnForms *formID) {
     memset32(formID, 0, sizeof(formID));
     switch(id) {
+        case 3:   // Venusaur
+        case 9:   // Blastoise
+        case 15:  // Beedrill
+        case 18:  // Pidgeot
+        case 65:  // Alakazam
+        case 80:  // Slowbro
+        case 94:  // Gengar
+        case 115: // Kangaskhan
+        case 127: // Pinsir
+        case 130: // Gyarados
+        case 142: // Aerodactyl
+        case 181: // Ampharos
+        case 208: // Steelix
+        case 212: // Scizor
+        case 214: // Heracross
+        case 229: // Houndoom
+        case 248: // Tyranitar
+        case 254: // Sceptile
+        case 257: // Blaziken
+        case 260: // Swampert
+        case 282: // Gardevoir
+        case 302: // Sableye
+        case 303: // Mawile
+        case 306: // Aggron
+        case 308: // Medicham
+        case 310: // Manectric
+        case 319: // Sharpedo
+        case 323: // Camerupt
+        case 334: // Altaria
+        case 354: // Banette
+        case 359: // Absol
+        case 362: // Glalie
+        case 373: // Salamence
+        case 376: // Metagross
+        case 380: // Latias
+        case 381: // Latios
+        case 384: // Rayquaza
+        case 428: // Lopunny
+        case 445: // Garchomp
+        case 448: // Lucario
+        case 460: // Abomasnow
+        case 475: // Gallade
+        case 531: // Audino
+        case 719: // Diancie
+            formID[0].name = "Normal";
+            formID[1].name = "Mega";
+            formID[1].battleOnly = 1;
+            break;
+        case 6:   // Charizard
+        case 150: // Mewtwo
+            formID[0].name = "Normal";
+            formID[1].name = "Mega X";
+            formID[1].battleOnly = 1;
+            formID[2].name = "Mega Y";
+            formID[2].battleOnly = 1;
+            break;
         case 19:  // Rattata
         case 20:  // Raticate
         case 26:  // Raichu
@@ -355,6 +413,21 @@ void    getForms(u32 id) {
             formID[26].name = "!";
             formID[27].name = "?";
             break;
+        case 351: // Castform
+            formID[0].name = "Normal";
+            formID[1].name = "Sunny";
+            formID[1].battleOnly = 1;
+            formID[2].name = "Rainy";
+            formID[2].battleOnly = 1;
+            formID[3].name = "Snowy";
+            formID[3].battleOnly = 1;
+            break;
+        case 382: // Kyogre
+        case 383: // Groudon
+            formID[0].name = "Normal";
+            formID[1].name = "Primal";
+            formID[1].battleOnly = 1;
+            break;
         case 386: //Deoxys
             formID[0].name = "Normal";
             formID[1].name = "Attack";
@@ -368,6 +441,7 @@ void    getForms(u32 id) {
             formID[1].name = "Sandy";
             formID[2].name = "Trash";
             break;
+        case 422: // Shellos
         case 423: //Gastrodon
             formID[0].name = "East";
             formID[1].name = "West";
@@ -384,9 +458,57 @@ void    getForms(u32 id) {
             formID[0].name = "Altered";
             formID[1].name = "Origin";
             break;
+        case 492: // Shaymin
+            formID[0].name = "Land";
+            formID[1].name = "Sky";
+            formID[1].battleOnly = 1;
+            break;
+        case 493: // Arceus
+        case 773: // Silvally
+            formID[0].name = "Normal";
+            formID[1].name = "Fighting";
+            formID[1].battleOnly = 1;
+            formID[2].name = "Flying";
+            formID[2].battleOnly = 1;
+            formID[3].name = "Poison";
+            formID[3].battleOnly = 1;
+            formID[4].name = "Ground";
+            formID[4].battleOnly = 1;
+            formID[5].name = "Rock";
+            formID[5].battleOnly = 1;
+            formID[6].name = "Bug";
+            formID[6].battleOnly = 1;
+            formID[7].name = "Ghost";
+            formID[7].battleOnly = 1;
+            formID[8].name = "Steel";
+            formID[8].battleOnly = 1;
+            formID[9].name = "Fire";
+            formID[9].battleOnly = 1;
+            formID[10].name = "Water";
+            formID[10].battleOnly = 1;
+            formID[11].name = "Grass";
+            formID[11].battleOnly = 1;
+            formID[12].name = "Electric";
+            formID[12].battleOnly = 1;
+            formID[13].name = "Psychic";
+            formID[13].battleOnly = 1;
+            formID[14].name = "Ice";
+            formID[14].battleOnly = 1;
+            formID[15].name = "Dragon";
+            formID[15].battleOnly = 1;
+            formID[16].name = "Dark";
+            formID[16].battleOnly = 1;
+            formID[17].name = "Fairy";
+            formID[17].battleOnly = 1;
+            break;
         case 550: // Basculin
             formID[0].name = "Red";
             formID[1].name = "Blue";
+            break;
+        case 555: // Darmanitan
+            formID[0].name = "Standard";
+            formID[1].name = "Zen";
+            formID[1].battleOnly = 1;
             break;
         case 585: // Deerling
         case 586: // Sawsbuck
@@ -410,9 +532,26 @@ void    getForms(u32 id) {
             formID[0].name = "Ordinary";
             formID[1].name = "Resolute";
             break;
+        case 648: // Meloetta
+            formID[0].name = "Aria";
+            formID[1].name = "Pirouette";
+            formID[1].battleOnly = 1;
+            break;
+        case 649: // Genesect
+            formID[0].name = "Normal";
+            formID[1].name = "Douse";
+            formID[1].battleOnly = 1;
+            formID[2].name = "Shock";
+            formID[2].battleOnly = 1;
+            formID[3].name = "Burn";
+            formID[3].battleOnly = 1;
+            formID[4].name = "Chill";
+            formID[4].battleOnly = 1;
         case 658: //Greninja
             formID[0].name = "Normal";
             formID[1].name = "Ash";
+            formID[2].name = "Bonded";
+            formID[2].battleOnly = 1;
             break;
         case 664: // Scatterbug
         case 665: // Spewpa
@@ -466,12 +605,37 @@ void    getForms(u32 id) {
             formID[8].name = "Kabuki";
             formID[9].name = "Pharaoh";
             break;
+        case 681: // Aegislash
+            formID[0].name = "Shield";
+            formID[1].name = "Blade";
+            formID[1].battleOnly = 1;
+            break;
         case 710: // Pumpkaboo
         case 711: // Gourgeist
             formID[0].name = "Average";
             formID[1].name = "Small";
             formID[2].name = "Large";
             formID[3].name = "Super";
+            break;
+        case 716: // Xerneas
+            formID[0].name = "Neutral";
+            formID[1].name = "Active";
+            break;
+        case 718: // Zygarde
+            formID[0].name = "50%";
+            formID[1].name = "10%";
+            formID[1].battleOnly = 1;
+            formID[2].name = "10%-C";
+            formID[2].battleOnly = 1;
+            formID[3].name = "50%-C";
+            formID[3].battleOnly = 1;
+            formID[4].name = "100%-C";
+            formID[4].battleOnly = 1;
+            break;
+        case 720: // Hoopa
+            formID[0].name = "Confined";
+            formID[1].name = "Unbound";
+            formID[1].battleOnly = 1;
             break;
         case 741: // Oricorio
             formID[0].name = "Red";
@@ -483,8 +647,39 @@ void    getForms(u32 id) {
             formID[0].name = "Midday";
             formID[1].name = "Midnight";
             break;
+        case 746: // Wishiwashi
+            formID[0].name = "Normal";
+            formID[1].name = "School";
+            formID[1].battleOnly = 1;
+            break;
         case 774: //Minior
-            formID[0].name = "Random";
+            formID[0].name = "R-Meteor"; // Meteor Red
+            formID[1].name = "O-Meteor"; // Meteor Orange
+            formID[2].name = "Y-Meteor"; // Meteor Yellow
+            formID[3].name = "G-Meteor"; // Meteor Green
+            formID[4].name = "B-Meteor"; // Meteor Blue
+            formID[5].name = "I-Meteor"; // Meteor Indigo
+            formID[6].name = "V-Meteor"; // Meteor Violet
+
+            formID[7].name = "R-Core"; // Core Red
+            formID[7].battleOnly = 1;
+            formID[8].name = "O-Core"; // Core Orange
+            formID[8].battleOnly = 1;
+            formID[9].name = "Y-Core"; // Core Yellow
+            formID[9].battleOnly = 1;
+            formID[10].name = "G-Core"; // Core Green
+            formID[10].battleOnly = 1;
+            formID[11].name = "B-Core"; // Core Blue
+            formID[11].battleOnly = 1;
+            formID[12].name = "I-Core"; // Core Indigo
+            formID[12].battleOnly = 1;
+            formID[13].name = "V-Core"; // Core Violet
+            formID[13].battleOnly = 1;
+            break;
+        case 778: // Mimikyu
+            formID[0].name = "Disguised";
+            formID[1].name = "Busted";
+            formID[1].battleOnly = 1;
             break;
         case 801: // Magearna
             formID[0].name = "Normal";

@@ -26,7 +26,7 @@ void    battleMenu(void) {
     new_spoiler("Opponent");
         new_entry_arg_note("No Wild Encounters", "Hold START to temporarily enable encounters", noEncounters, 0, NOENCOUNTERS, TOGGLE);
         new_entry("100% Capture Rate", catch100);
-        new_entry_arg_note("View Opponent's Info", "Hold X during battle\nPress R to cycle enemies", showOpponentInfo, 0, SHOWOPPONENTINFO, TOGGLE);
+        new_entry_arg_note("View Opponent's Info", "Press START to activate", showOpponentInfo, 0, SHOWOPPONENTINFO, TOGGLE);
         new_entry_managed("1-Hit KO", oneHitKO, ONEHITKO, 0);
         new_entry_managed("Shiny Chance: XXXXXX", decreaseShinyChance, DECREASESHINYCHANCE, AUTO_DISABLE);
         new_line();
@@ -61,7 +61,7 @@ void    noEncounters(u32 state) {
 
 // Shows opponent Pokémon's info during battle on bottom screen when icon is tapped
 void    showOpponentInfoOld(void) {
-    if (battleInfo) {
+    if (battleInfo && !getWifiStatus) {
         static const u32 offset[] =
         {
             0x080AE178,

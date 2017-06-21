@@ -816,12 +816,8 @@ static const spawnPokemon     pokemonID[802] =
 };
 
 
-// Array of forms
-typedef struct  arrayForms {
-    char    *name;
-}               spawnForms;
 
-spawnForms formID[30] = {0};
+
 
 
 #endif
