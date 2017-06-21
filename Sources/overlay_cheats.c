@@ -492,8 +492,7 @@ void drawPokemonID() {
         u8 value = 0;
         u32 xaddress = 0x30000000;
 
-        OvDrawTranspartBlackRect(posX - 4, posY - 4, 350, (10 * (RamLines + 1)) + 6, 1);
-        OvDrawTranspartBlackRect(posX - 4, posY - 4, 350, (10 * (RamLines + 1)) + 6, 1);
+        OvDrawTranspartBlackRect(posX - 4, posY - 4, 350, (10 * (RamLines + 1)) + 6, 3);
 
         xsprintf(buf, "Offset 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F %x", loopcounter);
         posY = OvDrawString(buf, posX, posY, 152, 216, 216);
@@ -609,9 +608,7 @@ void drawPokemonID() {
         if(isValid(pkm)) {
 
             u8 ScreenLines = 23;
-            // Draw background twice. Better contrast.
-			OvDrawTranspartBlackRect(posX - 6, posY - 4, 212, (10 * ScreenLines) + 3, 1);
-			OvDrawTranspartBlackRect(posX - 6, posY - 4, 212, (10 * ScreenLines) + 3, 1);
+			OvDrawTranspartBlackRect(posX - 6, posY - 4, 212, (10 * ScreenLines) + 3, 3);
 
             ///HYPER TRAINING FLAG POKEMON DATA 0XDE
 			//otData starts from 0xB0
@@ -1234,9 +1231,7 @@ void drawPokemonID() {
 
             int NoDataScreenLines = 12;
 
-            // DRAW DOUBLE BACKGROUND
-            OvDrawTranspartBlackRect(posX - 6, posY - 4, 212, (10 * NoDataScreenLines) + 6, 1);
-			OvDrawTranspartBlackRect(posX - 6, posY - 4, 212, (10 * NoDataScreenLines) + 6, 1);
+            OvDrawTranspartBlackRect(posX - 6, posY - 4, 212, (10 * NoDataScreenLines) + 6, 3);
 
 
             // DRAW POKEBALL SYMBOL WHITE RED
