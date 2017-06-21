@@ -4,7 +4,7 @@
 // prior to this when storing ASM code for cheats
 
 char	*builder_name = "AnalogMan",
-        version[7] = "v0.8.0",
+        version[7] = "v1.0.0",
         updateVer[12] = "Update v?.?",
         formattedVer[35];
 
