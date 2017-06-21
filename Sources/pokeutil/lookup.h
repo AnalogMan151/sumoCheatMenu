@@ -2652,7 +2652,7 @@ static const char P_676[][9] = {
     { 75 , 80 , 60 , 65 , 90 , 102 , 9 , 1 , 0 },  // No.  676   // Furfrou Normal  7
     { 75 , 80 , 60 , 65 , 90 , 102 , 9 , 1 , 0 },  // No.  676   // Furfrou Normal  8
     { 75 , 80 , 60 , 65 , 90 , 102 , 9 , 1 , 0 },  // No.  676   // Furfrou Normal  9
-    { 75 , 80 , 60 , 65 , 90 , 102 , 9 , 1 , 0 }  // No.  676   // Furfrou Normal  10    
+    { 75 , 80 , 60 , 65 , 90 , 102 , 9 , 1 , 0 }  // No.  676   // Furfrou Normal  10
 };
 static const char P_677[][9] = {
     { 62 , 48 , 54 , 63 , 60 , 68 , 4 , 14 , 0 }  // No.  677   // Espurr Psychic
@@ -2861,10 +2861,10 @@ static const char P_740[][9] = {
     { 97 , 132 , 77 , 62 , 67 , 43 , 9 , 2 , 15 }  // No.  740   // Crabominable Fighting Ice
 };
 static const char P_741[][9] = {
-    { 75 , 70 , 70 , 98 , 70 , 93 , 9 , 13 , 3 },  // No.  741   // Oricorio Electric Flying
-    { 75 , 70 , 70 , 98 , 70 , 93 , 7 , 10 , 3 },  // No.  741   // Oricorio Fire Flying
-    { 75 , 70 , 70 , 98 , 70 , 93 , 5 , 14 , 3 },  // No.  741   // Oricorio Psychic Flying
-    { 75 , 70 , 70 , 98 , 70 , 93 , 6 , 8 , 3 }  // No.  741   // Oricorio Ghost Flying
+    { 75 , 70 , 70 , 98 , 70 , 93 , 8 , 10 , 3 },  // No.  741   // Oricorio Fire Flying
+    { 75 , 70 , 70 , 98 , 70 , 93 , 10 , 13 , 3 },  // No.  741   // Oricorio Electric Flying
+    { 75 , 70 , 70 , 98 , 70 , 93 , 6 , 14 , 3 },  // No.  741   // Oricorio Psychic Flying
+    { 75 , 70 , 70 , 98 , 70 , 93 , 7 , 8 , 3 }  // No.  741   // Oricorio Ghost Flying
 };
 static const char P_742[][9] = {
     { 40 , 45 , 40 , 55 , 40 , 84 , 10 , 7 , 18 }  // No.  742   // Cutiefly Bug Fairy
