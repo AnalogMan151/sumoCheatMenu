@@ -1275,7 +1275,7 @@ void drawPokemonID() {
 
 			xsprintf(buf, "%s  %s", getWifiStatus() ? "Wifi [On]" : "Wifi [Off]", isInBattle2() ? "In Battle" : "Not In Battle");
 			posY = OvDrawString(buf, posX + 6, posY, BLANK);
-			xsprintf(buf, "SOS Counter %s [%x]", sosactivate ? "On" : "Off", soscounter);
+			xsprintf(buf, "SOS Counter %s [%d]", sosactivate ? "On" : "Off", soscounter);
 			posY = OvDrawString(buf, posX + 6, posY, BLANK);
 
 			// xsprintf(buf, "[%d] [%d] [%x][%x][%x]", enemyIndex, enemyExists, OPPONENT_POINTERS[selectedOpponent], enemyOffset, enemyPointer);
